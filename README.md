@@ -30,12 +30,14 @@ ZMM-TTS requires Python>=3.8, and a reasonly recent version of PyTorch.
 To install ZMM-TTS and make a quick synthesis, you can run from this repository:
 ```bash
 git clone https://github.com/nii-yamagishilab-visitors/ZMM-TTS.git
+
 cd ZMM-TTS
 pip3 install -r requirements.txt
 #In addition, you may need to install these libraries to support full functionality.
 pip install transformers  #For support XLSR-53 and XphoneBERT model.
 pip install speechbrain   #For extracting speaker embedding.
 ```
+If you want to try IPA representations, you need to install [Epitran](https://github.com/dmort27/epitran).
 ## Usage
 ### Model storage
 | Model| Dataset |Discription|
