@@ -44,7 +44,7 @@ If you want to try IPA representations, you need to install [Epitran](https://gi
 |:----|:----:|:----|:----|
 |[XLSR-53](https://huggingface.co/facebook/wav2vec2-large-xlsr-53)| Audio| 53 |56K hours|
 |[ECAPA-TDNN](https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb)| Audio| > 5| 2794 hours|
-|[XPhoneBERT](https://huggingface.co/vinai/xphonebert-base)| Text| 94| 330Msentences|
+|[XPhoneBERT](https://huggingface.co/vinai/xphonebert-base)| Text| 94| 330M sentences|
 ## Usage
 ### Model storage
 | Model| Dataset |Discription|
