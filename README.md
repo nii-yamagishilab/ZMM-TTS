@@ -7,12 +7,8 @@ This is the code for the ZMM-TTS submitted to the [IEEE TASLP](https://arxiv.org
 
 <br>
 <p align="center">
-    <img src="images/overview.png" width="95%"> <br>
+    <img src="img/fig1_1219 (1).pdf" width="95%"> <br>
     Overview
-</p>
-<p align="center">
-    <img src="images/speechtokenizer_framework.jpg" width="95%"> <br>
-    The SpeechTokenizer framework.
 </p>
 <be>
 
