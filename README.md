@@ -152,7 +152,7 @@ If you use this code, result, or MM6 dataset in your paper, please cite our work
 -  [Comprehensive-Transformer-TTS](https://github.com/keonlee9420/Comprehensive-Transformer-TTS), the txt2vec and vec2mel model were built on this project.
 -  [XPhoneBERT](https://github.com/VinAIResearch/XPhoneBERT), a Pre-trained Multilingual Model for Phoneme Representations for Text-to-Speech.
 -  [MSMC-TTS](https://github.com/hhguo/MSMC-TTS), the vec2wav model was built on this project.
--  [HifiGAN](https://github.com/jik876/hifi-gan)
-
+-  [HifiGAN](https://github.com/jik876/hifi-gan), Vocoder.
+-  [wav2vec2-codebook-indices](https://github.com/fauxneticien/wav2vec2-codebook-indices)The scripts for extracting the discrete code index and representations. 
 ## License
 The code in this repository is released under the xxx license as found in the xxx file.
