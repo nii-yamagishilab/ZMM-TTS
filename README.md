@@ -51,7 +51,7 @@ In my paper, the training data we used contained [GlobalPhone](https://ieeexplor
 Considering the scarcity of publicly multilingual and multilingual speaker databases for speech synthesis, I designed the following training database based on the [MLS](https://www.openslr.org/94/) and [NHT Swedish](https://huggingface.co/datasets/jimregan/nst_swedish_tts) databases and called it MM6. (It seems that NST is no longer open for downloads in Swedish, in which case you will not have to consider Swedish.)
 ｜Language|Gender|Speakers|Sentences|Durations (h)|Database|
 |:----|:----|:----|:----|:----|:----|
-|English|Female|20｜4000｜13.9｜MLS｜
+|English |Female |20 |4000 ｜13.9 ｜MLS ｜
 |English｜Male|20|4000|13.9|MLS|
 
 ### load model
