@@ -118,6 +118,16 @@ python vec2mel/train.py --dataset MM6 --config MM6
 ```bash
 python vec2wav/train.py -c Config/vec2wav/vec2wav.yaml
 ```
+### Test model
+1. Prepare test data:
+   a. test meta file `Dataset/MM6/test.txt`.
+   b. ref speaker embedding in `Dataset/MM6/test_spk_emb/`.
+2. Generate sample
+   ``` bash
+   bash test_scripts/quick_test.sh
+   ```
+3. The result would be found in `test_result` files.
+
 
 ```python
 from speechtokenizer import SpeechTokenizer
