@@ -38,6 +38,11 @@ pip install transformers  #For support XLSR-53 and XphoneBERT model.
 pip install speechbrain   #For extracting speaker embedding.
 ```
 If you want to try IPA representations, you need to install [Epitran](https://github.com/dmort27/epitran).
+
+## Pre-trained self-supervised model
+|Model| Modality| Lang| Training data|
+|:----|:----:|:----|:----|
+|[XLSR-53](https://huggingface.co/facebook/wav2vec2-large-xlsr-53)| Audio| 53 |56K hours|
 ## Usage
 ### Model storage
 | Model| Dataset |Discription|
