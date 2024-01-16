@@ -1,0 +1,143 @@
+id: "msmc_vqgan"
+
+#################################################
+# Task configuration
+#################################################
+
+task:
+    _name: "MSMCTTS"
+    _mode: "train_autoencoder"
+    autoencoder:
+        _name: "MSMCVQGAN"
+        in_dim: 768
+        n_model_size: 256
+        encoder_config:
+            downsample_scales: [1, 4]
+            max_seq_len: 1600
+            n_layers: 4
+            n_head: 2
+            d_k: 64
+            d_v: 64
+            d_inner: 1024
+            fft_conv1d_kernel: 3
+            fft_conv1d_padding: 1
+            dropout: 0.2
+            attn_dropout: 0.1
+            fused_layernorm: False
+        quantizer_config:
+            embedding_sizes: 64
+            embedding_dims: 256
+            n_heads: 4
+            prior_config:
+                kernel_size: 5
+                dilation_rate: 1
+                n_layers: 1
+            norm: False
+        frame_decoder_config:
+            max_seq_len: 2400
+            n_layers: 4
+            n_head: 2
+            d_k: 64
+            d_v: 64
+            d_inner: 1024
+            fft_conv1d_kernel: 3
+            fft_conv1d_padding: 1
+            dropout: 0.2
+            attn_dropout: 0.1
+            fused_layernorm: False
+        pred_mel: True
+        decoder_config:
+            upsample_rates: [5, 4, 4, 2, 2]
+            upsample_kernel_sizes: [11, 8, 8, 4, 4]
+            upsample_initial_channel: 512
+            resblock_kernel_sizes: [3, 7, 11]
+            resblock_dilation_sizes: [[1, 3, 5], [1, 3, 5], [1, 3, 5]]
+            use_lang: False
+    discriminator:
+        _name: 'UnivNetDiscriminator'
+        mrd_config:
+            hop_lengths: [10, 20, 35, 80, 160]
+            hidden_channels: [128, 128, 256, 256, 512]
+            domain: 'double'
+            mel_scale: True
+            sample_rate: 16000
+        mpd_config:
+            periods: [2, 3, 5, 7, 11]
+            channels: 16
+            max_channels: 512
+
+
+#################################################
+# Trainer configuration
+#################################################
+
+# Basic hyperparameters
+save_checkpoint_dir: "Train_log/vec2wav/checkpoints_wo/msmc_vq_gan"
+pretrain_checkpoint_path: ""
+restore_checkpoint_path: ""
+resume_training: True
+training_steps: 1000000
+iters_per_checkpoint: 5000
+seed: 1234
+
+# CuDNN configuration
+cudnn:
+    enabled: True
+    benchmark: True
+
+# Specific trainer hyperparameters
+trainer:
+    _name: 'VQGANTrainer'
+    grad_clip_thresh: 1.0
+    warmup_steps: 50000
+    sample_lengths: 8000
+    lambda_vq: 1
+    lambda_pr: 0.1
+    lambda_frame: 450
+    lambda_fm: 2
+    lambda_stft: 45
+
+optimizer:
+    _default:
+        _name: "AdamW"
+        learning_rate: 2e-4
+        betas: [0.8, 0.99]
+        eps: 1e-8
+        weight_decay: 0.0
+    
+dataloader:
+    batch_size: 16
+    num_workers: 8
+
+dataset:
+    _name: 'MelDataset'
+    id_list: "Dataset/preprocessed_data/ZMM6/train_lists.txt"
+    samplerate: 16000
+    feature: ['mel', 'wav']
+    feature_path:
+        - Dataset/preprocessed_data/ZMM6/DiscreteRp/{}.npy
+        - Dataset/MM6/wavs/{}.wav
+    dimension: [768, 1]
+    frameshift: [320, 1]
+    padding_value: [-4, 0]
+    pre_load: False
+    segment_length: -1 # all
+
+lr_scheduler:
+    _name: "ExponentialDecayLRScheduler"
+    warmup_steps: 200000
+    decay_scale: 200000
+    decay_learning_rate: 0.5
+    final_learning_rate: 1e-5
+
+# Only for Multi-GPU Training
+distributed:
+    dist_backend: "nccl"
+    dist_url: "tcp://localhost:54321"
+
+#################################################
+# Infer configuration
+#################################################
+
+save_features:
+    - ['wav', '.wav', 16000]

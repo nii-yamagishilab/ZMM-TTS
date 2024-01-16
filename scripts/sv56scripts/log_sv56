@@ -1,0 +1,42 @@
+SV56DEMO.C: Version 3.5 of 02.Feb.2010 
+
+  Program to level-equalize a speech file "NdB" dBs below
+  the overload point for a linear n-bit (default: 16 bit) system.
+  using the P.56 speech voltmeter algorithm.
+
+  Usage:
+  $ sv56demo [-options] FileIn FileOut 
+             [BlockSize [1stBlock [NoOfBlocks [DesiredLevel
+             [SampleRate [Resolution] ] ] ] ] ]
+  FileIn: ..... is the input file to be analysed and equalized;
+  FileOut: .... is the output equalized file
+  BlockSize: .. is the block size [default: 256 samples]
+  1stBlock: ... the first block to be manipulated [default: 1st]
+  NoOfBlocks: . number of blocks to be manipulated [default: all]
+  DesiredLevel: level desired to the output file, in dBov
+                [default: -26 dBov].
+  SampleRate: . sampling rate used for acquiring/generating the
+                file, in Hertz [default: 16000 Hz].
+  Resolution: . the digital system resolution (AD,DA systems), in
+                number of bits [default: 16 bits].
+  Options:
+  -lev ndB .... equivalent to specifying DesiredLevel above, but
+                here don't need to specify the former 3 parameters.
+  -sf f ....... set sampling frequency to `f' Hz; equivalent to
+                parameter SampleRate above.
+  -bits n ..... change the default word length to n bits; 
+                equivalent to parameter Resolution.
+  -rms ........ normalizes the output file using the RMS long-term 
+                level, instead of the active speech level.
+  -blk len .... is the block size in number of samples;
+                this parameter is optional [default is block size
+                of 256 samples]. Equiv. to param. BlockSize above
+  -start sb ... define `sb' the first block to be measured; equiv.
+                to param. 1stBlock above [dft: 1st block of file]
+  -end eb ..... define `eb' as the last block to be measured
+  -n nb ....... define `nb' as the number of blocks to be measured;
+                equiv. to param.NoOfBlocks above [dft: whole file]
+  -log file ... log statistics into file rather than stdout
+  -q .......... quiet operation - does not print the progress flag.
+                Saves time and avoids trash in batch processings.
+  -qq ......... print short statistics summary; no progress flag.

@@ -1,0 +1,277 @@
+			         EID.RME
+		  Read-me for ITU-T/UGST EID Module
+                               (28.Mar.2000)
+
+       =============================================================
+       COPYRIGHT NOTE: The source code, and all of its derivations,
+       is subject to the "ITU-T General Public License". Please have
+       it  read  in    the  distribution  disk,   or  in  the  ITU-T
+       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
+       CODING STANDARDS".
+       =============================================================
+
+
+C code:
+~~~~~~~
+
+The Error Insertion Device" (EID) module is built of the following files:
+
+eid.c: ........ Error insersion device module with the necessary routines.
+eid.h: ........ EID module definitions and prototypes.
+eiddemo.c: .... Demo program for EID module.
+eid8k.c: ...... Demo program for generating error-pattern files, char-oriented
+eid_io.c: ..... Functions for eid8k.c
+eid_io.h: ..... Header for for eid8k.c and eid_io.c
+
+eid-int.c: .... Interpolates error patterns from a master EP
+eid-xor.c: .... Disturbs bits or erases frames based on error patterns
+ep-stats.c: ... Assesses and prints statistics about an error pattern file
+gen-patt.c: ... Generates error pattern files
+softbit.c: .... Library with softbit file I/O and format check 
+softbit.h: .... Header file for softbit.h with prototypes and definitions
+ugstdemo.h: ... Definitions for UGST demo programs [in other directory].
+
+Since the eiddemo.c needs bitstream files as input, you may need to use the
+following programs to convert between parallel (normal samples) format to/
+from serial (bitstream) format (provided in other directory of this
+distribution):
+
+ugst-utl.c: ... serial/parallel data format conversion routines.
+ugst-utl.h: ... prototypes & definitions for serpa.c conversion routines.
+spdemo.c: ..... demo program on how to use the above routines.
+
+
+Supporting files:
+~~~~~~~~~~~~~~~~~
+
+makefile.unx: Unix make file for creating the executables. Please note that
+          the symbol PORT_TEST is defined, for carrying out
+          portability tests.  This means that successive runs generate
+          the same results. Therefore, for "real-life" runs, please
+          compile the program with PORT_TEST undefined. The symbol
+          POST_TEST direclty affect the behavior of eid.c and the demo
+          programs that depend on it: eiddemo.c, eid8k.c, and
+          gen-patt.c.
+
+          This makefile also generates bitstreams and calculate CRCs;
+          compare with CRC values tabulated below. Note that different
+          compilers may need different symbols defined. Check CC and
+          CC_OPT.  This makefile also generates bitstreams and
+          calculate CRCs; compare with CRC values tabulated below.
+
+make-vms.com: DCL for compiling in VMS using either gcc or vax-11 cc. See note
+          above regarding the symbol PORT_TEST.
+
+eid8k.mms: VAX/VMS MMS script to build the eid8k program
+
+makefile.tcc: Make file for creating the executables in the PC using Borland C
+	  [bt]cc 16-bit compiler. See note above regarding the symbol
+	  PORT_TEST. This makefile also generates bitstreams and
+	  calculate CRCs; compare with CRC values tabulated below.
+
+makefile.djc: Make file for creating the executables in the PC using the 
+	  32-bit MSDOS port of the GNU C compiler. See note above regarding 
+	  the symbol PORT_TEST. This makefile also generates bitstreams and 
+          calculate CRCs; compare with CRC values tabulated below.
+
+ascii-bs.awk: prints in ASCII form a G.192-compliant "bogus" frame. 
+          See self-documentation.
+
+show-crc.awk: prints the CRC info in log printout from running
+          the tests implemented in the EID makefiles.
+
+Data:
+~~~~~
+ref8keid.zip: The reference files for testing eid8k.c in a zip-compatible 
+	  archive. Use pkunzip (PC shareware) or unzip (public-domain, PC, 
+	  Sun or Vax) to extract the files. Byte-swaping needed on  
+          little-endian machines (PC/VAX).
+	  
+zero-eid.zip: The zero input sequence for testing eiddemo.c also as a
+	  a zip-compatible archive. Byte-swaping needed on little-endian
+          machines (PC/VAX). Also provided (but not needed) are 4
+          processed bitstream files (produced by make -fmakefile.xxx
+          proc-zero) which where generated on a HP with gcc
+          (therefore, need to be byte-swapped if used on a PC or VAX). 
+
+
+
+       =======================================================
+	     NOTES ON PORTABILITY TESTING OF THIS MODULE
+       =======================================================
+
+
+!@#$%^&*!@#$%^&!@#$%^&*!@#$%^&!@#$%^&*!@#$%^&!@#$%^&*!@#$%^&!@#$%^&*!@#$%^&!
+!			 VERY IMPORTANT NOTE:                              !
+!@#$%^&*!@#$%^&!@#$%^&*!@#$%^&!@#$%^&*!@#$%^&!@#$%^&*!@#$%^&!@#$%^&*!@#$%^&!
+!                                                                          !
+!     The makefiles have the PORT_TEST option disabled. To enable it       !
+!     for the tests that follows, please compile the programs using        !
+!     makefile -fmakefile.??? XXX=-DPORT_TEST veryclean all                !
+!                                                                          !
+!@#$%^&*!@#$%^&!@#$%^&*!@#$%^&!@#$%^&*!@#$%^&!@#$%^&*!@#$%^&!@#$%^&*!@#$%^&
+
+
+NOTE: the file zero-crc.txt (in archive zero-eid.zip) also contains a
+      summary of the CRCs described below.
+
+
+Testing the eiddemo.c
+~~~~~~~~~~~~~~~~~~~~~
+Generate an all-zero file with exactly 25600 samples (51200 bytes) and use
+spdemo to generate its bitstream UGST representation. For example, 
+   spdemo -left -r 16 ps zero.src zero.ser 
+
+Then process this file for the following conditions, and check the 
+16-bit CRCs. The values on big-endian computers (Unix workstations in general)
+are:
+  BER   gamma  FER    gamma  ITU-T ARC  XMODEM Reference file name(1)
+  0.001 0      0      0      10C7  D16F 00A0   b3g0f0g0.ser
+  0.001 0.01   0      0      A703  C5BC 1173   b3g2f0g0.ser
+  0     0      0.01   0      D653  CD41 0EBB   b0g0f2g0.ser
+  0     0      0.01   0.50   82A2  15D4 0F3D   b0g0f2g5.ser
+
+For little-endian computers (PC, VAX, Digital Workstations):
+  BER   gamma  FER    gamma  ITU-T ARC  XMODEM Reference file name(2)
+  0.001 0.01   0      0      5CF2  95C7 1234   b3g2f0g0.ser
+  0.001 0      0      0      4FCE  0892 1C19   b3g0f0g0.ser
+  0     0      0.01   0      6244  140E 0504   b0g0f2g0.ser
+  0     0      0.01   0.50   8935  7B16 0545   b0g0f2g5.ser
+
+Notes:
+ (1) These files are found in archive zero-eid.zip
+ (2) These CRC are obtained after byte-swapping the files with these
+     names in archive zero-eid
+
+For your reference, the all-zero serialized bit stream zero.ser has the
+following CRCs: 
+	 Endian ITU-T ARC  XMODEM
+	 Big    5B1A  D874 00C3
+	 Little 6B61  03DB 0000
+
++---------------------------------------------------------------------------+
+| PS: To perform these test, the compilation of the eid module must be done |
+|     withthe symbol PORT_TEST defined, and the eid state files should not  |
+|     exist at each invocation of the program!!!                            |
++---------------------------------------------------------------------------+
+
+The portability test of the eiddemo program can be automatically done using
+the command:
+      make -fmakefile.xxx test-zero
+(where xxx is the extension of one of the provided makefiles; see list
+above). 
+
+
+Testing the eid8k.c
+~~~~~~~~~~~~~~~~~~~
+
+The provided makefiles have automated procedures to test the program
+eid-8k.c, using the command:
+      make -fmakefile.xxx test-8k
+(where xxx is the extension of one of the provided makefiles; see list
+above). 
+
+The CRC for the generated files are (e.g. using measure.c) for both
+big-endian computers (Unix workstations in general) and little-endian
+computers (PC/VAX/Alpha):
+
+           File            CCITT   ARC  XMODEM
+	   patb1pct.ref ->  2951  7380    1F7C
+	   patb3pct.ref ->  488D  C707    1CF2
+	   patb5pct.ref ->  ABDA  BC73    0F3C
+	   patf10-2.ref ->  02F8  E089    0C30
+	   patr10-2.ref ->  9542  A489    1F3D
+  
+For comparison purposes, reference files pat*.ref above are available
+in the provided archive ref8keid.zip (the makefile will produce files
+with same root but extension .ser).
+
+Testing the error pattern generation program
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The provided makefiles have automated procedures to test the program
+gen-patt.c, using the sequence of commads:
+      make -fmakefile.xxx FMT=-g192 test-patt
+      make -fmakefile.xxx FMT=-byte test-patt
+      make -fmakefile.xxx FMT=-bit  test-patt
+(where xxx is the extension of one of the provided makefiles; see list
+above). 
+
+The CRC for the generated files are (e.g. using measure.c) for both
+big-endian computers (Unix workstations in general) and and
+little-endian computers (PC/VAX/Alpha) are:
+
+    G.192 format
+    +--------------------+--------------------+--------------+
+    |     BIG ENDIAN     |   LITTLE ENDIAN    | FILE NAME    |
+    | CCITT  ARC  XMODEM | CCITT  ARC  XMODEM |              |
+    +--------------------+--------------------+--------------+
+    | B318   335E   13FC | 00DC   FD6F   14BF | patb1pct.ser |
+    | D605   0064   1D80 | 21DF   EEDC   0E05 | patb3pct.ser |
+    | 8325   053F   03F9 | 0B8F   1598   1CDF | patb5pct.ser |
+    | C814   B2C8   1E4A | C320   936E   16F6 | patf10-2.ser |
+    | E5C5   431E   029A | DD73   08C3   1EFE | patr10-2.ser |
+    +--------------------+--------------------+--------------+
+
+    Byte format
+    +--------------------+--------------------+--------------+
+    |     BIG ENDIAN     |   LITTLE ENDIAN    | FILE NAME    |
+    | CCITT  ARC  XMODEM | CCITT  ARC  XMODEM |              |
+    +--------------------+--------------------+--------------+
+    | 5D7D   74F1   15E4 | 5D7D   74F1   15E4 | patb1pct.ser |
+    | 0848   6739   162E | 0848   6739   162E | patb3pct.ser |
+    | A969   EF13   137F | A969   EF13   137F | patb5pct.ser |
+    | 90A7   3C20   1072 | 90A7   3C20   1072 | patf10-2.ser |
+    | 4D79   2BD9   0830 | 4D79   2BD9   0830 | patr10-2.ser |
+    +--------------------+--------------------+--------------+
+
+    Compact Bit
+    +--------------------+--------------------+--------------+
+    |     BIG ENDIAN     |   LITTLE ENDIAN    | FILE NAME    |
+    | CCITT  ARC  XMODEM | CCITT  ARC  XMODEM |              |
+    +--------------------+--------------------+--------------+
+    | 0CFB   040C   1DC7 | 0CFB   040C   1DC7 | patb1pct.ser |
+    | 57E7   3D7B   0865 | 57E7   3D7B   0865 | patb3pct.ser |
+    | AB3B   8E14   1B78 | AB3B   8E14   1B78 | patb5pct.ser |
+    | 2843   2E7C   1EE6 | 2843   2E7C   1EE6 | patf10-2.ser |
+    | 2843   2E7C   1EE6 | 2843   2E7C   1EE6 | patr10-2.ser |
+    +--------------------+--------------------+--------------+
+
+NOTE: the CRCs above are obtained when gen-patt.c is compiled with the 
+      PORT_TEST option! Also note that the CRCs for the Byte and
+      COmpact Bit bitstream format if the same in either big- or
+      little-endian systems, since they are byte-oriented, and do NOT
+      need byte-swapping across platforms. 
+
+Testing the error pattern insertion (XORing) program
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The provided makefiles have automated procedures to test the program
+eid-xor.c, using the sequence of commads:
+      make -fmakefile.xxx test-xor
+(where xxx is the extension of one of the provided makefiles; see list
+above). 
+
+The CRC for the generated files are (e.g. using measure.c) for both
+big-endian computers (Unix workstations in general) and and
+little-endian computers (PC/VAX/Alpha) are:
+
+    +--------------------+--------------------+--------------+
+    |     BIG ENDIAN     |   LITTLE ENDIAN    | FILE NAME    |
+    | CCITT  ARC  XMODEM | CCITT  ARC  XMODEM |              |
+    +--------------------+--------------------+--------------+
+    | 4D00   5237   09D2 | 4D00   5237   09D2 | z_r05g10.bg1 |
+    | 4D00   5237   09D2 | 4D00   5237   09D2 | z_r05g10.bby |
+    | 4D00   5237   09D2 | 4D00   5237   09D2 | z_r05g10.bbi |
+    | F96C   FE54   1DF6 | A4B9   FFFF   1A68 | z_f05g10.bg1 |
+    | F96C   FE54   1DF6 | A4B9   FFFF   1A68 | z_f05g10.bby |
+    | F96C   FE54   1DF6 | A4B9   FFFF   1A68 | z_f05g10.bbi |
+    +--------------------+--------------------+--------------+
+
+Testing the error pattern histogram program
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Has not been implemented yet.
+
+
+Good luck!
+-- <simao.campos@labs.comsat.com>

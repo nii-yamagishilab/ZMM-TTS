@@ -1,0 +1,173 @@
+
+             Read-me for ITU-T/UGST High Quality Up/Downsampling
+                             and Filtering Module
+                                 (24.Jan.2000)
+								 (rev. Nov. 2008)
+
+       =============================================================
+       COPYRIGHT NOTE: This source code, and all of its derivations,
+       is subject to the "ITU-T General Public License". Please have
+       it  read  in    the  distribution  disk,   or  in  the  ITU-T
+       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
+       CODING STANDARDS".
+       =============================================================
+
+
+The ITU-T/UGST FIR Standard HQ and IRS Up/Downsampling and Filtering Module 
+(FIR, for short) is built of the following files:
+
+General:
+~~~~~~~~
+fir.rme: ........ Read-me file for FIR module (this file)
+
+C code:
+~~~~~~~
+Main files:
+ firflt.h: ...... FIR module definitions and prototypes.
+ fir-lib.c: ..... sub-unit of the FIR module with basic filtering functions
+ fir-flat.c: .... sub-unit of the FIR module with flat-weighting low-
+                  and high-pass filter initialization functions
+ fir-dsm.c: ..... sub-unit of the FIR module with the Delta-SM init.functions
+ fir-irs.c: ..... sub-unit of the FIR module with IRS-weighting init.functions
+ fir-hirs.c: .... sub-unit of the FIR module with Half-tilt IRS-weighting 
+                  init.functions
+ fir-msin.c: .... sub-unit of the FIR module with the GSM MSIN init.functions
+ fir-p341.c ..... sub-unit of the FIR module with the P.341 send-mask 
+                  characteristic band-pass filtering (1:1 rate change)
+ fir-pso.c: ..... sub-unit of the FIR module with the psophometric weighting 
+                  init.functions
+ fir-LP.c: ...... sub-unit of the FIR module with lowpass filters (anchors)
+ firflt.c: ...... dummy program that calls all the sub-units. Equivalent to 
+                  the old HQFLT.C file.
+Interface:
+ ugst-utl.c: .... UGST utility routines: scaling, conversion of formats:
+                  serial<=>parallel (ie, normal samples<=>bit-streams,
+                  short<=>float). (*)
+ ugst-utl.h: .... UGST utilities definitions and prototypes. (*)
+ ugstdemo.h: .... Definitions for UGST demo programs. (*)
+
+Demos:
+ firdemo.c: ..... Demo program for FIR module.
+ fltresp.c: ..... Calculate frequency response for FIR and PCM filter modules
+ filter.c: ...... Demo program for FIR and PCM modules. (**)
+ filter.prj: .... Borland BC project file for filter.c (binary!)
+ firdemo.prj: ... Borland BC project file for firdemo.c (binary!)
+ +-----------------------------------------------------------------------+
+ | OBS:                                                                  |
+ | (*):  In other directory                                              |
+ | (**): Also needed iir-lib.c, iir-g712.c, and iirflt.h, available in   |
+ |       other directory                                                 |
+ +-----------------------------------------------------------------------+
+
+Makefiles:
+~~~~~~~~~
+make-vms.com: ... DCL for VAX/VMS Vax-cc compiler or the VMS port of gcc
+makefile.tcc: ... makefile for MSDOS Borland [bt]cc
+makefile.cl: .... makefile for MS Visual C compiler
+makefile.djc: ... makefile for MSDOS port of gcc
+makefile.unx: ... makefile for Unix, using either cc, acc (Sun), or
+                  gcc; can also be used for CYGNUS Win32 gcc
+
+Testing:
+~~~~~~~~
+The provided makefiles can run a portability test on the demo program. They 
+need the archive test-fir.zip ([pk]zip compatible archive) and [pk]unzip to 
+extract the proper source and reference processed files. 
+
+test-fir.zip: ... ZIP-compatible archive with the test files in the Unix 
+		  byte orientation (high-byte first). Also with a readme
+		  file (test-fir.rme) and a statistics file (test-iir.sta). 
+		  [NOTE: for VMS and PC users, byte-swapping of the samples
+		         is needed. Please see tool sb.c in the directory
+		         ../utl of this distribution]
+
+The statistics and CRCs for the test files are as follows:
+-------+------+------+-------+--------+------+-----+------+--------------
+Samples    Min   Max       DC       AC    CRC   CRC    CRC  File name
+                                        CCITT   ARC XMODEM
+-------+------+------+-------+--------+------+-----+------+--------------
+  7680 -32768 32767     74.70  18991.14  D580  6D38   0FB8 rxmirs16.ref
+  7680 -32768 32767     21.55  22844.83  6BE7  B512   1773 rxmirs8.ref
+  7680 -27165 26728   -122.40   7217.84  45FC  87DA   17CB test-asy.ref
+ 23040 -27165 26999   -122.82   7218.13  CBB1  1CD2   0766 test-cas.ref
+  7680 -18273 18350     -1.09   5179.29  6EFF  0A9E   143E test-pso.ref
+  2560 -14823 17045   -123.92   4185.24  7ED8  040E   12B7 test-sac.ref
+  7680 -24264 25252      0.67   6523.30  544B  453C   11BA test001.ref
+  7680 -15658 17745      1.57   4585.16  7183  455F   0CEA test002.ref
+  7680 -12325 13685      0.25   3386.62  5B59  5964   18D3 test003.ref
+ 15360 -25997 31763   -122.70   7397.57  4583  15E9   1BE4 test004.ref
+ 23040 -26509 31330   -123.68   7390.24  4A1E  8816   1B1A test005.ref
+ 15360 -25997 31763   -122.70   7397.57  4583  15E9   1BE4 test006.ref
+ 23040 -26509 31330   -123.68   7390.24  4A1E  8816   1B1A test007.ref
+  3840 -15474 19428   -124.86   5215.66  BBD2  FFE4   1C34 test008.ref
+  2560 -12846 15077   -119.90   4276.88  9EB1  9B42   00EA test009.ref
+  3840 -15474 19428   -124.86   5215.66  BBD2  FFE4   1C34 test010.ref
+  2560 -12846 15077   -119.90   4276.88  9EB1  9B42   00EA test011.ref
+  7680 -25714 27040   -118.62   7328.01  3A3D  036D   1DB5 test012.ref
+  7680 -25714 27040   -118.62   7328.01  3A3D  036D   1DB5 test013.ref
+  7680 -23535 25276     -0.40   6482.84  A84C  2BC0   1177 test014.ref
+  7680 -15771 17223      0.10   4564.82  ACB7  4320   0F65 test015.ref
+  7680 -23535 25276     -0.40   6482.84  A84C  2BC0   1177 test016.ref
+  7680  -8201  9438      0.09   2362.66  1F95  564C   0061 test017.ref
+  7680 -19165 20300     -2.44   5089.78  C418  73CF   0D24 test018.ref
+  7680 -10727 12665     -1.51   2996.76  B28F  CE06   1F5A test019.ref
+ 15360 -26320 30810     -3.84   7094.25  6AF1  F9A8   11D3 test020.ref
+ 15360 -26320 30810     -3.84   7094.25  6AF1  F9A8   11D3 test021.ref
+  3840 -18013 19379      3.18   5000.62  BD39  5443   1D2B test022.ref
+  3840 -18013 19379      3.18   5000.62  BD39  5443   1D2B test023.ref
+  7680 -13788 14559      0.49   3882.42  24F0  BA57   1842 test024.ref
+  7680 -19244 23339      8.72   5954.66  0AC1  9329   0CD0 test5kbp.ref
+  7680 -32768 32767      4.43   9989.78  9FD0  F430   1B9E testfla1.ref
+  7680 -29722 32767     -1.05   7598.55  3E05  62DB   0D8E testmsin.ref
+  7680 -28160 30367      8.61   7084.59  CDE9  6903   0C2B testp341.ref
+  7680 -15513 18670     -1.96   5046.66  7905  30D0   0B93 testpcm1.ref
+  3840 -15395 17645     -1.83   5045.89  8A8A  2968   19C8 testpcmd.ref
+ 15360 -28479 26073      0.95   7126.48  7981  4219   0926 testpcmu.ref
+-------+------+------+-------+--------+------+-----+------+--------------
+
+Portability testing:
+~~~~~~~~~~~~~~~~~~~~
+
+The comparison of test vectors produced in a target platform and the
+reference vectors above should yield "equivalent results", as defined
+in the STL User's Manual. In other words, there should be no
+differences or +-1 differences (LSB differences are OK). The makefiles
+contain pertinent testing sections to assist the user in portability
+testing.  Byte-swaping will be necessary in Little-endian platforms
+(low byte first as for Intel and Alpha CPUs).
+
+Portability of the current version has been tested for the following:
+MSDOS: Borland Turbo C++ V1.0; DJGPP MSDOS port of gcc, V.2.6.3 Win32:
+CYGNUS environment with gcc [egcs V.2.91.57]
+       MS Visula C compiler V.6.0
+HPUX:  gcc [egcs V.1.00]
+SUN:   gcc V.2.8.1 with Solaris 2.7 (a.k.a. SunOS 5.7)
+       cc with SunOS 4.1.3
+
+Maintenance :
+~~~~~~~~~~~~~
+
+- 10 february 2005 : 	AUTHORS : <Cyril Guillaume & Stephane Ragot - stephane.ragot@francetelecom.com>
+				[fir-lib.c] is updated to solve the sample-based filtering bug.
+				[filter.c] is updated to enable sample-based filtering, the [50Hz-14kHz filter] and the LP filters.
+				[fir-wb.c] the [50Hz-14kHz] filter was added.
+				[fir-LP.c] new file containing LP filters (anchors) procedures.
+				[firflt.h] prototypes for the [50Hz - 14kHz] filter and the LP filters were added.
+				[fir-irs.c] the modified IRS send-part filter (48kHz) coefficients are made symmetric.
+					This modification affects test-vector 'test019.ref'. test-fir.zip has been updated.
+
+- 15 may 2007      :    AUTHORS : Ingemar Johansson, Jonas Svedberg ,L.M. Ericsson
+				added functionality:
+				   20KBP   20-20k Hz Flat bandpass FIR filter w/ factor 1:1 at sf=48kHz 
+
+				   LP1p5   1.5kHz low-pass filter for fs=48kHz, w/ factor 1:1 
+					     has the same roll of rate (db/decade) as the STL2005_Rev1 Mushra Lp anchors LP35,LP7,LP10
+
+				   LP14    14kHz low-pass filter for fs=48kHz, w/ factor 1:1
+					     has a greater roll of rate (narrower transition band) than the Mushra anchors.
+
+				   LP20    20kHz low-pass filter for fs=48kHz, w/ factor 1:1
+					     has a greater roll of rate (narrower transition band) than the Mushra anchors.
+
+-- <simao.campos@labs.comsat.com> --
+

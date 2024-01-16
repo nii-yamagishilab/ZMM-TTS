@@ -1,0 +1,349 @@
+# ------------------------------------------------------------------
+# UNIX General makefile to build all ITU-T STL modules
+# History:51,14
+# October 6 17:04:53 2008 y
+# 16.Jan.96	Created <simao@ctd.comsat.com>
+# ------------------------------------------------------------------
+
+#Define symbols
+BIN=binUnix
+MK= make -f makefile.unx
+CMD=cp
+ALL = binUnix eid fir freqresp g711 g711iplc g726 g727 g728/g728float \
+      g728/g728fixed iir is54 mnru reverb rpeltp stereoop \
+      sv56 truncate unsup utl g722 
+
+LOG=$(shell uname)$(CC).log
+EIDCRC=$(shell if test `unsup/endian` = "little"; then echo ltendian.crc; else echo bgendian.crc; fi)
+
+ifdef COMSPEC
+EXE=.exe
+RM=rm -f *.o
+endif
+
+all: $(ALL)
+
+# Specific rules
+
+# .. Create binUnix directory
+binUnix:
+	if test ! -d binUnix; then mkdir binUnix; fi
+
+# .. EID module
+eid:	binUnix $(BIN)/eiddemo $(BIN)/eid8k $(BIN)/eid-int $(BIN)/eid-xor \
+	$(BIN)/bs-stats $(BIN)/ep-stats $(BIN)/gen-patt $(BIN)/eid-ev clearEID
+
+$(BIN)/eid-ev: 
+	cd eid; $(MK) ; $(CMD) eid-ev$(EXE) ../$(BIN)
+
+$(BIN)/eiddemo: 
+	cd eid; $(MK) ; $(CMD) eiddemo$(EXE) ../$(BIN)
+
+$(BIN)/eid8k: 
+	cd eid; $(MK) ; $(CMD) eid8k$(EXE) ../$(BIN)
+
+$(BIN)/eid-int: 
+	cd eid; $(MK) ; $(CMD) eid-int$(EXE) ../$(BIN)
+
+$(BIN)/eid-xor: 
+	cd eid; $(MK) ; $(CMD) eid-xor$(EXE) ../$(BIN)
+
+$(BIN)/bs-stats: 
+	cd eid; $(MK) ; $(CMD) bs-stats$(EXE) ../$(BIN)
+
+$(BIN)/ep-stats: 
+	cd eid; $(MK) ; $(CMD) ep-stats$(EXE) ../$(BIN)
+
+$(BIN)/gen-patt: 
+	cd eid; $(MK) ; $(CMD) gen-patt$(EXE) ../$(BIN)
+
+clearEID: 
+	cd eid; $(RM)
+
+
+# .. FIR module
+fir:	binUnix $(BIN)/firdemo $(BIN)/filter clearFIR
+$(BIN)/firdemo: 
+	cd fir; $(MK) ; $(CMD) firdemo$(EXE) ../$(BIN)
+
+$(BIN)/filter: 
+	cd fir; $(MK) ; $(CMD) filter$(EXE) ../$(BIN)
+
+clearFIR: 
+	cd fir; $(RM)
+
+
+# .. G711 module
+g711:	binUnix $(BIN)/g711demo clearG711
+$(BIN)/g711demo: 
+	cd g711; $(MK) ; $(CMD) g711demo$(EXE) ../$(BIN)
+
+clearG711: 
+	cd g711; $(RM)
+
+
+# .. G711iplc module
+g711iplc:	binUnix $(BIN)/asc2g192 $(BIN)/g711iplc clearg711iplc
+$(BIN)/asc2g192 : 
+	cd g711iplc; $(MK) ; $(CMD) asc2g192$(EXE) ../$(BIN)
+
+$(BIN)/g711iplc : 
+	cd g711iplc; $(MK) ; $(CMD) g711iplc$(EXE) ../$(BIN)
+
+clearg711iplc: 
+	cd g711iplc; $(RM)
+
+# .. G.722 module
+g722:	binUnix $(BIN)/g722demo $(BIN)/decg722 $(BIN)/encg722 clearg722
+$(BIN)/g722demo: 
+	cd g722; $(MK) ; $(CMD) g722demo$(EXE) ../$(BIN)
+$(BIN)/decg722 : 
+	cd g722; $(MK) ; $(CMD) decg722$(EXE) ../$(BIN)
+$(BIN)/encg722: 
+	cd g722; $(MK) ; $(CMD) encg722$(EXE) ../$(BIN)
+clearg722: 
+	cd g722; $(RM)
+
+# .. G.726 module
+g726:	binUnix $(BIN)/g726demo $(BIN)/vbr-g726 clearg726
+$(BIN)/g726demo: 
+	cd g726; $(MK) ; $(CMD) g726demo$(EXE) ../$(BIN)
+$(BIN)/vbr-g726: 
+	cd g726; $(MK) ; $(CMD) vbr-g726$(EXE) ../$(BIN)
+clearg726: 
+	cd g726; $(RM)
+
+# .. G.727 module
+g727:	binUnix $(BIN)/g727demo $(BIN)/discard clearg727
+$(BIN)/g727demo: 
+	cd g727; $(MK) ; $(CMD) g727demo$(EXE) ../$(BIN)
+$(BIN)/discard: 
+	cd g727; $(MK) ; $(CMD) discard$(EXE) ../$(BIN)
+clearg727: 
+	cd g727; $(RM)
+
+# .. G.728 module
+g728:	binUnix $(BIN)/g728fp $(BIN)/g728 
+$(BIN)/g728fp: 
+	cd g728/g728fixed; $(MK) ; $(CMD) g728fp$(EXE) ../../$(BIN) ; cd ..
+$(BIN)/g728: 
+	cd g728/g728float; $(MK) ; $(CMD) g728$(EXE) ../../$(BIN) ; cd ..
+
+# .. IIR module
+iir:	binUnix $(BIN)/pcmdemo $(BIN)/cirsdemo $(BIN)/c712demo cleariir
+$(BIN)/pcmdemo: 
+	cd iir; $(MK) ; $(CMD) pcmdemo$(EXE) ../$(BIN)
+
+$(BIN)/cirsdemo:
+	cd iir; $(MK) ; $(CMD) cirsdemo$(EXE) ../$(BIN)
+
+$(BIN)/c712demo:
+	cd iir; $(MK) ; $(CMD) c712demo$(EXE) ../$(BIN)
+cleariir: 
+	cd iir; $(RM)
+
+# .. MNRU module
+mnru:	binUnix $(BIN)/mnrudemo clearmnru
+$(BIN)/mnrudemo: 
+	cd mnru; $(MK) ; $(CMD) mnrudemo$(EXE) ../$(BIN)
+clearmnru: 
+	cd mnru; $(RM)
+
+# .. REVERB module
+reverb:	binUnix $(BIN)/reverb clearreverb
+$(BIN)/reverb: 
+	cd reverb; $(MK) ; $(CMD) reverb$(EXE) ../$(BIN)
+clearreverb: 
+	cd reverb; $(RM)
+
+# .. RPE-LTP module
+rpeltp:	binUnix $(BIN)/rpedemo clearrpeltp
+$(BIN)/rpedemo: 
+	cd rpeltp; $(MK) ; $(CMD) rpedemo$(EXE) ../$(BIN)
+clearrpeltp: 
+	cd rpeltp; $(RM)
+
+# .. STEREOOP module
+stereoop:	binUnix $(BIN)/stereoop clearstereoop
+$(BIN)/stereoop: 
+	cd stereoop; $(MK) ; $(CMD) stereoop$(EXE) ../$(BIN)
+clearstereoop: 
+	cd stereoop; $(RM)
+
+# .. Speech voltmeter module
+sv56:	binUnix $(BIN)/sv56demo $(BIN)/actlev clearsv56
+$(BIN)/sv56demo: 
+	cd sv56; $(MK) ; $(CMD) sv56demo$(EXE) ../$(BIN)
+$(BIN)/actlev:
+	cd sv56; $(MK) ; $(CMD) actlev$(EXE) ../$(BIN)
+clearsv56: 
+	cd sv56; $(RM)
+
+# .. TRUNCATE module
+truncate:	binUnix $(BIN)/truncate cleartruncate
+$(BIN)/truncate: 
+	cd truncate; $(MK) ; $(CMD) truncate$(EXE) ../$(BIN)
+cleartruncate: 
+	cd truncate; $(RM)
+
+# .. Frequency response measure tool
+freqresp: binUnix $(BIN)/freqresp clearfreqresp
+$(BIN)/freqresp: 
+	cd freqresp; $(MK) ; $(CMD) freqresp$(EXE) ../$(BIN)
+clearfreqresp: 
+	cd freqresp; $(RM)
+
+# .. Utility module
+utl:	binUnix $(BIN)/scaldemo $(BIN)/spdemo clearutl
+$(BIN)/scaldemo: 
+	cd utl; $(MK) ; $(CMD) scaldemo$(EXE) ../$(BIN)
+
+$(BIN)/spdemo: 
+	cd utl; $(MK) ; $(CMD) spdemo$(EXE) ../$(BIN)
+clearutl: 
+	cd utl; $(RM)
+
+# .. Unsupported module
+unsup:  binUnix $(BIN)/add $(BIN)/asc2bin $(BIN)/astrip $(BIN)/bin2asc \
+	$(BIN)/chr2sh $(BIN)/cf $(BIN)/concat $(BIN)/crc $(BIN)/df \
+	$(BIN)/endian $(BIN)/fdelay $(BIN)/measure $(BIN)/oper $(BIN)/sb \
+	$(BIN)/sh2chr $(BIN)/sine $(BIN)/sub $(BIN)/xdecode \
+	$(BIN)/xencode $(BIN)/g729e_convert_synch $(BIN)/swapover clearunsup
+$(BIN)/add:
+	cd unsup; $(MK) ;     $(CMD) add$(EXE) ../$(BIN)
+$(BIN)/asc2bin:
+	cd unsup; $(MK) ; $(CMD) asc2bin$(EXE) ../$(BIN)
+$(BIN)/astrip:
+	cd unsup; $(MK) ;  $(CMD) astrip$(EXE) ../$(BIN)
+$(BIN)/bin2asc:
+	cd unsup; $(MK) ; $(CMD) bin2asc$(EXE) ../$(BIN)
+$(BIN)/cf:
+	cd unsup; $(MK) ;      $(CMD) cf$(EXE) ../$(BIN)
+$(BIN)/chr2sh:
+	cd unsup; $(MK) ;  $(CMD) chr2sh$(EXE) ../$(BIN)
+$(BIN)/concat:
+	cd unsup; $(MK) ;  $(CMD) concat$(EXE) ../$(BIN)
+$(BIN)/crc:
+	cd unsup; $(MK) ;     $(CMD) crc$(EXE) ../$(BIN)
+$(BIN)/df:
+	cd unsup; $(MK) ;      $(CMD) df$(EXE) ../$(BIN)
+$(BIN)/endian:
+	cd unsup; $(MK) ;  $(CMD) endian$(EXE) ../$(BIN)
+$(BIN)/fdelay:
+	cd unsup; $(MK) ;  $(CMD) fdelay$(EXE) ../$(BIN)
+$(BIN)/measure:
+	cd unsup; $(MK) ; $(CMD) measure$(EXE) ../$(BIN)
+$(BIN)/oper:
+	cd unsup; $(MK) ;    $(CMD) oper$(EXE) ../$(BIN)
+$(BIN)/sb:
+	cd unsup; $(MK) ;      $(CMD) sb$(EXE) ../$(BIN)
+$(BIN)/sh2chr:
+	cd unsup; $(MK) ;  $(CMD) sh2chr$(EXE) ../$(BIN)
+$(BIN)/sine:
+	cd unsup; $(MK) ;    $(CMD) sine$(EXE) ../$(BIN)
+$(BIN)/sub:
+	cd unsup; $(MK) ;     $(CMD) sub$(EXE) ../$(BIN)
+$(BIN)/xdecode:
+	cd unsup; $(MK) ; $(CMD) xdecode$(EXE) ../$(BIN)
+$(BIN)/xencode:
+	cd unsup; $(MK) ; $(CMD) xencode$(EXE) ../$(BIN)
+$(BIN)/g729e_convert_synch:
+	cd unsup; $(MK) ; $(CMD) g729e_convert_synch$(EXE) ../$(BIN)
+$(BIN)/swapover:
+	cd unsup; cp swapover.sh ../$(BIN)/swapover; chmod +x ../$(BIN)/swapover
+clearunsup: 
+	cd unsup; $(RM)
+
+# Testing the modules
+test: test-eid
+	cd fir       ; $(MK) test > $(LOG) 2>&1 ; cd ..
+	cd g711      ; $(MK) test > $(LOG) 2>&1 ; cd ..
+	cd g722      ; $(MK) test > $(LOG) 2>&1 ; cd ..
+	cd g726      ; $(MK) test > $(LOG) 2>&1 ; cd ..
+	cd g727      ; $(MK) test > $(LOG) 2>&1 ; cd ..
+	cd iir       ; $(MK) test > $(LOG) 2>&1 ; cd ..
+	cd is54/binUnix  ; $(MK) test > $(LOG) 2>&1 ; cd ..
+	cd mnru      ; $(MK) test > $(LOG) 2>&1 ; cd ..
+	cd rpeltp/ts ; $(MK) test > $(LOG) 2>&1 ; cd ..
+	cd sv56      ; $(MK) test > $(LOG) 2>&1 ; cd ..
+	cd utl       ; $(MK) test > $(LOG) 2>&1 ; cd ..
+	cd unsup     ; $(MK) test > $(LOG) 2>&1 ; cd ..
+
+test-eid:
+# 	We need a special case because for testing the EID has to be 
+#	compiled with a different definition!
+	cd eid ; $(MK) XXX=-DPORT_TEST veryclean all ; cd ..
+	cd eid ; $(MK) test > $(LOG) 2>&1 ; cd ..
+	cd eid ; $(MK) FMT=-byte test-patt >> $(LOG) 2>&1 ; cd ..
+	cd eid ; $(MK) FMT=-bit  test-patt >> $(LOG) 2>&1 ; cd ..
+	cd eid ; $(MK) veryclean ; cd ..
+
+# Cleaning the modules
+clean:
+	cd eid    ; $(MK) clean ; cd ..
+	cd fir    ; $(MK) clean ; cd ..
+	cd g711   ; $(MK) clean ; cd ..
+	cd g722   ; $(MK) clean ; cd ..
+	cd g726   ; $(MK) clean ; cd ..
+	cd g727   ; $(MK) clean ; cd ..
+	cd iir    ; $(MK) clean ; cd ..
+	cd is54   ; $(MK) clean ; cd ..
+	cd mnru   ; $(MK) clean ; cd ..
+	cd rpeltp ; $(MK) clean ; cd ..
+	cd sv56   ; $(MK) clean ; cd ..
+	cd utl    ; $(MK) clean ; cd ..
+	cd unsup  ; $(MK) clean ; cd ..
+
+# Cleaning test files in the modules
+cleantest:
+	cd eid       ; $(MK) cleantest ; cd ..
+	cd fir       ; $(MK) cleantest ; cd ..
+	cd g711      ; $(MK) cleantest ; cd ..
+	cd g722      ; $(MK) cleantest ; cd ..
+	cd g726      ; $(MK) cleantest ; cd ..
+	cd g727      ; $(MK) cleantest ; cd ..
+	cd iir       ; $(MK) cleantest ; cd ..
+	cd is54/binUnix  ; $(MK) cleantest ; cd ..
+	cd mnru      ; $(MK) cleantest ; cd ..
+	cd rpeltp/ts ; $(MK) cleantest ; cd ..
+	cd sv56      ; $(MK) cleantest ; cd ..
+	cd utl       ; $(MK) cleantest ; cd ..
+	cd unsup     ; $(MK) cleantest ; cd ..
+
+# Super-cleaning the modules
+veryclean:
+	cd eid       ; $(MK) veryclean ; cd ..
+	cd fir       ; $(MK) veryclean ; cd ..
+	cd g711      ; $(MK) veryclean ; cd ..
+	cd g722      ; $(MK) veryclean ; cd ..
+	cd g726      ; $(MK) veryclean ; cd ..
+	cd g727      ; $(MK) veryclean ; cd ..
+	cd iir       ; $(MK) veryclean ; cd ..
+	cd is54      ; $(MK) veryclean ; cd ..
+	cd is54/binUnix  ; $(MK) veryclean ; cd ..
+	cd mnru      ; $(MK) veryclean ; cd ..
+	cd rpeltp    ; $(MK) veryclean ; cd ..
+	cd rpeltp/ts ; $(MK) veryclean ; cd ..
+	cd sv56      ; $(MK) veryclean ; cd ..
+	cd utl       ; $(MK) veryclean ; cd ..
+	cd unsup     ; $(MK) veryclean ; cd ..
+	$(RM) binUnix/*
+
+# Ckeck the logs
+checklogs:
+	gawk -f eid/show-crc.awk eid/$(LOG) | diff -bwi - eid/$(EIDCRC) ; pause
+	gawk -f fir/chk-log.awk fir/$(LOG) | grep '\*' ; pause
+	grep -i diff g711/$(LOG) | less
+	grep -i diff g722/$(LOG) | less
+	grep -i diff g726/$(LOG) | less
+	grep -i diff g727/$(LOG) | less
+	gawk -f fir/chk-log.awk iir/$(LOG) | grep '\*' ; pause
+	grep -i diff is54/binUnix/$(LOG) | less
+	grep -i diff mnru/$(LOG) | less
+	grep -i diff rpeltp/ts/$(LOG) | less
+	less sv56/$(LOG)
+	grep -i diff utl/$(LOG) | less
+	grep -i diff unsup/$(LOG) | less
+
+
+

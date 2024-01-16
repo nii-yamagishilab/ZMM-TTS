@@ -1,0 +1,31 @@
+#
+# G.728 Makefile
+#
+# Coder Flags
+# -DUSEFLOATS	use single-precision arithmetic
+#		for speed
+# -DUSEDOUBLES	use double-precision arithmetic
+#		to match floating-point test vectors
+#
+CC=	gcc
+#CFLAGS= -O -DUSEFLOATS
+CFLAGS= -O -DUSEDOUBLES
+OFILES= g728.o g728enc.o g728dec.o g728b.o g728cpy.o g728durb.o g728vec.o \
+	g728util.o g728filt.o g728pf.o g728eras.o g728rom.o
+LIBS= -lm
+
+all: g728
+
+.c.o:
+	$(CC) -c $(CFLAGS)  $*.c
+
+g728: $(OFILES)
+	$(CC) $(CFLAGS) -o $@ $(OFILES) $(LIBS)
+
+clean:
+	rm -f g728 $(OFILES) *.out
+
+srccpy:
+	-rm -f g728.tar.Z
+	tar cfv g728.tar Make* README *.[ch] test*
+	compress g728.tar

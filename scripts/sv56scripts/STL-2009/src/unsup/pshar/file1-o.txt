@@ -1,0 +1,180 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <dos.h>
+#include <io.h>
+#include <alloc.h>
+#include "dsp16-io.h"
+
+int             main(int argc, char *argv[])
+{
+  char            hexfile[100] = "resmon.hex";	/* TMS320C25 init file */
+  double          rate = 8000;	/* Samplig rate, in Hz */
+  char            speech_file[100];	/* Digitized speech file */
+  int             errflg = 0;	/* Error flag */
+  char            high_byte_1st = 0;	/* Little or Big endian */
+  char            pause_before_start = 0;	/* wait user's input */
+  short           play_mode = CMD15_ONCE;	/* Loop or single listening */
+  long            addr;		/* Start address in DSP16+ data RAM */
+  long            file_size;	/* speech file size, in bytes */
+  FILE           *fx;		/* speech file structure pointer */
+  int             fh;		/* speech file handler */
+  short far      *bp;		/* pointer for speech data on PC RAM */
+  long            nword;	/* number of 16-bit words in the speech file */
+  long            tmp;
+
+  /* Ask for options */
+  while (argc > 1 && argv[1][0] == '-' && strlen(argv[1]) > 1)
+    if (strcmp(argv[1], "-fs") == 0)
+    {
+      /* Set sampling rate */
+      rate = atof(argv[2]);
+
+      /* Update argv and argc to next argument */
+      argv += 2;
+      argc -= 2;
+    }
+    else if (strcmp(argv[1], "-c") == 0)
+    {
+      /* Set play mode as continuous */
+      play_mode = CMD15_LOOP;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-1") == 0)
+    {
+      /* Set play mode for 1 play */
+      play_mode = CMD15_ONCE;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-p") == 0)
+    {
+      /* Wait user's command to start playback */
+      pause_before_start = 1;
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-s") == 0)
+    {
+      /* Files are big endian - so, swap bytes, please */
+      high_byte_1st = 1;
+      argv++;
+      argc--;
+    }
+    else
+    {
+      fprintf(stderr, "Invalid option \"%s\" in command line\n\n",
+	      argv[1]);
+      exit(1);
+    }
+
+  /* Get length for measurements */
+  if (argc < 2 || strcmp(argv[1], "-?") == 0)
+  {
+    fprintf(stderr, "Usage: %s [-fs Hz] [-1] [-c] [-s] file\n", argv[0]);
+    exit(1);
+  }
+  else
+  {
+    /* Read parameters for processing */
+    strcpy(speech_file, argv[1]);
+    fprintf(stderr, "Speech file: %s\n", speech_file);
+  }
+
+  /* Setting address of DSP-16 */
+  if (DSP16_setaddress())
+    return (1);
+
+  /* Initializing DSP-16 hardware */
+  if (DSP16_initialize(hexfile))
+    return (2);
+
+  /* Documenting hardware/software/firmware options */
+  printf("DSP-16 Driver version %d.%d. - ", dcall.p3, dcall.p4);
+  printf("%d words uploaded.\n", DWORDSUP);
+
+  /* Setting sampling rate, with prevoius check for range */
+  if ((rate <= 0.0) || (rate > 50000.0))
+    rate = 50000.0;
+  errflg = DSP16_samplerate(rate);
+  if (errflg)
+    return (1);
+  printf("Sample rate set to %3.3f kHz.\n", rate / 1000.0);
+
+  /* Open speech file */
+  if ((fx = fopen(speech_file, "rb")) == NULL)
+  {
+    printf("Can't open file %s ... aborted\n", speech_file);
+    return (1);
+  }
+  fh = fileno(fx);
+
+  /* Inicializations for file */
+  bp = (short far *) NULL;
+  file_size = filelength(fh);
+
+  /* Check if enough memory */
+  if ((tmp = farcoreleft()) < file_size)
+    return (fprintf(stderr, "Insufficient memory: %ld bytes! \n", tmp), 2);
+
+  /* ... Allocates memory to load current file */
+  if ((bp = (short far *) farmalloc((long) file_size)) == NULL)
+  {
+    /* Well, there was enough memory BUT allocation failed! */
+    printf("Can't allocate memory for file %s", speech_file);
+    fclose(fx);
+    return (1);
+  }
+
+  /* Load file into the PC memory */
+  fprintf(stderr, "Loading sampled data in PC's RAM\r");
+  nword = load_big_buffer(fh, bp, file_size) / 2;
+  fclose(fx);
+
+  /* Swap bytes when requested */
+  if (high_byte_1st)
+    swap_byte((char far *) bp, 2 * nword);
+
+  /* Send next speech material to DSP16 */
+  addr = 0;
+  fprintf(stderr, "Sending sampled data to DSP16's RAM\r");
+  send_big_block(bp, (long) file_size, &addr);
+
+  /* Clear line */
+  clreol();
+
+  /* Pause, if requested */
+  if (pause_before_start)
+  {
+    fprintf(stderr, "Hit ENTER to start listening ... ");
+    (void) getch();
+    fprintf(stderr, "\r");
+    clreol();
+  }
+
+  /* Send order to start playback */
+  if (start_playback(nword, play_mode) == 0)
+    return (1);
+
+  /* Display info */
+  if (play_mode == CMD15_LOOP)
+    fprintf(stderr, "Hit 'S' to stop listening! ... ");
+
+  /* Free memory */
+  farfree(bp);
+
+  /* Wait until the current file ends its playback */
+  wait_eop_or_esc();
+
+  /* Resets DSP16 */
+  DSP16_resetTMS();
+
+  /* Put DSP16 back into the initial state and quit */
+  errflg = DSP16_initialize(hexfile);
+  return (errflg ? 1 : 0);
+}

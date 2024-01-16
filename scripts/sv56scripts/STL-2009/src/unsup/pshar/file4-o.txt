@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include "gpib-bib.h"		/* header file for the NI488 software */
+#include "hp8903b.h"		/* header file for the HP8903B */
+
+int             main()
+{
+  /* GPIB variables */
+  int             bd;
+  HP8903B_state   st;
+
+  /* Assign unique identifier to board 0 and save in bd */
+  fprintf(stderr, "Initializing controller");
+  if ((bd = ibfind("GPIB0")) < 0)
+    return (GPIB_error(NULL), 1);
+
+  /* Send the Interface Clear (IFC). */
+  if (ibsic(bd) & ERR)
+    return (GPIB_error(NULL), 1);
+
+  /* Turn on Remote Enable (REN) signal so instrument can be programmed. */
+  if (ibsre(bd, 1) & ERR)
+    return (GPIB_error(NULL), 1);
+
+  /* Reset devices */
+  if (HP8903B_reset(bd))
+    return (GPIB_error(NULL), 1);
+
+  /* Initialize data structure with desired settings for the HP8903B */
+  strcpy(st.src.uf, "HZ");	/* Frequency unity: Hz */
+  strcpy(st.src.uv, "VL");	/* Amplitude unity: V */
+  st.src.f = 1020;		/* 1020 Hz */
+  st.src.v = 1;			/* 1V */
+
+  /* Initialize the HP8903B */
+  if (HP8903B_set_source(bd, st))
+    exit(1);
+  else
+    fprintf(stderr, "\nHP8903B Source initialized!\n");
+
+
+  /* Read measurement from HP8903 until something else than ENTER is hit */
+  do
+  {
+    printf("\n");
+    fprintf(stderr, ">> Hit ENTER repeat measurement, %s",
+	    "any other key quit\n");
+    printf(" AClevel= %11.3lfV\n", HP8903B_measure(LevelAC, bd, 4l));
+    printf(" DClevel= %11.3lfV\n", HP8903B_measure(LevelDC, bd, 4l));
+    printf(" SNR=     %10.2lfdB\n", HP8903B_measure(SNR, bd, 4l));
+    printf(" SINAD=   %10.2lfdB\n", HP8903B_measure(SINAD, bd, 4l));
+    printf(" Dist=    %12.4lfV\n", HP8903B_measure(Distortion, bd, 4l));
+    printf(" Dist=    %12.4lf%%\n",
+	   HP8903B_measure(DistortionPercent, bd, 4l));
+  } while (getch() == '\r');
+
+  /* The program terminates with an interface clear */
+  ibsic(bd);
+
+  /* Return OK */
+  return (0);
+}

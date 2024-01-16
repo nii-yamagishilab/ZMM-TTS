@@ -1,0 +1,119 @@
+README for G.727 Test Vectors
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The test vectors obtained from the ITU-T are in ASCII format. To
+convert them to the UGST format, the program ../g726/cvt_h_b.c can be
+used. The ITU provides reset and homing test sequences. The UGST code
+has been tested only with the reset test sequences.
+
+Following is a description of the reset test vector files.
+
+
+Reset Sequences
+~~~~~~~~~~~~~~~
+
+16 kbit/s
+Rate   InFile Enc.Law Enc.Mode  ADPCMfil	Dec.Law	Dec.Mod	OutFile
+16kb/s	nrm.m	u	(2,2)	rn22_m.i	u	(2,2)	rn22_m.o
+16kb/s	-	-	-	rn22_m.i	A	(2,2)	rn22_c.o
+16kb/s	ovr.m	u	(2,2)	rv22_m.i	u	(2,2)	rv22_m.o
+16kb/s	-	-	-	rv22_m.i	A	(2,2)	rv22_c.o
+16kb/s	-	-	-	     i16	u	(2,2)	ri22_m.o
+16kb/s	nrm.a	A	(2,2)	rn22_a.i	a	(2,2)	rn22_a.o
+16kb/s	-	-	-	rn22_a.i	u	(2,2)	rn22_x.o
+16kb/s	ovr.a	A	(2,2)	rv22_a.i	a	(2,2)	rv22_a.o
+16kb/s	-	-	-	rv22_a.i	u	(2,2)	rv22_x.o
+16kb/s	-	-	-	     i16	a	(2,2)	ri22_a.o
+
+
+24 kbit/s
+Rate   InFile Enc.Law Enc.Mode  ADPCMfil	Dec.Law	Dec.Mod	OutFile
+24kb/s	nrm.m	u	(3,2)	rn32_m.i	u	(3,2)	rn32_m.o
+24kb/s	-	-	-	rn32_m.i	A	(3,2)	rn32_c.o
+24kb/s	ovr.m	u	(3,2)	rv32_m.i	u	(3,2)	rv32_m.o
+24kb/s	-	-	-	rv32_m.i	A	(3,2)	rv32_c.o
+24kb/s	-	-	-	     i24	u	(3,2)	ri32_m.o
+24kb/s	nrm.m	u	(3,3)	rn33_m.i	u	(3,3)	rn33_m.o
+24kb/s	-	-	-	rn33_m.i	A	(3,3)	rn33_c.o
+24kb/s	ovr.m	u	(3,3)	rv33_m.i	u	(3,3)	rv33_m.o
+24kb/s	-	-	-	rv33_m.i	A	(3,3)	rv33_c.o
+24kb/s	-	-	-	     i24	u	(3,3)	ri33_m.o
+24kb/s	nrm.a	A	(3,2)	rn32_a.i	a	(3,2)	rn32_a.o
+24kb/s	-	-	-	rn32_a.i	u	(3,2)	rn32_x.o
+24kb/s	ovr.a	A	(3,2)	rv32_a.i	a	(3,2)	rv32_a.o
+24kb/s	-	-	-	rv32_a.i	u	(3,2)	rv32_x.o
+24kb/s	-	-	-	     i24	a	(3,2)	ri32_a.o
+24kb/s	nrm.a	A	(3,3)	rn33_a.i	a	(3,3)	rn33_a.o
+24kb/s	-	-	-	rn33_a.i	u	(3,3)	rn33_x.o
+24kb/s	ovr.a	A	(3,3)	rv33_a.i	a	(3,3)	rv33_a.o
+24kb/s	-	-	-	rv33_a.i	u	(3,3)	rv33_x.o
+24kb/s	-	-	-	     i24	a	(3,3)	ri33_a.o
+
+32 kbit/s
+Rate   InFile Enc.Law Enc.Mode  ADPCMfil	Dec.Law	Dec.Mod	OutFile
+32kb/s	nrm.m	u	(4,2)	rn42_m.i	u	(4,2)	rn42_m.o
+32kb/s	-	-	-	rn42_m.i	A	(4,2)	rn42_c.o
+32kb/s	ovr.m	u	(4,2)	rv42_m.i	u	(4,2)	rv42_m.o
+32kb/s	-	-	-	rv42_m.i	A	(4,2)	rv42_c.o
+32kb/s	-	-	-	     i32	u	(4,2)	ri42_m.o
+32kb/s	nrm.m	u	(4,3)	rn43_m.i	u	(4,3)	rn43_m.o
+32kb/s	-	-	-	rn43_m.i	A	(4,3)	rn43_c.o
+32kb/s	ovr.m	u	(4,3)	rv43_m.i	u	(4,3)	rv43_m.o
+32kb/s	-	-	-	rv43_m.i	A	(4,3)	rv43_c.o
+32kb/s	-	-	-	     i32	u	(4,3)	ri43_m.o
+32kb/s	nrm.m	u	(4,4)	rn44_m.i	u	(4,4)	rn44_m.o
+32kb/s	-	-	-	rn44_m.i	A	(4,4)	rn44_c.o
+32kb/s	ovr.m	u	(4,4)	rv44_m.i	u	(4,4)	rv44_m.o
+32kb/s	-	-	-	rv44_m.i	A	(4,4)	rv44_c.o
+32kb/s	-	-	-	     i32	u	(4,4)	ri44_m.o
+32kb/s	nrm.a	A	(4,2)	rn42_a.i	a	(4,2)	rn42_a.o
+32kb/s	-	-	-	rn42_a.i	u	(4,2)	rn42_x.o
+32kb/s	ovr.a	A	(4,2)	rv42_a.i	a	(4,2)	rv42_a.o
+32kb/s	-	-	-	rv42_a.i	u	(4,2)	rv42_x.o
+32kb/s	-	-	-	     i32	a	(4,2)	ri42_a.o
+32kb/s	nrm.a	A	(4,3)	rn43_a.i	a	(4,3)	rn43_a.o
+32kb/s	-	-	-	rn43_a.i	u	(4,3)	rn43_x.o
+32kb/s	ovr.a	A	(4,3)	rv43_a.i	a	(4,3)	rv43_a.o
+32kb/s	-	-	-	rv43_a.i	u	(4,3)	rv43_x.o
+32kb/s	-	-	-	     i32	a	(4,3)	ri43_a.o
+32kb/s	nrm.a	A	(4,4)	rn44_a.i	a	(4,4)	rn44_a.o
+32kb/s	-	-	-	rn44_a.i	u	(4,4)	rn44_x.o
+32kb/s	ovr.a	A	(4,4)	rv44_a.i	a	(4,4)	rv44_a.o
+32kb/s	-	-	-	rv44_a.i	u	(4,4)	rv44_x.o
+32kb/s	-	-	-	     i32	a	(4,4)	ri44_a.o
+
+40 kbit/s
+Rate   InFile Enc.Law Enc.Mode  ADPCMfil	Dec.Law	Dec.Mod	OutFile
+40kb/s	nrm.m	u	(5,2)	rn52_m.i	u	(5,2)	rn52_m.o
+40kb/s	-	-	-	rn52_m.i	A	(5,2)	rn52_c.o
+40kb/s	ovr.m	u	(5,2)	rv52_m.i	u	(5,2)	rv52_m.o
+40kb/s	-	-	-	rv52_m.i	A	(5,2)	rv52_c.o
+40kb/s	-	-	-	     i40	u	(5,2)	ri52_m.o
+40kb/s	nrm.m	u	(5,3)	rn53_m.i	u	(5,3)	rn53_m.o
+40kb/s	-	-	-	rn53_m.i	A	(5,3)	rn53_c.o
+40kb/s	ovr.m	u	(5,3)	rv53_m.i	u	(5,3)	rv53_m.o
+40kb/s	-	-	-	rv53_m.i	A	(5,3)	rv53_c.o
+40kb/s	-	-	-	     i40	u	(5,3)	ri53_m.o
+40kb/s	nrm.m	u	(5,4)	rn54_m.i	u	(5,4)	rn54_m.o
+40kb/s	-	-	-	rn54_m.i	A	(5,4)	rn54_c.o
+40kb/s	ovr.m	u	(5,4)	rv54_m.i	u	(5,4)	rv54_m.o
+40kb/s	-	-	-	rv54_m.i	A	(5,4)	rv54_c.o
+40kb/s	-	-	-	     i40	u	(5,4)	ri54_m.o
+40kb/s	nrm.a	A	(5,2)	rn52_a.i	a	(5,2)	rn52_a.o
+40kb/s	-	-	-	rn52_a.i	u	(5,2)	rn52_x.o
+40kb/s	ovr.a	A	(5,2)	rv52_a.i	a	(5,2)	rv52_a.o
+40kb/s	-	-	-	rv52_a.i	u	(5,2)	rv52_x.o
+40kb/s	-	-	-	     i40	a	(5,2)	ri52_a.o
+40kb/s	nrm.a	A	(5,3)	rn53_a.i	a	(5,3)	rn53_a.o
+40kb/s	-	-	-	rn53_a.i	u	(5,3)	rn53_x.o
+40kb/s	ovr.a	A	(5,3)	rv53_a.i	a	(5,3)	rv53_a.o
+40kb/s	-	-	-	rv53_a.i	u	(5,3)	rv53_x.o
+40kb/s	-	-	-	     i40	a	(5,3)	ri53_a.o
+40kb/s	nrm.a	A	(5,4)	rn54_a.i	a	(5,4)	rn54_a.o
+40kb/s	-	-	-	rn54_a.i	u	(5,4)	rn54_x.o
+40kb/s	ovr.a	A	(5,4)	rv54_a.i	a	(5,4)	rv54_a.o
+40kb/s	-	-	-	rv54_a.i	u	(5,4)	rv54_x.o
+40kb/s	-	-	-	     i40	a	(5,4)	ri54_a.o
+
+
+--<simao> 07.Jan.1998

@@ -1,0 +1,38 @@
+# -----------------------------------------------------------------------------
+#	Unix makefile for compiling and testing the unsupported program pshar.
+#	It is believed to be compatible with the Unix shar utility. Useful
+#	for the MSDOS and VAX/VMS environments.
+#	implementation. 
+#	 create:	create executable
+#	 unpack: 	extract (p)shar archives
+#	 repack:	repack files
+#	 clean:		delete unnecessary files
+#	Implemented by <simao@cpqd.ansp.br> -- 01.May.94
+# -----------------------------------------------------------------------------
+.SUFFIXES: .txt
+
+CC = gcc
+CC_OPT = -traditional -Wall -fno-builtin
+DIFF = diff
+
+all:: create unpak repack clean
+
+create:	pshar
+pshar:	pshar.c
+	$(CC) $(CC_OPT) -o pshar pshar.c
+
+unpak:
+	pshar -u test.ori
+	$(DIFF) file1.txt file1-o.txt
+	$(DIFF) file2.txt file2-o.txt
+	$(DIFF) file3.txt file3-o.txt
+	$(DIFF) file4.txt file4-o.txt
+	$(DIFF) file5.txt file5-o.txt
+
+repack:
+	pshar -f test.new file1.txt file2.txt file3.txt file4.txt file5.txt
+	-$(DIFF) test.ori test.new
+
+clean:
+	$(RM) file?.txt test.new
+

@@ -1,0 +1,67 @@
+			     UGST-UTL.RME
+			 (version: 05/Sep/95)
+
+                   Description of the UGST Utility routines
+                              (ITU-T/UGST Works)
+
+       =============================================================
+       COPYRIGHT NOTE: This source code, and all of its derivations,
+       is subject to the "ITU-T General Public License". Please have
+       it  read  in    the  distribution  disk,   or  in  the  ITU-T
+       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
+       CODING STANDARDS".
+       =============================================================
+
+Source code:
+~~~~~~~~~~~~
+ugst-utl.c ... Float/short, Serial/Parallel conversion routines; scaling 
+               routine.
+ugst-utl.h ... Definitions for conversion and scaling routines.
+
+Demo programs
+~~~~~~~~~~~~~
+spdemo.c ..... Demo for use of the serial/parallel conversion routines.
+scaldemo.c ... Demo program with short/float conversion and scaling functions 
+ugstdemo.h ... General UGST demo's include.
+
+Makefiles:
+~~~~~~~~~~
+Makefiles have been provided for automatic build-up of the executable program
+and to process the test files:
+make-vms.com: ... DCL for VAX/VMS Vax-cc compiler or the VMS port of gcc
+makefile.tcc: ... make file for MSDOS Borland tcc
+makefile.djc: ... make file for MSDOS port of gcc
+makefile.unx: ... make file for Unix, using either cc (Sun), acc (Sun), or gcc
+
+Testing:
+~~~~~~~~
+The provided makefiles can run a portability test on the demo program. They 
+need the archive tst-sp.zip ([pk]zip compatible archive) and [pk]unzip to 
+extract the proper source and reference processed files. The contents of this
+archive file is, as reported by unzip:
+ Length  Method   Size  Ratio   Date    Time   CRC-32     Name ("^" ==> case
+ ------  ------   ----  -----   ----    ----   ------     ----   conversion)
+    200  Deflate     84  58%  01-11-95  17:30  32ce01ed   spref-l.p12
+    200  Deflate    134  33%  01-11-95  17:30  b1a2aa4e   spref-l.p15
+    200  Deflate    132  34%  01-11-95  17:30  672a5c1a   spref-l.p16
+   2402  Deflate    126  95%  01-11-95  17:30  a4c94711   spref-l.s12
+   3002  Deflate    228  92%  01-11-95  17:30  c1cff366   spref-l.s15
+   3202  Deflate    222  93%  01-11-95  17:30  1e4164d1   spref-l.s16
+    200  Deflate     64  68%  01-11-95  17:30  0db7cd1e   spref-r.p12
+    200  Deflate    129  36%  01-11-95  17:30  c2a277ec   spref-r.p15
+    200  Deflate    132  34%  01-11-95  17:30  672a5c1a   spref-r.p16
+   2402  Deflate     88  96%  01-11-95  17:30  7d359b06   spref-r.s12
+   3002  Deflate    202  93%  01-11-95  17:30  30f87b36   spref-r.s15
+   3202  Deflate    222  93%  01-11-95  17:30  1e4164d1   spref-r.s16
+    200  Deflate    132  34%  01-11-95  17:30  672a5c1a   spref-s.p16
+   3200  Deflate    218  93%  01-11-95  17:30  60075c77   spref-s.s16
+    200  Deflate    132  34%  01-11-95  16:24  672a5c1a   spref.src
+ ------          ------  ---                              -------
+  22012            2245  90%                              15     
+
+NOTE! These files are in the big-endian (high-byte first) format. Therefore, 
+      before using under MSDOS or VAX/VMS, the files need to be byte-swapped. 
+      See unsupported program sb in the ../unsup directory.
+
+-- <simao@ctd.comsat.com> --
+

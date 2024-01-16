@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <string.h>
+#include "gpib-bib.h"
+#include "gpib-dft.h"
+#include "hp35665a.h"
+
+void            main()
+{
+  /* Local variables */
+  float           buf[500];
+  long            datapoints, pulseno;
+  int             bd, dev;	/* GPIB board and device numbers */
+
+  /* Assign unique identifier to board 0 and store in variable bd */
+  if ((bd = ibfind("GPIB0")) < 0)
+    exit(GPIB_error("Can't initialize GPIB board\n"), 1);
+
+  /* Initializing HP35665A as DEV11 */
+  if ((dev = ibfind("DEV11")) < 0)
+    exit(GPIB_error("Can't initialize HP35665A as DEV11\n"), 2);
+
+  /* Send the Interface Clear (IFC). */
+  if (ibsic(bd) & ERR)
+    exit(GPIB_error("Failed sending IFC\n"), 1);
+
+  /* Turn on Remote Enable (REN) signal so instrument can be programmed. */
+  if (ibsre(bd, 1) & ERR)
+    exit(GPIB_error("Failed raising REN\n"), 1);
+
+  /* Initialize the HP35665A */
+  if (init_HP35665A(bd))
+    exit(2);
+
+  /* Do multiple measurements, until a key is hit */
+  do
+  {
+    /* Print message */
+    printf("Dial something on the phone\r");
+
+    /* Get channel 1 of HP35665A, when new data comes */
+    if (get_trace_HP35665A(bd, buf, &datapoints, 1))
+      break;
+
+    /* Find out which key was pressed and print if a valid one */
+    if (get_vote(buf, datapoints, 0l, 9l, &pulseno))
+      printf("Pressed key %ld\t\t\t\n", pulseno);
+
+  } while (!kbhit());
+
+  /* Send instrument to local mode */
+  ibloc(dev);
+
+  /* The program terminates with an interface clear */
+  ibsic(bd);
+}

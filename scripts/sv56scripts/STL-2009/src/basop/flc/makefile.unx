@@ -1,0 +1,23 @@
+# Floating point operation counter STL 2009 makefile
+# for for GNU gcc/g++ compiler
+
+CC=gcc
+CFLAGS=-Wall -pedantic -O3 -std=gnu9x
+
+all: flc_example
+
+build:
+
+OBJS= flc_example.o flc.o
+	
+flc_example : build ${OBJS}
+	$(CC) -o flc_example $(OBJS)
+
+flc.o:flc.c
+	$(CC) $(CFLAGS) -c flc.c -o flc.o
+flc_example.o:flc_example.c
+	$(CC) $(CFLAGS) -c flc_example.c -o flc_example.o	
+
+clean:
+	rm -f *.o
+

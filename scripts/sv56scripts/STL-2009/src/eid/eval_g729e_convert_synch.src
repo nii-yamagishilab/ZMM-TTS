@@ -1,0 +1,49 @@
+# Example commands for testing g729e_convert_synch utility
+#  source test_g729e_convert_synch.src > & log.txt
+
+# Needed files
+#  file.smp
+#  f.10.g192
+#  file.g729e.f.10.swap
+
+
+./g729e/fix/codere  file.smp file.g729e  1
+./bs-stats file.g729e file.g729e.bs-stats.txt
+./g729e/fix/decodere file.g729e file.g729e.smp
+
+# error patter creation 
+#\rm sta; ./gen-patt -reset -fer -g192 -gamma 0 -rate 0.10 -n 609  f.10.g192
+./ep-stats f.10.g192 5
+
+
+./eid-xor -fer -ep g192 -bs g192 file.g729e f.10.g192 file.g729e.f.10
+# eid-xor sets  zeroed payload with G192_FER sync tag. 
+./bs-stats file.g729e.f.10 file.g729e.f.10.bs-stats.txt
+./g729e_convert_synch file.g729e.f.10 file.g729e.f.10.all_synch
+./bs-stats file.g729e.f.10.all_synch file.g729e.f.10.all_synch.bs-stats.txt
+./g729e/fix/decodere file.g729e.f.10.all_synch file.g729e.f.10.all_synch.smp
+
+#(or using eid-ev as eid)
+# eid-ev sets a zero length payload with G192_FER sync tag. 
+./eid-ev -layers 118 file.g729e f.10.g192 file.g729e.f.10.ev 
+./bs-stats file.g729e.f.10.ev file.g729e.f.10.ev.bs-stats.txt   
+./g729e_convert_synch file.g729e.f.10.ev file.g729e.f.10.ev.all_synch
+./bs-stats file.g729e.f.10.ev.all_synch file.g729e.f.10.ev.all_synch.bs-stats.txt
+./g729e/fix/decodere file.g729e.f.10.ev.all_synch file.g729e.f.10.ev.all_synch.smp
+#-----------------------------------------------------------------
+
+
+# check consistency 
+cmp  file.g729e.f.10.all_synch  file.g729e.f.10.ev.all_synch
+cmp  file.g729e.f.10.all_synch.smp file.g729e.f.10.ev.all_synch.smp
+
+# test output as input
+ ./g729e_convert_synch file.g729e.f.10.all_synch file.g729e.f.10.all_synch2
+ ./bs-stats file.g729e.f.10.all_synch2 file.g729e.f.10.all_synch2.bs-stats.txt
+
+       
+# test binary file 
+./g729e_convert_synch /dev/zero dummy
+
+# test of swapped g192 file
+./g729e_convert_synch file.g729e.f.10.swap dummy

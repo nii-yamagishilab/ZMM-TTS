@@ -1,0 +1,58 @@
+/* Version 0.3    Last modified: July 26 2006, Jonas Svedberg */
+g729e_convert_synch
+
+Background:
+ The G729E reference decoder does not accept other synchs than SYNCH_WORD(G192_SYNC)
+ in the G192 word oriented bitstream. The STL tools EID-XOR and EID-EV write a 
+ G192_FER tag for erased frames.
+ Also to make G729(Main,A,D) accept EID-EV output, a zeroed payload 
+ has to be created when the corrupted frame has zero payload length.
+
+----------------------------------
+ G729E Bitstream information - all parameters start with msb
+ The bits are defined as follows:
+ #define SYNC_WORD (short)0x6b21   (=G192_SYNC)
+ #define BIT_0     (short)0x007f 
+ #define BIT_1     (short)0x0081 
+ A bad frame is indicated by setting all payload bits to zero. 
+
+---Actual g729E c-code--- 
+ if(serial[0] != SYNC_WORD ) {
+   printf("error reading synchro word file %s frame %hd\n",
+   argv[1], frame);
+   exit(-1);
+}
+------------------------------------
+This program converts G.192 word oriented analysis frames without SYNCH_WORD 
+into a G.192 word oriented file with SYNCH_WORD and zeroed payload bits.
+Also zero length frames (with header G192_FER or G192_SYNC) 
+are converted to non-zero length G192_SYNC frames with zeroed payload.  
+
+Note: G729D and G729/G729A/G729B does not check the synch_word, 
+they merely check that all analysis bits in the frame are set to zero
+to declare a frame erasure(FER). I.e. G729D/G729/G729A works ok with eid-xor.
+however they do not work with eid-ev, since eid-ev has a zero payload for the G192_FER frames
+
+Compilation (in the STL eid directory):
+ gcc g729e_convert_synch.c ../eid/softbit.c -I../eid -I ../utl -o g729e_convert_synch
+
+Example execution:
+ ./g729e/fix/codere  file.smp file.g729e  1
+ # optional error patter creation 
+ #\rm sta; ./gen-patt -reset -fer -g192 -gamma 0 -rate 0.10 -n 609  f.10.g192
+ ./eid-xor -fer -ep g192 -bs g192 file.g729e f.10.g192 file.g729e.f.10
+ ./g729e_convert_synch file.g729e.f.10 file.g729e.f.10.all_synch quiet
+ ./g729e/fix/decodere file.g729e.f.10.all_synch file.g729e.f.10.all_synch.smp
+-----------------------------------------------------------------       
+
+Note for DTX operation and different Error insertion devices(EID-XOR/EID-EV):
+   When inserting Errors EID-XOR tags NO_DATA frames(G192_SYNC,length 0) as FER frames (G192_FER,length 0),
+   When inserting errors EID-EV maintains NO_DATA frames(G192_SYNC,length 0) as NO_DATA frames (G192_SYNC,length 0).
+   ( This causes problems because the G729 decoders does not handle these frametypes  exactly the same way. 
+      causing minor synthesis differences.)
+
+
+Script file: 
+ see eval_g729e_convert_synch.src 
+ for further examples
+*/

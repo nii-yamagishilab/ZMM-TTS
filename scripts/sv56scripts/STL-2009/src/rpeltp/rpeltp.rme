@@ -1,0 +1,73 @@
+
+			       U G S T
+
+	     rpeltp.rme - Read me file for RPELTP module
+			     (05.May.95)
+
+       =============================================================
+       COPYRIGHT NOTE: This source code, and all of its derivations,
+       is subject to the "ITU-T General Public License". Please have
+       it  read  in    the  distribution  disk,   or  in  the  ITU-T
+       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
+       CODING STANDARDS". Further copyright notice below.
+       =============================================================
+
+This is the readme file for the ITU-T STL module rpeltp. This module has 
+been based on the implementation done by Jutta Degener and Carsten Bormann, 
+from the Technische Universitaet Berlin, at the Communications and 
+Operating Systems Research Group (KBS). 
+
+The authors have granted the right to use it provided that the copyright 
+notices are kept in the files. See file "cpyright" for their copyright 
+conditions and statements.
+
+This module comprises several files, described below:
+
+rpeltp.rme	This readme file
+changes		report of changes and portability notes for the UGST port,
+		in relation with the original distribution.
+copyright	Original copyright note from the original authors
+
+make-vms.com	Program-making DCL for VAX-C and VMS port of the GNU C compiler
+makefile.tcc	Makefile for Borland's tcc
+makefile.cl     Makefile for MS Visual C Compiler
+makefile.djc	Makefile for the MSDOS port of the GNU-C compiler (DJCPP)
+makefile.unx	Unix Makefile, adapted from the original distribution
+rpedemo.prj	Borland's BC project file (binary!)
+
+add_test.c	Program for testing the correct working of the functions 
+		in add.c. Needed only when porting the program to new 
+		platforms.
+add_test.dta	Input test sequence for add_test.c
+
+rpedemo.c	demo program for the rpeltp module
+ugstdemo.h	UGST header with user interface macros and other nice stuf.
+
+The following are the functions that comprise the rpeltp module:
+add.c		code.c		config.h	debug.c		decode.c
+gsm.h		gsm_crea.c	gsm_deco.c	gsm_dest.c	gsm_enco.c
+gsm_expl.c	gsm_impl.c	gsm_opti.c	gsm_prin.c	long_ter.c
+lpc.c		preproce.c	private.h	proto.h		rpe.c	
+rpeltp.c	rpeltp.h	short_te.c	table.c		unproto.h
+
+all above but rpeltp.c are from the original distribution (after changes to
+ensure portability!). This one has been added to provide "driving" functions 
+in the UGST style.
+
+File names from the original distribution had to be shortened because of the
+DOS limitation for 8 plus 3 letters for file names. See "changes" for a
+list of the files with changes (shortened) names.
+
+Note on Testing:
+~~~~~~~~~~~~~~~~
+The directory ts has a file named sine.lin, that is a sinewave. Try make with
+the proper makefile and run with the target `sine'. Then you should get no 
+differences. Please note that this is *not* a thorough validation of the 
+coder, because this is done using the 5 test sequences sold by ETSI. Because
+they are sold, we cannot distribute them here. But the code has been tested,
+and passed, the necessary test sequence in at least: Sun [cc/gcc/acc and 
+SunOs 4.3], VAX/VMS [Vax-C3/gcc], HP-UX [gcc], PC [bcc 16 bit/DJC gcc].
+Therefore, use sine.lin to test for rough errors. 
+NOTE: If you have the test sequences, the makefiles can process them for you, 
+if they are named seq01 to seq05.
+-- <simao@ctd.comsat.com> -------

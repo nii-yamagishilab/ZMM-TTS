@@ -1,0 +1,41 @@
+# -----------------------------------------------------------------------------
+#       Unix makefile for compiling and testing the UGST IIR module.
+#       31.Aug.09 - Created - <hiwasaki.yusuke@lab.ntt.co.jp>
+# -----------------------------------------------------------------------------
+.SUFFIXES: .c .o
+
+# ------------------------------------------------
+# Compiler
+# ------------------------------------------------
+CC = gcc
+CFLAGS = -O3 -Wall -pedantic -I../utl
+LDFLAGS = -lm
+
+# ------------------------------------------------
+# Object files
+# ------------------------------------------------
+OBJ = bmp_utils.o export.o fft.o freqresp.o ugst-utl.o
+
+# ------------------------------------------------
+# Generic rule
+# ------------------------------------------------
+.c.o:
+	$(CC) $(CFLAGS) -c $<
+
+# ------------------------------------------------
+# Targets
+# ------------------------------------------------
+all:: freqresp
+
+ugst-utl.o: ../utl/ugst-utl.c
+	    $(CC) $(CFLAGS) -c ../utl/ugst-utl.c
+
+freqresp: $(OBJ)
+	$(CC) $(CFLAGS) -o freqresp $(OBJ) $(LDFLAGS)
+
+clean:
+	$(RM) -f *.o *.obj
+	$(RM) -f *~
+
+bigclean: clean
+	$(RM) -f freqresp freqresp.exe

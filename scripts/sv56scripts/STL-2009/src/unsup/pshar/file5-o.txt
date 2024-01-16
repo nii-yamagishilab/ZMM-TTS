@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <math.h>
+#include "gpib-bib.h"
+#include "sv6.h"
+
+void            main(int argc, char *argv[])
+{
+  sv6_state       st;
+  double          time;
+
+  /* Get length for measurements */
+  if (argc < 2 || strcmp(argv[1], "-?") == 0)
+  {
+    fprintf(stderr, "Usage: %s meas-time-in-sec\n", argv[0]);
+    exit(1);
+  }
+  else
+  {
+    /* Read parameters for processing */
+    st.DeltaT = (double) atof(argv[1]);
+    fprintf(stderr, ">> Measurement time is %lfs\n", st.DeltaT);
+  }
+
+  /* Save specified time in memory */
+  time = st.DeltaT;
+
+  /* Initializing the SV6 structure */
+  if (SV6_open(&st))
+    exit(fprintf(stderr, "Aborting program\n"), 3);
+
+  /* Initialize SV6 */
+  SV6_initialize(st);
+  delay(1000);			/* Allow 1s for settling */
+
+  /* Measuring level and reporting */
+  do
+  {
+    /* Measure level for the specified time */
+    SV6_measure(&st);
+
+    /* Print levels read on screen */
+    print_sv6_state(st, stdout);
+
+    /* Set measurement time to the original value */
+    st.DeltaT = time;
+
+    /* Repeat while the user hits just ENTER */
+    fprintf(stderr, "\n>> Hit ENTER to repeat, other key to quit\n");
+  } while (!kbhit() && getche() == '\r');
+}
