@@ -20,7 +20,7 @@ This is the code for the ZMM-TTS submitted to the [IEEE TASLP](https://arxiv.org
 Welcome to try our code and pre-trained model on different languages!
 
 ## Release 
-- [20/01] 🔥 We released code and model pre-trained on 6 language public datasets.
+- [20/01] 🔥 We released code and model pre-trained on 6 language (English, French, German, Portuguese, Spanish and Swedish) public datasets.
 
 ## Samples
 Samples are provided on [our demo page](https://gongchenghhu.github.io/TASLP-demo/).
