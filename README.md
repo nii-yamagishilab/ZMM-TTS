@@ -95,17 +95,14 @@ wav = model.decode(codes[i: (j + 1)], st=i)
 ```
 
 ## Citation
-If you use this code or result in your paper, please cite our work as:
+If you use this code, result or MM6 dataset in your paper, please cite our work as:
 ```Tex
-@misc{zhang2023speechtokenizer,
-      title={SpeechTokenizer: Unified Speech Tokenizer for Speech Language Models}, 
-      author={Xin Zhang and Dong Zhang and Shimin Li and Yaqian Zhou and Xipeng Qiu},
-      year={2023},
-      eprint={2308.16692},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@article{gong2023zmm,
+  title={ZMM-TTS: Zero-shot Multilingual and Multispeaker Speech Synthesis Conditioned on Self-supervised Discrete Speech Representations},
+  author={Gong, Cheng and Wang, Xin and Cooper, Erica and Wells, Dan and Wang, Longbiao and Dang, Jianwu and Richmond, Korin and Yamagishi, Junichi},
+  journal={arXiv preprint arXiv:2312.14398},
+  year={2023}
 }
 ```
 ## License
-The code in this repository is released under the Apache 2.0 license as found in the
-[LICENSE](LICENSE) file.
+The code in this repository is released under the xxx license as found in the xxx file.
