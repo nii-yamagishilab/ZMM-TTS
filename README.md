@@ -73,7 +73,7 @@ bash scripts/norm_wav.sh
 #
 ```
 This MM6 is a multilingual dataset with a largely balanced mix of speakers and genders, and we encourage you to experiment with other tasks as well.
-### Train model
+### Preprocess
 After you generate the MM6 dataset, you can find wav in `Dataset/MM6/wavs/`  and meta file in `Dataset/preprocessed_data/ZMM6/train.txt`.
 The meta file looks like:
 ```bash
