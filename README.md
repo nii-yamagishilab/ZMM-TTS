@@ -67,8 +67,12 @@ Considering the scarcity of publicly multilingual and multilingual speaker datab
 Once the MLS and NST Swedish data have been downloaded, the following script can be executed to generate the MM6 dataset:
 ```bash
 python prepare_data/creat_meta.py
+#We recommend that you use sv56 to normalize the audio.
+bash scripts/norm.sh
+#
 ```
-### load model
+This is a multilingual dataset with a largely balanced mix of speakers and genders, and we encourage you to experiment with other tasks as well.
+### Train model
 ```python
 from speechtokenizer import SpeechTokenizer
 
