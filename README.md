@@ -120,6 +120,10 @@ python vec2wav/train.py -c Config/vec2wav/vec2wav.yaml
 #If you want to train a model without a language layer:
 python vec2wav/train.py -c Config/vec2wav/vec2wav_wo.yaml
 ```
+4. Train HifiGAN model:
+``` bash
+python Vocoder_HifiGAN_Model/train.py --config Config/config_16k_mel.json
+```
 ### Test model
 1. Prepare test data:
    a. test meta file `Dataset/MM6/test.txt`.
