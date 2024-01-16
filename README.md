@@ -7,7 +7,7 @@ This is the code for the ZMM-TTS submitted to the [IEEE TASLP](https://arxiv.org
 
 <br>
 <p align="center">
-    <img src="img/fig1_1219 (1).pdf" width="95%"> <br>
+    <img src="img/overview.png" width="95%"> <br>
     Overview
 </p>
 <be>
