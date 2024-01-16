@@ -52,7 +52,7 @@ Considering the scarcity of publicly multilingual and multilingual speaker datab
 ｜Language|Gender|Speakers|Sentences|Durations (h)|Database|
 |:----|:----:|:----|:----|:----:|:----|
 |English|Female|20｜4000｜13.9｜MLS｜
-｜｜Male|20|4000|13.9||
+｜English｜Male|20|4000|13.9|MLS|
 
 ### load model
 ```python
