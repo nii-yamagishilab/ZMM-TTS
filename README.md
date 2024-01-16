@@ -43,13 +43,14 @@ If you want to try IPA representations, you need to install [Epitran](https://gi
 |Model| Modality| Lang| Training data|
 |:----|:----:|:----|:----|
 |[XLSR-53](https://huggingface.co/facebook/wav2vec2-large-xlsr-53)| Audio| 53 |56K hours|
+|[ECAPA-TDNN](https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb)| Audio| > 5| 2794 hours|
+|[XPhoneBERT](https://huggingface.co/vinai/xphonebert-base)| Text| 94| 330Msentences|
 ## Usage
 ### Model storage
 | Model| Dataset |Discription|
 |:----|:----:|:----|
 |[speechtokenizer_hubert_avg](https://huggingface.co/fnlp/SpeechTokenizer/tree/main/speechtokenizer_hubert_avg)|LibriSpeech|Adopt average representation across all HuBERT layers as semantic teacher |
-|[ECAPA-TDNN](https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb)| Audio| > 5| 2794 hours|
-|(XPhoneBERT)[https://huggingface.co/vinai/xphonebert-base]| Text| 94| 330Msentences|
+
 ### load model
 ```python
 from speechtokenizer import SpeechTokenizer
