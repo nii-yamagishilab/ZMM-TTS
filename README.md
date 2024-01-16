@@ -16,7 +16,6 @@ This is the code for the ZMM-TTS submitted to the [IEEE TASLP](https://arxiv.org
 </p>
 <be>
 
-
 Welcome to try our code and pre-trained model on different languages!
 
 ## Release 
@@ -27,15 +26,15 @@ Samples are provided on [our demo page](https://gongchenghhu.github.io/TASLP-dem
 
 ## Installation
 
-SpeechTokenizer requires Python>=3.8, and a reasonly recent version of PyTorch.
-To install SpeechTokenizer, you can run from this repository:
+ZMM-TTS requires Python>=3.8, and a reasonly recent version of PyTorch.
+To install ZMM-TTS and make a quick synthesis, you can run from this repository:
 ```bash
-pip install -U speechtokenizer
-
-# or you can clone the repo and install locally
-git clone https://github.com/ZhangXInFD/SpeechTokenizer.git
-cd SpeechTokenizer
-pip install .
+git clone https://github.com/nii-yamagishilab-visitors/ZMM-TTS.git
+cd ZMM-TTS
+pip3 install -r requirements.txt
+#In addition, you may need to install these libraries to support full functionality.
+pip install transformers  #For support XLSR-53 and XphoneBERT model.
+pip install speechbrain   #For extracting speaker embedding.
 ```
 ## Usage
 ### Model storage
