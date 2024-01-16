@@ -14,20 +14,16 @@ This is the code for the ZMM-TTS submitted to the [IEEE TASLP](https://arxiv.org
     <img src="images/speechtokenizer_framework.jpg" width="95%"> <br>
     The SpeechTokenizer framework.
 </p>
-<br>
+<be>
 
 
-Welcome to try our [SLMTokBench](https://github.com/0nutation/SLMTokBench) 
- and we will also open source our  [USLM](https://github.com/0nutation/USLM) !!
+Welcome to try our code and pre-trained model on different languages!
 
-## Release
-- [9/11] 🔥 We released code of [soundstorm_speechtokenizer](https://github.com/ZhangXInFD/soundstorm-speechtokenizer).
-- [9/10] 🔥 We released code and checkpoints of [USLM](https://github.com/0nutation/USLM). 
-- [9/1] 🔥 We released code and checkpoints of SpeechTokenizer. Checkout the [paper](https://arxiv.org/abs/2308.16692) and [demo](https://0nutation.github.io/SpeechTokenizer.github.io/).
+## Release 
+- [20/01] 🔥 We released code and model pre-trained on 6 language public datasets.
 
 ## Samples
-
-Samples are provided on [our demo page](https://0nutation.github.io/SpeechTokenizer.github.io/).
+Samples are provided on [our demo page](https://gongchenghhu.github.io/TASLP-demo/).
 
 ## Installation
 
