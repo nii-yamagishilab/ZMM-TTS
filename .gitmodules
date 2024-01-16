@@ -1,0 +1,3 @@
+[submodule "prepare_data/wav2vec2-codebook-indices"]
+	path = prepare_data/wav2vec2-codebook-indices
+	url = https://github.com/fauxneticien/wav2vec2-codebook-indices.git
