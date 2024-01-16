@@ -109,6 +109,9 @@ python txte2vec/train.py --dataset MM6 --config MM6_XphoneBERT
 python txte2vec/train.py --dataset MM6 --config MM6_Letters
 #Using IPA:
 python txte2vec/train.py --dataset MM6 --config MM6_IPA
+
+#If you want to train a model without a language layer, you could use xxx_wo config like:
+python txte2vec/train.py --dataset MM6 --config MM6_XphoneBERT_wo
 ```
 2. Train vec2mel model:
 ```bash
@@ -117,6 +120,9 @@ python vec2mel/train.py --dataset MM6 --config MM6
 3. Train vec2wav model:
 ```bash
 python vec2wav/train.py -c Config/vec2wav/vec2wav.yaml
+
+#If you want to train a model without a language layer:
+python vec2wav/train.py -c Config/vec2wav/vec2wav_wo.yaml
 ```
 ### Test model
 1. Prepare test data:
@@ -128,51 +134,12 @@ python vec2wav/train.py -c Config/vec2wav/vec2wav.yaml
    ```
 3. The result would be found in `test_result` files.
 
-
-```python
-from speechtokenizer import SpeechTokenizer
-
-config_path = '/path/config.json'
-ckpt_path = '/path/SpeechTokenizer.pt'
-model = SpeechTokenizer.load_from_checkpoint(config_path, ckpt_path)
-model.eval()
-```
-### Extracting discrete representations
-```python
-import torchaudio
-import torch
-
-# Load and pre-process speech waveform
-wav, sr = torchaudio.load('<SPEECH_FILE_PATH>')
-
-# monophonic checking
-if wav.shape(0) > 1:
-    wav = wav[:1,;]
-
-if sr != model.sample_rate:
-    wav = torchaudio.functional.resample(wav, sr, model.sample_rate)
-
-wav = wav.unsqueeze(0)
-
-# Extract discrete codes from SpeechTokenizer
-with torch.no_grad():
-    codes = model.encode(wav) # codes: (n_q, B, T)
-
-RVQ_1 = codes[:1, :, :] # Contain content info, can be considered as semantic tokens
-RVQ_supplement = codes[1:, :, :] # Contain timbre info, complete info lost by the first quantizer
-```
-
-### Decoding discrete representations
-```python
-# Concatenating semantic tokens (RVQ_1) and supplementary timbre tokens and then decoding
-wav = model.decode(torch.cat([RVQ_1, RVQ_supplement], axis=0))
-
-# Decoding from RVQ-i:j tokens from the ith quantizers to the jth quantizers
-wav = model.decode(codes[i: (j + 1)], st=i) 
-```
+## To do
+- [x] Scripts for few-shot training.
+- [x] Scripts for zero-shot inference on any language.
 
 ## Citation
-If you use this code, result or MM6 dataset in your paper, please cite our work as:
+If you use this code, result, or MM6 dataset in your paper, please cite our work as:
 ```Tex
 @article{gong2023zmm,
   title={ZMM-TTS: Zero-shot Multilingual and Multispeaker Speech Synthesis Conditioned on Self-supervised Discrete Speech Representations},
