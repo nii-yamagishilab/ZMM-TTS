@@ -80,7 +80,27 @@ The meta file looks like:
 Name|Database|Language|Speaker|text
 7756_9025_000004|MM6|English|7756|on tiptoe also i followed him and just as his hands were on the wardrobe door my hands were on his throat he was a little man and no match for me
 ```
-Of course you can try your own data, as long as it conforms to the above form.
+1. Extract discrete code index and representations:
+```bash
+bash scripts/extract_discrete.sh
+```
+2. Extract speaker embeddings:
+```bash
+bash scripts/extract_spk.sh
+```
+3. Extract text sequences:
+```bash
+python prepare_data/extract_text_seq_from_raw_text.py
+```
+4. Extract mel spectrograms:
+```bash
+python prepare_data/compute_mel.py
+```
+5. Compute a priori alignment probabilities：
+```bash
+python prepare_data/compute_attention_prior.py
+```
+
 ```python
 from speechtokenizer import SpeechTokenizer
 
