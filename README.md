@@ -80,6 +80,7 @@ The meta file looks like:
 Name|Database|Language|Speaker|text
 7756_9025_000004|MM6|English|7756|on tiptoe also i followed him and just as his hands were on the wardrobe door my hands were on his throat he was a little man and no match for me
 ```
+Of course you can try your own data, as long as it conforms to the above form.
 ```python
 from speechtokenizer import SpeechTokenizer
 
