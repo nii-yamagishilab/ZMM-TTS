@@ -66,17 +66,19 @@ Considering the scarcity of publicly multilingual and multilingual speaker datab
 
 Once the MLS and NST Swedish data have been downloaded, the following script can be executed to generate the MM6 dataset:
 ```bash
-python prepare_data/creat_meta.py
+python prepare_data/creat_meta_data.py
 
 #We recommend that you use sv56 to normalize the audio.
-bash scripts/norm.sh
+bash scripts/norm_wav.sh
 #
 ```
 This MM6 is a multilingual dataset with a largely balanced mix of speakers and genders, and we encourage you to experiment with other tasks as well.
 ### Train model
 After you generate the MM6 dataset, you can find wav in and meta file in .
 The meta file looks like:
-
+Name|Database|Language|Speaker|text
+:----|:----|:----|:----|:----
+7756_9025_000004|MM6|English|7756|on tiptoe also i followed him and just as his hands were on the wardrobe door my hands were on his throat he was a little man and no match for me
 ```python
 from speechtokenizer import SpeechTokenizer
 
