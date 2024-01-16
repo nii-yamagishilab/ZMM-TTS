@@ -49,9 +49,10 @@ If you want to try IPA representations, you need to install [Epitran](https://gi
 ### Prepapre multilingual multispeaker dataset MM6
 In my paper, the training data we used contained [GlobalPhone](https://ieeexplore.ieee.org/document/6639248), and unfortunately that is not an open source data. 
 Considering the scarcity of publicly multilingual and multilingual speaker databases for speech synthesis, I designed the following training database based on the [MLS](https://www.openslr.org/94/) and [NHT Swedish](https://huggingface.co/datasets/jimregan/nst_swedish_tts) databases and called it MM6. (It seems that NST is no longer open for downloads in Swedish, in which case you will not have to consider Swedish.)
-| Model| Dataset |Discription|
-|:----|:----:|:----|
-|[speechtokenizer_hubert_avg](https://huggingface.co/fnlp/SpeechTokenizer/tree/main/speechtokenizer_hubert_avg)|LibriSpeech|Adopt average representation across all HuBERT layers as semantic teacher |
+｜Language|Gender|Speakers|Sentences|Durations (h)|Database|
+|:----|:----:|:----|:----|:----:|:----|
+|English|Female|20｜4000｜13.9｜MLS｜
+｜｜Male|20|4000|13.9||
 
 ### load model
 ```python
