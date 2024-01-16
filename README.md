@@ -63,7 +63,10 @@ Considering the scarcity of publicly multilingual and multilingual speaker datab
 |Spanish|Male|20|3786|13.1|MLS|
 |Swedish|Female|0|0|0||
 |Swedish|Male|20|4000|13.9|NST|
-
+Once the MLS and NST Swedish data have been downloaded, the following script can be executed to generate the MM6 dataset:
+```bash
+python prepare_data/creat_meta.py
+```
 ### load model
 ```python
 from speechtokenizer import SpeechTokenizer
