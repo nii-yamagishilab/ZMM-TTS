@@ -77,7 +77,6 @@ This MM6 is a multilingual dataset with a largely balanced mix of speakers and g
 After you generate the MM6 dataset, you can find wav in and meta file in .
 The meta file looks like:
 Name|Database|Language|Speaker|text
-:----|:----|:----|:----|:----
 7756_9025_000004|MM6|English|7756|on tiptoe also i followed him and just as his hands were on the wardrobe door my hands were on his throat he was a little man and no match for me
 ```python
 from speechtokenizer import SpeechTokenizer
