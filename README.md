@@ -1,4 +1,4 @@
-![image](https://github.com/nii-yamagishilab-visitors/ZMM-TTS/assets/45996835/ae2b78f2-670d-4b8d-a21d-6c26a0fbdda3)# ZMM-TTS: Zero-shot Multilingual and Multispeaker Speech Synthesis Conditioned on Self-supervised Discrete Speech Representations
+# ZMM-TTS: Zero-shot Multilingual and Multispeaker Speech Synthesis Conditioned on Self-supervised Discrete Speech Representations
 
 <a href='https://gongchenghhu.github.io/TASLP-demo/'><img src='https://img.shields.io/badge/Demo-Page-blue'></a>  <a href='https://arxiv.org/abs/2312.14398'><img src='https://img.shields.io/badge/Paper-Arxiv-red'></a>
 
