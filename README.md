@@ -100,6 +100,24 @@ python prepare_data/compute_mel.py
 ```bash
 python prepare_data/compute_attention_prior.py
 ```
+### Train model
+1. Train txt2vec model:
+```bash
+#Using XphoneBERT:
+python txte2vec/train.py --dataset MM6 --config MM6_XphoneBERT
+#Using Characters (Letters):
+python txte2vec/train.py --dataset MM6 --config MM6_Letters
+#Using IPA:
+python txte2vec/train.py --dataset MM6 --config MM6_IPA
+```
+2. Train vec2mel model:
+```bash
+python vec2mel/train.py --dataset MM6 --config MM6
+```
+3. Train vec2wav model:
+```bash
+python vec2wav/train.py -c Config/vec2wav/vec2wav.yaml
+```
 
 ```python
 from speechtokenizer import SpeechTokenizer
