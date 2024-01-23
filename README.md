@@ -155,4 +155,7 @@ If you use this code, result, or MM6 dataset in your paper, please cite our work
 -  [HifiGAN](https://github.com/jik876/hifi-gan), Vocoder.
 -  [wav2vec2-codebook-indices](https://github.com/fauxneticien/wav2vec2-codebook-indices)The scripts for extracting the discrete code index and representations. 
 ## License
-The code in this repository is released under the xxx license as found in the xxx file.
+The code in this repository is released under the BSD-3-Clause license as found in the LICENSE file.
+The `txt2vec`, `vec2mel` and `vec2wav` subfolder have MIT License. 
+The sv56scripts has GPL License.
+
