@@ -105,6 +105,7 @@ python txt2vec/train.py --dataset MM6 --config MM6_XphoneBERT
 python txt2vec/train.py --dataset MM6 --config MM6_Letters
 #Using IPA:
 python txt2vec/train.py --dataset MM6 --config MM6_IPA
+```
 For the training of txt2vec model, we used a batch_size of 16 and trained for 1.2M steps.
 It took about 3 days on 1 Tesla A100 GPU. The training log can be found in the corresponding `log.txt` file in Train_log.
 
