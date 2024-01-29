@@ -100,11 +100,14 @@ python prepare_data/compute_attention_prior.py
 1. Train txt2vec model:
 ```bash
 #Using XphoneBERT:
-python txte2vec/train.py --dataset MM6 --config MM6_XphoneBERT
+python txt2vec/train.py --dataset MM6 --config MM6_XphoneBERT
 #Using Characters (Letters):
-python txte2vec/train.py --dataset MM6 --config MM6_Letters
+python txt2vec/train.py --dataset MM6 --config MM6_Letters
 #Using IPA:
-python txte2vec/train.py --dataset MM6 --config MM6_IPA
+python txt2vec/train.py --dataset MM6 --config MM6_IPA
+For the training of txt2vec model, we used a batch_size of 16 and trained for 1.2M steps.
+It took about 3 days on 1 Tesla A100 GPU. The training log can be found in the corresponding `log.txt` file in Train_log.
+
 
 #If you want to train a model without a language layer, you could use xxx_wo config like:
 python txte2vec/train.py --dataset MM6 --config MM6_XphoneBERT_wo
