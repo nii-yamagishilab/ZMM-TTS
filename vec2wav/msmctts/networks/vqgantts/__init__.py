@@ -1,0 +1,1 @@
+from .msmc_vqgan import MSMCVQGAN
