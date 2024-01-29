@@ -157,5 +157,5 @@ If you use this code, result, or MM6 dataset in your paper, please cite our work
 ## License
 The code in this repository is released under the BSD-3-Clause license as found in the LICENSE file.
 The `txt2vec`, `vec2mel` and `vec2wav` subfolder have MIT License. 
-The sv56scripts has GPL License.
+The `sv56scripts` has GPL License.
 
