@@ -114,6 +114,7 @@ python vec2mel/train.py --dataset MM6 --config MM6
 ```
 For the training of txt2vec and vec2mel model, we used a batch_size of 16 and trained for 1.2M steps.
 It took about 3 days on 1 Tesla A100 GPU. The training log can be found in the corresponding `Train_log` files.
+
 3. Train vec2wav model:
 ```bash
 python vec2wav/train.py -c Config/vec2wav/vec2wav.yaml
