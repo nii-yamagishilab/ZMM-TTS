@@ -108,23 +108,28 @@ python txt2vec/train.py --dataset MM6 --config MM6_IPA
 #If you want to train a model without a language layer, you could use xxx_wo config like:
 python txt2vec/train.py --dataset MM6 --config MM6_XphoneBERT_wo
 ```
-For the training of txt2vec model, we used a batch_size of 16 and trained for 1.2M steps.
-It took about 3 days on 1 Tesla A100 GPU. The training log can be found in the corresponding `log.txt` file in Train_log.
 2. Train vec2mel model:
 ```bash
 python vec2mel/train.py --dataset MM6 --config MM6
 ```
+For the training of txt2vec and vec2mel model, we used a batch_size of 16 and trained for 1.2M steps.
+It took about 3 days on 1 Tesla A100 GPU. The training log can be found in the corresponding `Train_log` files.
 3. Train vec2wav model:
 ```bash
 python vec2wav/train.py -c Config/vec2wav/vec2wav.yaml
-
 #If you want to train a model without a language layer:
 python vec2wav/train.py -c Config/vec2wav/vec2wav_wo.yaml
 ```
+For the training of vec2wav , we used a batch_size of 16 and trained for 1M steps.
+It took about 3 days on 1 Tesla A100 GPU. The training log also could be found in the corresponding `Train_log` files.
+
 4. Train HifiGAN model:
 ``` bash
 python Vocoder_HifiGAN_Model/train.py --config Config/config_16k_mel.json
 ```
+For the training of  HifiGAN, we used a batch_size of 16 and trained for 1M steps.
+It took about 3 days on 1 Tesla A100 GPU. The training log also could be found in the corresponding `Train_log` files.
+
 ### Test model
 1. Prepare test data:
    a. test meta file `Dataset/MM6/test.txt`.
