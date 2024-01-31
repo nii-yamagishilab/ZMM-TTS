@@ -139,6 +139,7 @@ It took about 3 days on 1 Tesla A100 GPU. The training log also could be found i
    ``` bash
    bash test_scripts/quick_test.sh
    ```
+   Of course, you can download our pre-trained model from google driver. And put it in the corresponding `Train_log` directory.
 4. The result would be found in `test_result` files.
 
 ## To do
