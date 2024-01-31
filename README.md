@@ -133,9 +133,8 @@ It took about 3 days on 1 Tesla A100 GPU. The training log also could be found i
 
 ### Test model
 1. Prepare test data:
-   a. test meta file `Dataset/MM6/test.txt`.
-   
-   b. ref speaker embedding in `Dataset/MM6/test_spk_emb/`.
+   + a. test meta file `Dataset/MM6/test.txt`.
+   + b. ref speaker embedding in `Dataset/MM6/test_spk_emb/`.
 3. Generate sample
    ``` bash
    bash test_scripts/quick_test.sh
