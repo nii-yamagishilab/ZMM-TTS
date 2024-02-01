@@ -1,3 +1,9 @@
+# ==============================================================================
+# Copyright (c) 2024, Yamagishi Laboratory, National Institute of Informatics
+# Author: Gong Cheng (gongchengcheng@tju.edu.cn)
+# All rights reserved.
+# ==============================================================================
+
 #Try to male a speaker-gender-language balance data
 #Max 25 speakers per gender per language
 #For training speed, each audio piece should not exceed 15 seconds at most.
@@ -14,7 +20,7 @@ summary = []
 ftrain = open('Dataset/preprocessed_data/MM6/train.txt','w')
 target_wavs_path = 'Dataset/MM6/wavs/'
 for language in ['english','french', 'german', 'portuguese','spanish']:
-  with open (os.path.join('../Dataset/Multilingual_LibriSpeech_fl','mls_'+language, 'train', 'transcripts.txt'), 'r') as f2:
+  with open (os.path.join('Dataset/origin_data/','mls_'+language, 'train', 'transcripts.txt'), 'r') as f2:
         #print (language) 
         line_texts = f2.readlines()
         language_text_dict={}
@@ -23,7 +29,7 @@ for language in ['english','french', 'german', 'portuguese','spanish']:
             language_text_dict[line_text.split('\t')[0]] = line_text.split('\t')[1].strip()
             #print (line_text.split('\t')[0])
             #print (line_text.split('\t')[1])
-  with open (os.path.join('../Dataset/Multilingual_LibriSpeech_fl','mls_'+language, 'metainfo.txt'), 'r') as f1:
+  with open (os.path.join('Dataset/origin_data/','mls_'+language, 'metainfo.txt'), 'r') as f1:
         print (language)
         lines=f1.readlines()
         speaker_dur_dict_f={}
@@ -55,17 +61,17 @@ for language in ['english','french', 'german', 'portuguese','spanish']:
                 else:
                    max_num = 200
                 
-                files=os.listdir('../Dataset/Multilingual_LibriSpeech_fl/'+'mls_'+language+'/train/audio/'+ speaker[0])
+                files=os.listdir('Dataset/origin_data/'+'mls_'+language+'/train/audio/'+ speaker[0])
                 num = 0
                 dur_temp = 0 
                 wav_number = 0 
                 for book in files:
-                    num_temp = os.listdir('../Dataset/Multilingual_LibriSpeech_fl/'+'mls_'+language+'/train/audio/'+ speaker[0]+'/'+book)
+                    num_temp = os.listdir('Dataset/origin_data/'+'mls_'+language+'/train/audio/'+ speaker[0]+'/'+book)
                     #print ('num_temp',num_temp)
                     for wav_file in num_temp:
                         #print (wav_file)
                         if wav_file.endswith('flac') and wav_number<max_num:
-                          audio_path = '../Dataset/Multilingual_LibriSpeech_fl/'+'mls_'+language+'/train/audio/'+ speaker[0]+'/'+book+'/'+ wav_file
+                          audio_path = 'Dataset/origin_data/'+'mls_'+language+'/train/audio/'+ speaker[0]+'/'+book+'/'+ wav_file
                           data, sr = sf.read(audio_path)
                           #print (data)
                           #print (len(data))
@@ -94,7 +100,7 @@ for language in ['english','french', 'german', 'portuguese','spanish']:
         #print(sorted_dict)
         for speaker in sorted_dict[:20]:
             #print (speaker[0],speaker[1])
-                files=os.listdir('../Dataset/Multilingual_LibriSpeech_fl/'+'mls_'+language+'/train/audio/'+ speaker[0])
+                files=os.listdir('Dataset/origin_data/'+'mls_'+language+'/train/audio/'+ speaker[0])
                 num = 0
                 dur_temp = 0 
                 wav_number = 0                
@@ -103,10 +109,10 @@ for language in ['english','french', 'german', 'portuguese','spanish']:
                 else:
                    max_num = 200
                 for book in files:
-                    num_temp = os.listdir('../Dataset/Multilingual_LibriSpeech_fl/'+'mls_'+language+'/train/audio/'+ speaker[0]+'/'+book)
+                    num_temp = os.listdir('Dataset/origin_data/'+'mls_'+language+'/train/audio/'+ speaker[0]+'/'+book)
                     for wav_file in num_temp:
                         if wav_file.endswith('flac') and wav_number<max_num:
-                          audio_path = '../Dataset/Multilingual_LibriSpeech_fl/'+'mls_'+language+'/train/audio/'+ speaker[0]+'/'+book+'/'+ wav_file
+                          audio_path = 'Dataset/origin_data/'+'mls_'+language+'/train/audio/'+ speaker[0]+'/'+book+'/'+ wav_file
                           data, sr = sf.read(audio_path)
                           dur_length = len(data)/sr
                           text = language_text_dict[wav_file.split('.')[0]]
@@ -125,8 +131,9 @@ for language in ['english','french', 'german', 'portuguese','spanish']:
         print ('total sens',sum(meta_numbers))
         print ('total durs', sum(meta_dur))
 
-print('---swedish----')
 
+'''
+print('---swedish----')
 with open('../Model_For_Group1_single_speker_v1/Dataset/preprocessed_data/Group1S/train_unsup.txt','r') as f1:
    lines = f1.readlines()
    j = 0
@@ -144,3 +151,4 @@ with open('../Model_For_Group1_single_speker_v1/Dataset/preprocessed_data/Group1
           ftrain.write(base_name+'|MM6|'+language.capitalize()+'|swnht0|'+text+'\n')
           j = j + 1
 print (j,dur_temp)
+'''

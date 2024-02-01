@@ -14,4 +14,4 @@ for wavf in tqdm(os.listdir(wavs_dir)):
         spk_num = embeddings.squeeze(0).cpu().numpy()
         #print (spk_num.shape)
         #print (spk_num)
-        np.save(os.path.join('Dataset/preprocessed_data/ZMM6/SpeakerEmb/',wavf.replace('wav','npy')), spk_num)
+        np.save(os.path.join('Dataset/preprocessed_data/MM6/SpeakerEmb/',wavf.replace('wav','npy')), spk_num)

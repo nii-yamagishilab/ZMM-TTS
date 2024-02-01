@@ -1,3 +1,10 @@
+# ==============================================================================
+# Copyright (c) 2024, Yamagishi Laboratory, National Institute of Informatics
+# Author: Gong Cheng (gongchengcheng@tju.edu.cn)
+# All rights reserved.
+# ==============================================================================
+
+
 from __future__ import absolute_import, division, print_function, unicode_literals
 import os
 import numpy as np
@@ -59,7 +66,7 @@ else:
 Train_Dir = 'Dataset/MM6/wavs/'
 
 
-Mel_dir = 'Dataset/preprocessed_data/ZMM6/16K_MEL'
+Mel_dir = 'Dataset/preprocessed_data/MM6/16K_MEL'
 wav_lists = os.listdir(Train_Dir)
 print (cpu_count())
 for wav_file in tqdm(wav_lists):

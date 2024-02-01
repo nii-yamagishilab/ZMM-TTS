@@ -1,3 +1,9 @@
+# ==============================================================================
+# Copyright (c) 2024, Yamagishi Laboratory, National Institute of Informatics
+# Author: Gong Cheng (gongchengcheng@tju.edu.cn)
+# All rights reserved.
+# ==============================================================================
+
 import os
 import numpy as np
 from scipy.stats import betabinom
@@ -26,15 +32,15 @@ def save_npy(target=None,source=None,base_name=None):
     #attn_prior_dr_mel = beta_binomial_prior_distribution(target[2],source[2],1.0)
     attn_prior_ipa_dr = beta_binomial_prior_distribution(target[3],source[3],1.0)
     attn_prior_filename = "{}-attn_prior-{}".format('MM6', base_name)
-    #np.save(os.path.join("Dataset/preprocessed_data/ZMM6/xp_dr_prior", attn_prior_filename), attn_prior_xp_dr)
-    #np.save(os.path.join("Dataset/preprocessed_data/ZMM6/le_dr_prior",  attn_prior_filename), attn_prior_le_dr)
-    #np.save(os.path.join("Dataset/preprocessed_data/ZMM6/dr_mel_prior", attn_prior_filename), attn_prior_dr_mel)
-    np.save(os.path.join("Dataset/preprocessed_data/ZMM6/ipa_dr_prior", attn_prior_filename), attn_prior_ipa_dr)
-Mel_dir = 'Dataset/preprocessed_data/ZMM6/16K_MEL/'
-Le_dir = 'Dataset/preprocessed_data/ZMM6/letters_seq/'
-Dr_dir = 'Dataset/preprocessed_data/ZMM6/DiscreteRp/'
-Xp_dir = 'Dataset/preprocessed_data/ZMM6/xpbid_seq/' 
-ipa_dir = 'Dataset/preprocessed_data/ZMM6/ipa_seq/' 
+    np.save(os.path.join("Dataset/preprocessed_data/MM6/xp_dr_prior", attn_prior_filename), attn_prior_xp_dr)
+    np.save(os.path.join("Dataset/preprocessed_data/MM6/le_dr_prior",  attn_prior_filename), attn_prior_le_dr)
+    np.save(os.path.join("Dataset/preprocessed_data/MM6/dr_mel_prior", attn_prior_filename), attn_prior_dr_mel)
+    np.save(os.path.join("Dataset/preprocessed_data/MM6/ipa_dr_prior", attn_prior_filename), attn_prior_ipa_dr)
+Mel_dir = 'Dataset/preprocessed_data/MM6/16K_MEL/'
+Le_dir = 'Dataset/preprocessed_data/MM6/letters_seq/'
+Dr_dir = 'Dataset/preprocessed_data/MM6/DiscreteRp/'
+Xp_dir = 'Dataset/preprocessed_data/MM6/xpbid_seq/' 
+ipa_dir = 'Dataset/preprocessed_data/MM6/ipa_seq/' 
 lines = os.listdir(Mel_dir)
 for line in lines:
        #target = []

@@ -1,3 +1,9 @@
+# ==============================================================================
+# Copyright (c) 2024, Yamagishi Laboratory, National Institute of Informatics
+# Author: Gong Cheng (gongchengcheng@tju.edu.cn)
+# All rights reserved.
+# ==============================================================================
+
 import torch
 #from scipy.io.wavfile import write
 from tqdm import *
@@ -115,9 +121,9 @@ def process_text(text,language):
     return input_ids_val, IPA_phones
 
 OOV=[]
-lepath = 'Dataset/preprocessed_data/ZMM6/letters_seq'
-xppath = 'Dataset/preprocessed_data/ZMM6/xpbid_seq'
-ipapath = 'Dataset/preprocessed_data/ZMM6/ipa_seq'
+lepath = 'Dataset/preprocessed_data/MM6/letters_seq'
+xppath = 'Dataset/preprocessed_data/MM6/xpbid_seq'
+ipapath = 'Dataset/preprocessed_data/MM6/ipa_seq'
 with open("Config/letters_dict_ascill.json", "r") as f, open('Config/ipa_dict_ascill.json','r') as fipa, open('Dataset/preprocessed_data/ZMM6/train.txt','r') as ftrain:
     letter_dict = json.load(f)
     ipa_dict = json.load(fipa)
