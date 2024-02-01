@@ -158,11 +158,11 @@ def get_codebook_indices_lists(data_dir):
 
     warnings.filterwarnings(action='ignore', category=UserWarning, module=r'.*configuration_utils')
 
-    feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained("facebook/wav2vec2-large-960h")
+    feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained("facebook/wav2vec2-large-xlsr-53")
 
     
 
-    model = Wav2Vec2ForPreTrainingWithCodebookIndices.from_pretrained("facebook/wav2vec2-large-960h")
+    model = Wav2Vec2ForPreTrainingWithCodebookIndices.from_pretrained("facebook/wav2vec2-large-xlsr-53")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
