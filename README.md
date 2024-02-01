@@ -63,6 +63,7 @@ Considering the scarcity of publicly multilingual and multilingual speaker datab
 You can generate MM6 dataset through following download and norm scripts:
 ```bash
 bash scripts/download.sh   #download the MLS data.
+python prepare_data/creat_meta_data_mls.py #Generate speaker-gender-language balance data.
 #We recommend that you use sv56 to normalize the MLS audio.
 bash scripts/norm_wav.sh
 ```
