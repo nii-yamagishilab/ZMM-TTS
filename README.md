@@ -62,11 +62,10 @@ Considering the scarcity of publicly multilingual and multilingual speaker datab
 
 Once the MLS and NST Swedish data have been downloaded, the following script can be executed to generate the MM6 dataset:
 ```bash
-bash scripts/download.sh   #download the MLS and Swedish data.
-python prepare_data/creat_meta_data_MLS.py
-
+bash scripts/download.sh   #download the MLS data.
 #We recommend that you use sv56 to normalize the MLS audio.
 bash scripts/norm_wav.sh
+Download NHT Swedish dataset through [google driver](https://drive.google.com/file/d/1V-_IAHBQrIypilSd2wPga_-PzRxFDACd/view?usp=drive_link), and extract it to the `Dataset/origin_data/`.
 
 #The Swedish audio already normalize
 python prepare_data/creat_meta_data_swe.py
