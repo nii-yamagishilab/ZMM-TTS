@@ -44,7 +44,7 @@ If you want to try IPA representations, you need to install [Epitran](https://gi
 ## Usage
 ### Prepapre multilingual multispeaker dataset MM6
 In my paper, the training data we used contained [GlobalPhone](https://ieeexplore.ieee.org/document/6639248), and unfortunately that is not an open source data. 
-Considering the scarcity of publicly multilingual and multilingual speaker databases for speech synthesis, I designed the following training database based on the [MLS](https://www.openslr.org/94/) and [NHT Swedish](https://huggingface.co/datasets/jimregan/nst_swedish_tts) databases and called it MM6. (It seems that NST is no longer open for downloads in Swedish, in which case you will not have to consider Swedish.) If you have GlobalPhone dataset, you can try the same training data `Dataset/train_paper.txt` as our paper.
+Considering the scarcity of publicly multilingual and multilingual speaker databases for speech synthesis, I designed the following training database based on the [MLS](https://www.openslr.org/94/) and [NHT Swedish](https://huggingface.co/datasets/jimregan/nst_swedish_tts) databases and called it MM6. (It seems that NST is no longer open for downloads in Swedish, in which case I have provided the download link for Google Drive). If you have GlobalPhone dataset, you can try the same training data `Dataset/train_paper.txt` as our paper.
 |Language|Gender|Speakers|Sentences|Durations (h)|Database|
 |:----|:----|:----|:----|:----|:----|
 |English|Female|20|4000|13.9|MLS|
@@ -62,16 +62,28 @@ Considering the scarcity of publicly multilingual and multilingual speaker datab
 
 Once the MLS and NST Swedish data have been downloaded, the following script can be executed to generate the MM6 dataset:
 ```bash
-python prepare_data/creat_meta_data.py
+bash scripts/download.sh   #download the MLS and Swedish data.
+python prepare_data/creat_meta_data_MLS.py
 
-#We recommend that you use sv56 to normalize the audio.
+#We recommend that you use sv56 to normalize the MLS audio.
 bash scripts/norm_wav.sh
-#
+
+#The Swedish audio already normalize
+python prepare_data/creat_meta_data_swe.py
 ```
 This MM6 is a multilingual dataset with a largely balanced mix of speakers and genders, and we encourage you to experiment with other tasks as well.
 ### Preprocess
-After you generate the MM6 dataset, you can find wav in `Dataset/MM6/wavs/`  and meta file in `Dataset/preprocessed_data/ZMM6/train.txt`.
-The meta file looks like:
+After you download and nom the wav, you can generate in `Dataset` folder as:
+```bash
+|--Dataset
+     |--MM6
+         |--wavs          #Store audio files
+     |--preprocessed_data #Store preprocessed data: text, features,...
+         |--MM6
+             |--train.txt      
+```
+you can find wav in `Dataset/MM6/wavs/`  and meta file in `Dataset/preprocessed_data/ZMM6/train.txt`.
+The train.txt looks like:
 ```bash
 Name|Database|Language|Speaker|text
 7756_9025_000004|MM6|English|7756|on tiptoe also i followed him and just as his hands were on the wardrobe door my hands were on his throat he was a little man and no match for me
