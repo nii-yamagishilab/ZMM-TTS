@@ -128,8 +128,7 @@ NOTE: Please set `needUpdate: True` in model.yaml after 1/4 iteration, when you 
 python vec2mel/train.py --dataset MM6 --config MM6
 ```
 For the training of txt2vec and vec2mel model, we used a batch_size of 16 and trained for 1.2M steps.
-It took about 3 days on 1 Tesla A100 GPU. The training log can be found in the corresponding `Train_log` files.
-
+It took about 3 days on 1 Tesla A100 GPU. 
 + 3. Train vec2wav model:
 ```bash
 python vec2wav/train.py -c Config/vec2wav/vec2wav.yaml
@@ -137,14 +136,14 @@ python vec2wav/train.py -c Config/vec2wav/vec2wav.yaml
 python vec2wav/train.py -c Config/vec2wav/vec2wav_wo.yaml
 ```
 For the training of vec2wav , we used a batch_size of 16 and trained for 1M steps.
-It took about 3 days on 1 Tesla A100 GPU. The training log also could be found in the corresponding `Train_log` files.
+It took about 3 days on 1 Tesla A100 GPU. 
 
 + 4. Train HifiGAN model:
 ``` bash
 python Vocoder_HifiGAN_Model/train.py --config Config/config_16k_mel.json
 ```
 For the training of  HifiGAN, we used a batch_size of 16 and trained for 1M steps.
-It took about 3 days on 1 Tesla A100 GPU. The training log also could be found in the corresponding `Train_log` files.
+It took about 3 days on 1 Tesla A100 GPU. 
 
 ### Test model
 + 1. Prepare test data:
@@ -154,7 +153,8 @@ It took about 3 days on 1 Tesla A100 GPU. The training log also could be found i
    ``` bash
    bash test_scripts/quick_test.sh
    ```
-   Of course, you can download our pre-trained model from google driver. And put it in the corresponding `Train_log` directory.
+   Of course, you can download our pre-trained model from google driver. And put it in the corresponding `Train_log` directory. The training log can be found in the corresponding `Train_log` files.
+
 + 3. The result would be found in `test_result` files.
 
 ## To do
