@@ -114,9 +114,9 @@ def train(rank, args, configs, batch_size, num_gpus):
                     total_loss = losses[0]
                     total_loss = total_loss / grad_acc_step
 
-                # Backward
+                # Backward 
                 scaler.scale(total_loss).backward()
-
+                #print (scaler)
                 # Clipping gradients to avoid gradient explosion
                 if step % grad_acc_step == 0:
                     scaler.unscale_(optimizer._optimizer)
@@ -219,6 +219,12 @@ if __name__ == "__main__":
     parser.add_argument('--use_amp', action='store_true')
     parser.add_argument("--restore_step", type=int, default=0)
     parser.add_argument(
+        "--pretrained_model",
+        type=str,
+        default=None,
+        help="use our paper's model",
+    ) 
+    parser.add_argument(
         "--dataset",
         type=str,
         required=True,
@@ -230,6 +236,7 @@ if __name__ == "__main__":
         required=True,
         help="name of config",
     )
+
     args = parser.parse_args()
 
     # Read Config

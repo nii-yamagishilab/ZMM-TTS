@@ -218,6 +218,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--use_amp', action='store_true')
     parser.add_argument("--restore_step", type=int, default=0)
+    
+    parser.add_argument(
+        "--pretrained_model",
+        type=str,
+        default=None,
+        help="use our paper's model",
+    )
+ 
     parser.add_argument(
         "--dataset",
         type=str,
