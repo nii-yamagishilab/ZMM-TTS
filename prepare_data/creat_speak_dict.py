@@ -1,3 +1,8 @@
+# ==============================================================================
+# Copyright (c) 2024, Yamagishi Laboratory, National Institute of Informatics
+# Author: Gong Cheng (gongchengcheng@tju.edu.cn)
+# All rights reserved.
+# ==============================================================================
 import os
 import numpy as np
 language_dict={'English':0,'French':1,'German':2,'Portuguese':3,'Spanish':4,'Swedish':5}
@@ -6,7 +11,7 @@ import json
 speaker_dict = {}
 language_dict_new = {}
 
-with open('Dataset/preprocessed_data/ZMM6/train.txt','r') as f1:
+with open('Dataset/preprocessed_data/MM6/train.txt','r') as f1:
     lines1 = f1.readlines()
     for line in lines1:
 
@@ -18,5 +23,5 @@ with open('Dataset/preprocessed_data/ZMM6/train.txt','r') as f1:
       speaker_dict[base_name] = speaker_id
       language_dict_new[base_name] = language_id
 
-with open("Dataset/preprocessed_data/ZMM6/language_dict.json", "w") as f:
+with open("Dataset/preprocessed_data/MM6/language_dict.json", "w") as f:
     f.write(json.dumps(language_dict_new, indent=4))
