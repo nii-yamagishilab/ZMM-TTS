@@ -1,3 +1,4 @@
+#This source code was adapted from https://huggingface.co/speechbrain/spkrec-ecapa-voxcelebby Gong Cheng (NII, Japan).
 import torchaudio
 import os
 from speechbrain.pretrained import EncoderClassifier
