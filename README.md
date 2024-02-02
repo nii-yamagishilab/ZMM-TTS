@@ -90,28 +90,28 @@ The train.txt looks like:
 Name|Database|Language|Speaker|text
 7756_9025_000004|MM6|English|7756|on tiptoe also i followed him and just as his hands were on the wardrobe door my hands were on his throat he was a little man and no match for me
 ```
-1. Extract discrete code index and representations:
++ 1. Extract discrete code index and representations:
 ```bash
 bash scripts/extract_discrete.sh
 ```
-2. Extract speaker embeddings:
++ 2. Extract speaker embeddings:
 ```bash
 bash scripts/extract_spk.sh
 ```
-3. Extract text sequences:
++ 3. Extract text sequences:
 ```bash
 python prepare_data/extract_text_seq_from_raw_text.py
 ```
-4. Extract mel spectrograms:
++ 4. Extract mel spectrograms:
 ```bash
 python prepare_data/compute_mel.py
 ```
-5. Compute a priori alignment probabilities：
++ 5. Compute a priori alignment probabilities：
 ```bash
 python prepare_data/compute_attention_prior.py
 ```
 ### Train model
-1. Train txt2vec model:
++ 1. Train txt2vec model:
 ```bash
 #Using XphoneBERT:
 python txt2vec/train.py --dataset MM6 --config MM6_XphoneBERT
@@ -123,14 +123,14 @@ python txt2vec/train.py --dataset MM6 --config MM6_IPA
 python txt2vec/train.py --dataset MM6 --config MM6_XphoneBERT_wo
 ```
 NOTE: Please set `needUpdate: True` in model.yaml after 1/4 iteration, when you use XphoneBERT.
-2. Train vec2mel model:
++ 2. Train vec2mel model:
 ```bash
 python vec2mel/train.py --dataset MM6 --config MM6
 ```
 For the training of txt2vec and vec2mel model, we used a batch_size of 16 and trained for 1.2M steps.
 It took about 3 days on 1 Tesla A100 GPU. The training log can be found in the corresponding `Train_log` files.
 
-3. Train vec2wav model:
++ 3. Train vec2wav model:
 ```bash
 python vec2wav/train.py -c Config/vec2wav/vec2wav.yaml
 #If you want to train a model without a language layer:
@@ -139,7 +139,7 @@ python vec2wav/train.py -c Config/vec2wav/vec2wav_wo.yaml
 For the training of vec2wav , we used a batch_size of 16 and trained for 1M steps.
 It took about 3 days on 1 Tesla A100 GPU. The training log also could be found in the corresponding `Train_log` files.
 
-4. Train HifiGAN model:
++ 4. Train HifiGAN model:
 ``` bash
 python Vocoder_HifiGAN_Model/train.py --config Config/config_16k_mel.json
 ```
@@ -147,15 +147,15 @@ For the training of  HifiGAN, we used a batch_size of 16 and trained for 1M step
 It took about 3 days on 1 Tesla A100 GPU. The training log also could be found in the corresponding `Train_log` files.
 
 ### Test model
-1. Prepare test data:
++ 1. Prepare test data:
    + a. test meta file `Dataset/MM6/test.txt`.
    + b. ref speaker embedding in `Dataset/MM6/test_spk_emb/`.
-3. Generate sample
++ 2. Generate sample
    ``` bash
    bash test_scripts/quick_test.sh
    ```
    Of course, you can download our pre-trained model from google driver. And put it in the corresponding `Train_log` directory.
-4. The result would be found in `test_result` files.
++ 3. The result would be found in `test_result` files.
 
 ## To do
 - [x] Scripts for few-shot training.
