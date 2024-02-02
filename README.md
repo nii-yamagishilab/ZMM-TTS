@@ -122,6 +122,7 @@ python txt2vec/train.py --dataset MM6 --config MM6_IPA
 #If you want to train a model without a language layer, you could use xxx_wo config like:
 python txt2vec/train.py --dataset MM6 --config MM6_XphoneBERT_wo
 ```
+
 2. Train vec2mel model:
 ```bash
 python vec2mel/train.py --dataset MM6 --config MM6
