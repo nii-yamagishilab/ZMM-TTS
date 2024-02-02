@@ -131,6 +131,7 @@ For the training of txt2vec and vec2mel model, we used a batch_size of 16 and tr
 It took about 3 days on 1 Tesla A100 GPU. 
 + 3. Train vec2wav model:
 ```bash
+python prepare_data/creat_lists.py
 python vec2wav/train.py -c Config/vec2wav/vec2wav.yaml
 #If you want to train a model without a language layer:
 python vec2wav/train.py -c Config/vec2wav/vec2wav_wo.yaml
