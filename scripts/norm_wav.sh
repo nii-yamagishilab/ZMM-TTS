@@ -1,10 +1,8 @@
-#!/bin/bash
-#SBATCH --job-name=norm_wav
-#SBATCH --out=norm_wav.log
-#SBATCH --error=norm_wav.error
-#SBATCH --time=70:00:00
-#SBATCH --cpus-per-task=16
-
+# ==============================================================================
+# Copyright (c) 2024, Yamagishi Laboratory, National Institute of Informatics
+# Author: Gong Cheng (gongchengcheng@tju.edu.cn)
+# All rights reserved.
+# ==============================================================================
 
 sv56=scripts/sv56scripts/batch_normRMSE.sh
 TEMP_de=delete_origin
