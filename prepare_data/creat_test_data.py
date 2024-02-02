@@ -1,3 +1,9 @@
+# ==============================================================================
+# Copyright (c) 2024, Yamagishi Laboratory, National Institute of Informatics
+# Author: Gong Cheng (gongchengcheng@tju.edu.cn)
+# All rights reserved.
+# ==============================================================================
+
 #Try to male a speaker-gender-language balance data
 #Max 25 speakers per gender per language
 #For training speed, each audio piece should not exceed 15 seconds at most.
