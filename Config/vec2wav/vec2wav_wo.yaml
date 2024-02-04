@@ -111,11 +111,11 @@ dataloader:
 
 dataset:
     _name: 'MelDataset'
-    id_list: "Dataset/preprocessed_data/ZMM6/train_lists.txt"
+    id_list: "Dataset/preprocessed_data/MM6/train_lists.txt"
     samplerate: 16000
     feature: ['mel', 'wav']
     feature_path:
-        - Dataset/preprocessed_data/ZMM6/DiscreteRp/{}.npy
+        - Dataset/preprocessed_data/MM6/DiscreteRp/{}.npy
         - Dataset/MM6/wavs/{}.wav
     dimension: [768, 1]
     frameshift: [320, 1]
