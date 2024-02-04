@@ -46,7 +46,7 @@ class BaseDataset(torch.utils.data.Dataset):
         with open('Dataset/Group1v2/vq_speaker_w_val_wsin.json', 'r') as f:
             self.speaker_dict = json.load(f)
         '''
-        with open('Dataset/preprocessed_data/ZMM6/language_dict.json', 'r') as f:
+        with open('Dataset/preprocessed_data/MM6/language_dict.json', 'r') as f:
             self.language_dict = json.load(f)
         
         self.language_dict_static={'English':0,'French':1,'German':2,'Portuguese':3,'Spanish':4,'Swedish':5}
@@ -96,7 +96,7 @@ class BaseDataset(torch.utils.data.Dataset):
            speaker_emb = np.load(speaker_path)
            language_id = int(self.language_dict_static[basename.split('_')[1]])
          else:
-              speaker_path = os.path.join('Dataset/preprocessed_data/ZMM6',
+              speaker_path = os.path.join('Dataset/preprocessed_data/MM6',
               "SpeakerEmb",
               "{}.npy".format(basename),)
 
