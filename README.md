@@ -44,7 +44,7 @@ If you want to try IPA representations, you need to install [Epitran](https://gi
 ## Usage
 ### Multilingual multispeaker dataset MM6
 In my paper, the training data we used contained [GlobalPhone](https://ieeexplore.ieee.org/document/6639248), and unfortunately that is not an open source data. 
-Considering the scarcity of publicly multilingual and multilingual speaker databases for speech synthesis, I designed the following training database based on the [MLS](https://www.openslr.org/94/) and [NHT Swedish](https://huggingface.co/datasets/jimregan/nst_swedish_tts) databases and called it MM6. (It seems that NST is no longer open for downloads in Swedish, in which case I have provided the download link for Google Drive). If you have GlobalPhone dataset, you can try the same training data `Dataset/train_paper.txt` as our paper.
+Considering the scarcity of publicly multilingual and multilingual speaker databases for speech synthesis, I designed the following training database based on the [MLS](https://www.openslr.org/94/) and [NHT Swedish](https://huggingface.co/datasets/jimregan/nst_swedish_tts) databases and called it MM6. (It seems that NST is no longer open for downloads in Swedish, in which case you should apply this data from The Norwegian Language Bank). If you have GlobalPhone dataset, you can try the same training data `Dataset/train_paper.txt` as our paper.
 |Language|Gender|Speakers|Sentences|Durations (h)|Database|
 |:----|:----|:----|:----|:----|:----|
 |English|Female|20|4000|13.9|MLS|
@@ -67,7 +67,7 @@ python prepare_data/creat_meta_data_mls.py #Generate speaker-gender-language bal
 #We recommend that you use sv56 to normalize the MLS audio.
 bash scripts/norm_wav.sh
 ```
-Please contact [The Norwegian Language Bank](https://www.nb.no/sprakbanken/en/sprakbanken/)  if you wish to get NHT Swedish data, and extract it to the `Dataset/origin_data/`.
+Please contact [The Norwegian Language Bank](https://www.nb.no/sprakbanken/en/sprakbanken/) if you want to get NHT Swedish data, and extract it to the `Dataset/origin_data/`.
 Or, you could simply consider excluding the Swedish language.
 
 ```bash
@@ -85,7 +85,7 @@ After you download and nom the wav, you can generate in `Dataset` folder as:
          |--MM6
              |--train.txt      
 ```
-you can find wav in `Dataset/MM6/wavs/`  and meta file in `Dataset/preprocessed_data/ZMM6/train.txt`.
+you can find wav in `Dataset/MM6/wavs/` and meta file in `Dataset/preprocessed_data/ZMM6/train.txt`.
 The train.txt looks like:
 ```bash
 Name|Database|Language|Speaker|text
