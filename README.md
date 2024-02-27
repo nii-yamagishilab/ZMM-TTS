@@ -67,7 +67,8 @@ python prepare_data/creat_meta_data_mls.py #Generate speaker-gender-language bal
 #We recommend that you use sv56 to normalize the MLS audio.
 bash scripts/norm_wav.sh
 ```
-Download NHT Swedish dataset through [google driver](https://drive.google.com/file/d/1V-_IAHBQrIypilSd2wPga_-PzRxFDACd/view?usp=drive_link), and extract it to the `Dataset/origin_data/`.
+Please contact [The Norwegian Language Bank](https://www.nb.no/sprakbanken/en/sprakbanken/)  if you wish to get NHT Swedish data, and extract it to the `Dataset/origin_data/`.
+Or, you could simply consider excluding the Swedish language.
 
 ```bash
 #The Swedish audio already normalize
