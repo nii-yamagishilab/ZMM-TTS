@@ -1,0 +1,44 @@
+seed: 1234
+dist_config:
+  dist_backend: "nccl"
+  dist_url: "tcp://localhost:54321"
+  world_size: 1
+path:
+  ckpt_path: "Train_log/vec2mel/output/ckpt/LJSpeech"
+  log_path: "Train_log/vec2mel/output/log/LJSpeech"
+  result_path: "Train_log/vec2mel/output/result/LJSpeech"
+optimizer:
+  batch_size: 16
+  betas: [0.9, 0.98]
+  eps: 0.000000001
+  weight_decay: 0.0
+  grad_clip_thresh: 1.0
+  grad_acc_step: 1
+  warm_up_step: 4000
+  anneal_steps: [500000, 700000, 900000]
+  anneal_rate: 0.3
+loss:
+  noise_loss: "l1"
+  dur_loss: "mse"
+  pitch_loss: "l1"
+  cwt_loss: "l1"
+  # cwt_add_f0_loss: false
+  lambda_f0: 0.0
+  lambda_uv: 0.0
+  lambda_ph_dur: 1.0
+  lambda_word_dur: 0.0
+  lambda_sent_dur: 0.0
+step:
+  total_step: 1200000
+  log_step: 100
+  synth_step: 100000000000000000000
+  val_step: 10000000000000000000
+  save_step: 5000
+  var_start_steps: 10000000000000000000000000000
+duration:
+  binarization_start_steps: 6000
+  binarization_loss_enable_steps: 18000
+  binarization_loss_warmup_steps: 10000
+prosody:
+  gmm_mdn_beta: 0.02
+  prosody_loss_enable_steps: 100000

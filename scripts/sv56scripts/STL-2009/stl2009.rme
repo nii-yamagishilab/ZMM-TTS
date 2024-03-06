@@ -1,0 +1,394 @@
+                              STL2009.RME
+         Readme file for the ITU-T Software Tool Library (STL)
+                        Release November 2009
+      =============================================================
+      COPYRIGHT NOTE: This source code, and all of its derivations,
+      is subject to the "ITU-T General Public License". Please have
+      it  read  in    the  distribution  disk,   or  in  the  ITU-T
+      Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
+      CODING STANDARDS".
+      =============================================================
+
+------------------------------- DISCLAIMER ------------------------------------
+
+This STL2009 release was prepared by the Rapporteurs of Q.10/16
+(Speech and audio coding and related software tools), who believe
+that no mistakes have been committed and that all the software is
+consistent with the descriptions. The Rapporteurs are not liable for
+any damages it might cause you, but the contact addresses of the
+Q.10/16 Rapporteurs are:
+
+	Herve Taddei and Yusuke Hiwasaki
+	<herve.taddei[at]huawei.com> and <hiwasaki.yusuke[at]lab.ntt.co.jp>
+
+-------------------------------------------------------------------------------
+
+This release has a revised version of the ITU-T Software Tool
+Library. 
+
+Please read the file "gen-lic.txt" for the terms and conditions.  The
+code in is54 and rpeltp have additional copyright issues. Please read
+the appropriate files in those directories.
+
+This release also includes the Software Tool Library User's Manual
+(version dated 15/Feb/2010). The Manual is not a normative part of
+Recommendation G.191.
+
+Please note that the files "makefile.*" is repeated all over the
+directories, but they are *ALL* different. Don't have them copied over
+the same directory. On the other hand, ugstdemo.h is the same and may
+be copied over and over again :-)
+
+Please note that some of the program verification procedures use external
+tools you should be able to provide. Currently you need
+- MSDOS/Windows 3.1: a Borland compiler or DJGPP gcc port
+- Windows 95/98/NT/2000/XP: Microsoft Visual C compiler (cl) or Cygnus
+  CYGWIN gcc
+- VMS: a suitable VMS C compiler, e.g. DEC-C or gcc, if you are a VMS
+  user.  Unhappily the rapporteur has very limited hability to help
+  solve problems for this environment, and for most of the tools there
+  is no DCL for compiling. Identifying a make program for this
+  environment is encouraged. If you are a MMS expert, you may want to
+  adapt one of the makefiles. If you want to share that, your
+  contribution will be more than welcome.
+- A "decent" C compiler for Unix. This *excludes* the default cc
+  available for the HP workstations. All tools tested with gcc, some
+  of the older ones with acc and old cc in a Sun with SunOS4.1.
+- Other than the C compilers, for testing the portability and/or the
+  compliance of the tools, some of the makefiles or scripts require a
+  version of the Unix tool awk and an unzipping utility compatible
+  with pkunzip. I suggest getting GNU gawk and InfoZIP unzip because
+  these are the ones I use, and they are available for free. Check the
+  Internet for the latest availability of such tools.
+
+NOTE: recent additions to the STL have not been tested with the older
+platforms listed above
+
+Some additional tools have been provided without any warranty of support
+in the directory unsup. There you find some programs extensively used in the
+testing of the tools. They include [see unsup.rme]:
+
+- binary file comparison/dump/addition/subtraction/multiplication/division 
+  and byte-swapping programs
+- file statistics program plus crc calculation
+- 32-bit CRC calculation
+- a batch file for MSDOS that emulates the basic functionality of the
+  Unix program rm (a delete for multiple files per command line), plus
+  another that will byt swap a list of files, overwriting. Keep
+  makefiles more ellegant.
+- 8-bit to/from 16-bit file conversion (packed to/from UGST format)
+- determination of the natural order of the OS (big, little endian)
+
+Please note that some of the comparison and byte-swapping utilities
+are needed by the testing procedures within each module.
+
+These programs need to be compiled (except the batch file :-) and put
+in your path. Automated compilation of the tool box demo programs is
+available for Unix, Windows (MS Visual C and CYGWIN gcc), and MS-DOS
+(Borland tc++v1.00 and gcc v.2.6.3). For Unix, it is only necessary to
+call e.g.
+
+  make -f makefile.unx 
+
+and all relevant files will be compiled and put in the directory bin
+of the root of the tool library distribution. For Borland tc++,
+automated compilation is driven a batch file called maketcc.bat (which
+uses another batch file, called tccmk.bat), and for MSDOS-port of gcc
+(DJGPP), the batch file is makedjc.bat (which uses gccmk.bat). For MS
+Visual C compiler, use makecl.bat. These batch files also put the
+executables in the directory bin. After compilation, you may either
+move the executables to a directory in your path, or to add this
+directory to your path.
+
+Finaly, there are a number of pre-defined, standard targets for all
+the makefiles, so that a standard action can be expected, as follows:
+
+# General
+all:    	# All (pending) targets are built
+anyway: 	# Build from scratch (same as "clean all")
+clean:  	# Delete object files
+veryclean:	# Reset to a "pristine distribution" state
+
+# Portability tests
+test:   	# Process and compare against reference material
+proc:   	# Process reference material
+comp:   	# Compare against reference material
+cleantest:	# Clean reference and processed files generated by proc
+
+# When there are test vectors for compliance verification
+test-tv:	# Process and compare against compliance test vectors
+proc-tv:	# Process compliance test vectors
+comp-tv:	# Compare against compliance test vectors
+clean-tv:	# Clean processed files generated by proc-tv
+
+
+Good luck!
+-- <> --
+
+-------------------------------------------------------------------------------
+			    -- ANNEX A --
+			    List of Files
+-------------------------------------------------------------------------------
+
+root:
+gen-lic.txt  stl2009  stl2009.rme  stl2009man_LC.pdf  zzzBIGLIST.txt
+
+stl2009:
+basop  bin	     binUnix	   clear.bat	clmk.bat      eid
+fir    flip-dos.bat  flip-unx.bat  freqresp	g711	      g711iplc
+g722   g726	     g727	   g728		gccmk.bat     gen-cl.sed
+iir    is54	     makecl.bat    makedjc.bat	makefile.unx  maketcc.bat
+mnru   mvlogs.sh     porttest.txt  reverb	rpeltp	      stereoop
+sv56   tccmk.bat     test-zip.bat  truncate	unsup	      utl
+
+stl2009/basop:
+basop.rme  basop32.c  basop32.h  basop_cnt.c  control.c  control.h  count.c
+count.h    enh1632.c  enh1632.h  enh40.c      enh40.h	 flc	    move.h
+patch.h    stl.h      typedef.h  typedefs.h
+
+stl2009/basop/flc:
+flc.c  flc.h  flc.rme  flc_example.c  makefile.cl  makefile.unx
+
+stl2009/bin:
+rm.bat	swapover.bat
+
+stl2009/binUnix:
+
+stl2009/eid:
+ascii-bs.awk	       bs-stats.c		       bs-stats.c.org
+cvt-head.c	       cvt-head.c.org		       dec-patt.c
+dec-patt.c.org	       eid-ev.c			       eid-ev.c.org
+eid-int.c	       eid-int.c.org		       eid-xor.c
+eid-xor.c.org	       eid.c			       eid.c.org
+eid.h		       eid.rme			       eid16k.mms
+eid8k.c		       eid8k.c.org		       eid_io.c
+eid_io.c.org	       eid_io.h			       eiddemo.c
+eiddemo.c.org	       ep-stats.c		       ep-stats.c.org
+eval_ep-stats.bash     eval_g729e_convert_synch.src    eval_gen-patt.bash
+g729e_convert_synch.c  g729e_convert_synch.readme.txt  gen-patt.c
+gen-patt.c.org	       gen_rate_profile.c	       gen_rate_profile.c.org
+makefile.cl	       makefile.unx		       ref8keid.zip
+show-crc.awk	       softbit.c		       softbit.c.org
+softbit.h	       zero-eid.zip
+
+stl2009/fir:
+filter.c       filter.c.org  fir-LP.c	   fir-dsm.c	 fir-flat.c
+fir-hirs.c     fir-irs.c     fir-lib.c	   fir-msin.c	 fir-pso.c
+fir-tia.c      fir-wb.c      fir.rme	   fir.rme.org	 firdemo.c
+firdemo.c.org  firflt.c      firflt.h	   fltresp.c	 fltresp.c.org
+makefile.cl    makefile.unx  test-fir.rme  test-fir.zip
+
+stl2009/freqresp:
+bmp_utils.c	bmp_utils.h  export.c	   export.h	      export.h.org
+fft.c		fft.c.org    fft.h	   fft.h.org	      freqresp.c
+freqresp.c.org	makefile.cl  makefile.unx  test-freqresp.zip
+
+stl2009/g711:
+g711-tst.zip	g711.c		g711.h	      g711.rme	    g711demo.c
+g711demo.c.org	makefile.cl	makefile.djc  makefile.tcc  makefile.unx
+shiftbit.c	shiftbit.c.org	tst-g711.zip
+
+stl2009/g711iplc:
+asc2g192.c	 copyrght.txt  cpp_code    error.c	     error.h
+g711iplc.c	 g711iplc.rme  lowcfe.c    lowcfe.h	     makefile.cl
+makefile.cl.bak  plcferio.c    plcferio.h  tst-g711iplc.zip
+
+stl2009/g711iplc/cpp_code:
+g711iplc.cc  lowcfe.cc	lowcfe.h
+
+stl2009/g722:
+decg722.c	 encg722.c	       funcg722.c	 funcg722.h
+g722.c		 g722.h		       g722.rme		 g722_com.h
+g722_com.h.org	 g722demo.c	       g722demo.zip	 makefile.cl
+makefile.cl.org  makefile.unx	       makefile.unx.org  operg722.c
+operg722.h	 readme-G722.v3.0.txt  softbit.c.org	 softbit.h.org
+tst-g722.zip	 tstcg722.c	       tstdg722.c
+
+stl2009/g726:
+cvt_h_b.c	cvt_h_b.c.org	g726.c	      g726.h	    g726.rme
+g726demo.c	g726demo.c.org	make-vms.com  makefile.cl   makefile.djc
+makefile.tcc	makefile.unx	ts-crcs       tst-g726.zip  vbr-g726.c
+vbr-g726.c.org
+
+stl2009/g727:
+discard.c   g727-tv.rme     g727.c	 g727.h        g727.h.org    g727.rme
+g727demo.c  g727demo.c.org  makefile.cl  makefile.unx  tst-g727.zip  tstvector
+
+stl2009/g727/tstvector:
+readme.tv
+
+stl2009/g728:
+g728fixed  g728float  license.txt  testvector
+
+stl2009/g728/g728fixed:
+README		  g728fp.c	   g728fp.c.org      g728fp.h
+g728fpacor.c	  g728fpblk36.c    g728fpblk43.c     g728fpblk49.c
+g728fpcbsearch.c  g728fpcpy.c	   g728fpdec.c	     g728fpdecp.c
+g728fpdivide.c	  g728fpdurbin.c   g728fpenc.c	     g728fperase.c
+g728fpexp10.c	  g728fpimpres.c   g728fplgpred.c    g728fplgupdate.c
+g728fplog.c	  g728fplpcinv.c   g728fpltpfcoef.c  g728fpmemsyn.c
+g728fpnorm.c	  g728fpnormsq.c   g728fpnormtarv.c  g728fppostf.c
+g728fprand.c	  g728fprom.c	   g728fpscalecv.c   g728fpvec.c
+g728fpweight.c	  g728fpwfilter.c  g728fpzirlpcf.c   g728fpzirwf.c
+main.c		  makefile.cl	   makefile.cl.org   makefile.unx
+makefile.unx.org  mask1		   testall.bat	     testall.sh
+testplc.bat	  testplc.sh
+
+stl2009/g728/g728float:
+README	    g728.c	 g728.h       g728b.c	    g728cpy.c  g728dec.c
+g728durb.c  g728enc.c	 g728eras.c   g728filt.c    g728pf.c   g728rom.c
+g728util.c  g728vec.c	 makefile.cl  makefile.unx  mask1      testall.bat
+testall.sh  testplc.bat  testplc.sh
+
+stl2009/g728/testvector:
+README
+
+stl2009/iir:
+c712demo.c    c712demo.c.org  cascg712.c  cirsdemo.c	 cirsdemo.c.org
+iir-dir.c     iir-flat.c      iir-g712.c  iir-irs.c	 iir-lib.c
+iir.rme       iirflt.c	      iirflt.h	  makefile.cl	 makefile.djc
+makefile.tcc  makefile.unx    pcmdemo.c   pcmdemo.c.org  pcmdemo.prj
+test-iir.zip
+
+stl2009/is54:
+b_con.c       basis.i	    bin		  calcp.c	cpyright   cunpack0.c
+decorr.c      edef.i	    excite.c	  filt4.c	filters.c  flatv.c
+fspace.c      g_quant.c     getp.c	  gray.i	init.c	   interp.c
+is54.rme      k_table.i     lag.c	  make-vms.com	makec.c    makefile.cl
+makefile.djc  makefile.tcc  makefile.unx  mysplit.c	p_ex.c	   pconv.c
+putc.c	      r_sub.c	    r_sub.h	  readme.mot	rs_rr.c    t_sub.c
+t_sub.h       v_con.c	    v_srch.c	  vparams.h	vselp.c    vselp.c.org
+vselp.h       wsnr.c
+
+stl2009/is54/bin:
+is54-tst.zip  make-vms.com  makefile.cl  makefile.djc  makefile.tcc
+makefile.unx
+
+stl2009/mnru:
+calc-snr.c    calc-snr.c.org  make-vms.com  makefile.cl  makefile.djc
+makefile.tcc  makefile.unx    mnru.c	    mnru.h	 mnru.rme
+mnrudemo.c    mnrudemo.c.org  sine-ref.zip  snr.c
+
+stl2009/reverb:
+IR	      makefile.cl  makefile.unx  reverb-lib.c  reverb-lib.h  reverb.c
+reverb.c.org  reverb.rme   test-rev.zip
+
+stl2009/reverb/IR:
+mono  stereo
+
+stl2009/reverb/IR/mono:
+big_endian  little_endian
+
+stl2009/reverb/IR/mono/big_endian:
+IR48.IR  meeting100.IR	meeting50.IR  visio.IR
+
+stl2009/reverb/IR/mono/little_endian:
+IR48.IR  meeting100.IR	meeting50.IR  visio.IR
+
+stl2009/reverb/IR/stereo:
+big_endian  little_endian
+
+stl2009/reverb/IR/stereo/big_endian:
+LAABP01.L.IR32	LAABP01.R.IR32	LAABP02.L.IR32	LAABP02.R.IR32	LAABP03.L.IR32
+LAABP03.R.IR32	LAABP04.L.IR32	LAABP04.R.IR32	LAABP05.L.IR32	LAABP05.R.IR32
+LAABP06.L.IR32	LAABP06.R.IR32	LAABP07.L.IR32	LAABP07.R.IR32	LAABP08.L.IR32
+LAABP08.R.IR32	LAABP09.L.IR32	LAABP09.R.IR32	LAABP10.L.IR32	LAABP10.R.IR32
+LAABP11.L.IR32	LAABP11.R.IR32	LAABP12.L.IR32	LAABP12.R.IR32	LEABP01.L.IR32
+LEABP01.R.IR32	LEABP02.L.IR32	LEABP02.R.IR32	LEABP03.L.IR32	LEABP03.R.IR32
+LEABP04.L.IR32	LEABP04.R.IR32	LEABP05.L.IR32	LEABP05.R.IR32	LEABP06.L.IR32
+LEABP06.R.IR32	LEABP07.L.IR32	LEABP07.R.IR32	LEABP08.L.IR32	LEABP08.R.IR32
+LEABP09.L.IR32	LEABP09.R.IR32	LEABP10.L.IR32	LEABP10.R.IR32	LEABP11.L.IR32
+LEABP11.R.IR32	LEABP12.L.IR32	LEABP12.R.IR32	SAABP01.L.IR32	SAABP01.R.IR32
+SAABP02.L.IR32	SAABP02.R.IR32	SAABP03.L.IR32	SAABP03.R.IR32	SAABP04.L.IR32
+SAABP04.R.IR32	SAABP05.L.IR32	SAABP05.R.IR32	SAABP06.L.IR32	SAABP06.R.IR32
+SAABP07.L.IR32	SAABP07.R.IR32	SAMSP01.L.IR32	SAMSP01.R.IR32	SAMSP02.L.IR32
+SAMSP02.R.IR32	SAMSP03.L.IR32	SAMSP03.R.IR32	SAMSP04.L.IR32	SAMSP04.R.IR32
+SAMSP05.L.IR32	SAMSP05.R.IR32	SAMSP06.L.IR32	SAMSP06.R.IR32	SAMSP07.L.IR32
+SAMSP07.R.IR32	SEABP01.L.IR32	SEABP01.R.IR32	SEABP02.L.IR32	SEABP02.R.IR32
+SEABP03.L.IR32	SEABP03.R.IR32	SEABP04.L.IR32	SEABP04.R.IR32	SEABP05.L.IR32
+SEABP05.R.IR32	SEABP06.L.IR32	SEABP06.R.IR32	SEABP07.L.IR32	SEABP07.R.IR32
+SEBIP01.L.IR32	SEBIP01.R.IR32	SEBIP02.L.IR32	SEBIP02.R.IR32	SEBIP03.L.IR32
+SEBIP03.R.IR32	SEBIP04.L.IR32	SEBIP04.R.IR32	SEBIP05.L.IR32	SEBIP05.R.IR32
+SEBIP06.L.IR32	SEBIP06.R.IR32	SEBIP07.L.IR32	SEBIP07.R.IR32	SEMSP01.L.IR32
+SEMSP01.R.IR32	SEMSP02.L.IR32	SEMSP02.R.IR32	SEMSP03.L.IR32	SEMSP03.R.IR32
+SEMSP04.L.IR32	SEMSP04.R.IR32	SEMSP05.L.IR32	SEMSP05.R.IR32	SEMSP06.L.IR32
+SEMSP06.R.IR32	SEMSP07.L.IR32	SEMSP07.R.IR32
+
+stl2009/reverb/IR/stereo/little_endian:
+LAABP01.L.IR32	LAABP01.R.IR32	LAABP02.L.IR32	LAABP02.R.IR32	LAABP03.L.IR32
+LAABP03.R.IR32	LAABP04.L.IR32	LAABP04.R.IR32	LAABP05.L.IR32	LAABP05.R.IR32
+LAABP06.L.IR32	LAABP06.R.IR32	LAABP07.L.IR32	LAABP07.R.IR32	LAABP08.L.IR32
+LAABP08.R.IR32	LAABP09.L.IR32	LAABP09.R.IR32	LAABP10.L.IR32	LAABP10.R.IR32
+LAABP11.L.IR32	LAABP11.R.IR32	LAABP12.L.IR32	LAABP12.R.IR32	LEABP01.L.IR32
+LEABP01.R.IR32	LEABP02.L.IR32	LEABP02.R.IR32	LEABP03.L.IR32	LEABP03.R.IR32
+LEABP04.L.IR32	LEABP04.R.IR32	LEABP05.L.IR32	LEABP05.R.IR32	LEABP06.L.IR32
+LEABP06.R.IR32	LEABP07.L.IR32	LEABP07.R.IR32	LEABP08.L.IR32	LEABP08.R.IR32
+LEABP09.L.IR32	LEABP09.R.IR32	LEABP10.L.IR32	LEABP10.R.IR32	LEABP11.L.IR32
+LEABP11.R.IR32	LEABP12.L.IR32	LEABP12.R.IR32	SAABP01.L.IR32	SAABP01.R.IR32
+SAABP02.L.IR32	SAABP02.R.IR32	SAABP03.L.IR32	SAABP03.R.IR32	SAABP04.L.IR32
+SAABP04.R.IR32	SAABP05.L.IR32	SAABP05.R.IR32	SAABP06.L.IR32	SAABP06.R.IR32
+SAABP07.L.IR32	SAABP07.R.IR32	SAMSP01.L.IR32	SAMSP01.R.IR32	SAMSP02.L.IR32
+SAMSP02.R.IR32	SAMSP03.L.IR32	SAMSP03.R.IR32	SAMSP04.L.IR32	SAMSP04.R.IR32
+SAMSP05.L.IR32	SAMSP05.R.IR32	SAMSP06.L.IR32	SAMSP06.R.IR32	SAMSP07.L.IR32
+SAMSP07.R.IR32	SEABP01.L.IR32	SEABP01.R.IR32	SEABP02.L.IR32	SEABP02.R.IR32
+SEABP03.L.IR32	SEABP03.R.IR32	SEABP04.L.IR32	SEABP04.R.IR32	SEABP05.L.IR32
+SEABP05.R.IR32	SEABP06.L.IR32	SEABP06.R.IR32	SEABP07.L.IR32	SEABP07.R.IR32
+SEBIP01.L.IR32	SEBIP01.R.IR32	SEBIP02.L.IR32	SEBIP02.R.IR32	SEBIP03.L.IR32
+SEBIP03.R.IR32	SEBIP04.L.IR32	SEBIP04.R.IR32	SEBIP05.L.IR32	SEBIP05.R.IR32
+SEBIP06.L.IR32	SEBIP06.R.IR32	SEBIP07.L.IR32	SEBIP07.R.IR32	SEMSP01.L.IR32
+SEMSP01.R.IR32	SEMSP02.L.IR32	SEMSP02.R.IR32	SEMSP03.L.IR32	SEMSP03.R.IR32
+SEMSP04.L.IR32	SEMSP04.R.IR32	SEMSP05.L.IR32	SEMSP05.R.IR32	SEMSP06.L.IR32
+SEMSP06.R.IR32	SEMSP07.L.IR32	SEMSP07.R.IR32
+
+stl2009/rpeltp:
+add.c	       add_test.c   add_test.dta  changes	code.c
+config.h       cpyright     debug.c	  decode.c	gsm.h
+gsm_crea.c     gsm_deco.c   gsm_dest.c	  gsm_enco.c	gsm_expl.c
+gsm_impl.c     gsm_opti.c   gsm_prin.c	  long_ter.c	lpc.c
+make-vms.com   makefile.cl  makefile.djc  makefile.tcc	makefile.unx
+preproce.c     private.h    proto.h	  rpe.c		rpedemo.c
+rpedemo.c.org  rpeltp.c     rpeltp.h	  rpeltp.rme	short_te.c
+table.c        ts	    unproto.h
+
+stl2009/rpeltp/ts:
+make-vms.com  makefile.cl  makefile.djc  makefile.tcc  makefile.unx
+tst-rpe.zip
+
+stl2009/stereoop:
+makefile.cl	makefile.unx	    readme.txt	stereo_proc  stereoop.c
+stereoop.c.org	test_stereoop.bash
+
+stl2009/stereoop/stereo_proc:
+sample.L.32k.1ch.smp  sample.R.32k.1ch.smp
+
+stl2009/sv56:
+actlevel.c  makefile.cl  makefile.djc  makefile.tcc  makefile.unx    sv-p56.c
+sv-p56.h    sv-p56.rme	 sv56-tst.zip  sv56demo.c    sv56demo.c.org
+
+stl2009/truncate:
+makefile.cl  makefile.unx  test-trunc.zip  trunc-lib.c	trunc-lib.h
+truncate.c   truncate.rme
+
+stl2009/unsup:
+asc2bin.c     astrip.c	    bin2asc.c	  chr2sh.c    compfile.c  concat.c
+dumpfile.c    endian.c	    fdelay.c	  g728-vt     getcrc32.c  makefile.cl
+makefile.djc  makefile.tcc  makefile.unx  measure.c   oper.c	  pshar
+rm.bat	      sb.c	    sh2chr.c	  sig-snr.h   sine.c	  sub-add.c
+swapover.bat  swapover.sh   tstunsup.zip  unsupp.rme  voice.ori   xdecode.c
+xencode.c
+
+stl2009/unsup/g728-vt:
+cwcomp.c   filsub.c  ldcdec.c  ldcsub.c  makefile  read.me  run-ncw  s_rnge.c
+sig_die.c  snr.c     wsnr.c
+
+stl2009/unsup/pshar:
+file1-o.txt   file2-o.txt   file3-o.txt   file4-o.txt	file5-o.txt
+make-vms.com  makefile.djc  makefile.tcc  makefile.unx	pshar.c
+pshar.rme     test.ori
+
+stl2009/utl:
+makefile.cl	makefile.djc  makefile.tcc  makefile.unx  scaldemo.c
+scaldemo.c.org	spdemo.c      spdemo.c.org  tst-sp.zip	  ugst-utl.c
+ugst-utl.h	ugst-utl.rme  ugstdemo.h
+
+[END]

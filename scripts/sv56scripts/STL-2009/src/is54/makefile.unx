@@ -1,0 +1,155 @@
+#**************************************************************************
+#
+#               (C) Copyright 1990, Motorola Inc., U.S.A.
+#
+# Note:  Reproduction and use for the development of North American digital
+#        cellular standards or development of digital speech coding
+#        standards within the International Telecommunications Union -
+#        Telecommunications Standardization Sector is authorized by 
+#        Motorola Inc.  No other use is intended or authorized.
+#
+#        The availability of this material does not provide any license
+#        by implication, estoppel, or otherwise under any patent rights
+#        of Motorola Inc. or others covering any use of the contents
+#        herein.
+#
+#        Any copies or derivative works must incude this and all other
+#        proprietary notices.
+#
+# Systems Research Laboratories
+# Chicago Corporate Research and Development Center
+# Motorola Inc.
+#
+#**************************************************************************
+#
+#	makefile for vselp using a Unix compiler
+#
+
+.SUFFIXES: .out .o .c .e .r .f .y .l .s .p .os
+
+RM = rm -f
+
+# normal mode with SPPACK headers
+#CC_OPT= -DFLOAT_TYPE=float -O2 -DSPPACK -I../utl
+# normal mode, no headers
+#CC_OPT= -DFLOAT_TYPE=float -O2 -I../utl
+# for pc data format
+#CC_OPT= -DFLOAT_TYPE=float -DINTEL_FORMAT=1 -I../utl
+# YOUR choice:
+CC_OPT= -g -DFLOAT_TYPE=float -I../utl
+
+# Choose a C compiler
+ACC = acc
+GCC = gcc -fno-builtin
+# CC = cc
+# CC = $(GCC)
+# CC = $(ACC)
+
+#	object file dependency strings
+#
+VSELP_OBJ=getp.o calcp.o init.o filt4.o flatv.o interp.o \
+	makec.o pconv.o t_sub.o filters.o lag.o p_ex.o decorr.o v_srch.o \
+	b_con.o v_con.o rs_rr.o g_quant.o excite.o wsnr.o r_sub.o \
+	cunpack0.o putc.o fspace.o
+
+
+#	make options
+#
+
+# ------------------------------------------------
+# Targets
+# ------------------------------------------------
+all:: uvselp
+
+anyway: clear uvselp
+
+clean:
+	$(RM) *.o
+
+cleantest:
+	echo No test file processing available in this directory
+
+veryclean: clean
+	$(RM) uvselp
+
+# ------------------------------------------------
+# Specific rules
+# ------------------------------------------------
+uvselp: vselp.h vparams.h edef.i $(VSELP_OBJ) vselp.o
+	$(CC) $(CC_OPT) -o $@ $(VSELP_OBJ) vselp.o -lm
+
+getp.o: getp.c vparams.h
+	$(CC) $(CC_OPT) -c -o getp.o getp.c
+
+calcp.o: calcp.c vparams.h
+	$(CC) $(CC_OPT) -c -o calcp.o calcp.c
+
+init.o: init.c vparams.h k_table.i basis.i gray.i 
+	$(CC) $(CC_OPT) -c -o init.o init.c 
+
+filt4.o: filt4.c vparams.h
+	$(CC) $(CC_OPT) -c -o filt4.o filt4.c
+
+filters.o: filters.c vparams.h
+	$(CC) $(CC_OPT) -c -o filters.o filters.c
+
+flatv.o: flatv.c vparams.h
+	$(CC) $(CC_OPT) -c -o flatv.o flatv.c 
+
+interp.o: interp.c vparams.h
+	$(CC) $(CC_OPT) -c -o interp.o interp.c 
+
+makec.o: makec.c vparams.h
+	$(CC) $(CC_OPT) -c -o makec.o makec.c
+
+pconv.o: pconv.c vparams.h
+	$(CC) $(CC_OPT) -c -o pconv.o pconv.c
+
+lag.o: lag.c vparams.h
+	$(CC) $(CC_OPT) -c -o lag.o lag.c
+
+p_ex.o: p_ex.c vparams.h
+	$(CC) $(CC_OPT) -c -o p_ex.o p_ex.c
+
+decorr.o: decorr.c vparams.h
+	$(CC) $(CC_OPT) -c -o decorr.o decorr.c
+
+v_srch.o: v_srch.c vparams.h
+	$(CC) $(CC_OPT) -c -o v_srch.o v_srch.c
+
+b_con.o: b_con.c vparams.h
+	$(CC) $(CC_OPT) -c -o b_con.o b_con.c
+
+v_con.o: v_con.c vparams.h
+	$(CC) $(CC_OPT) -c -o v_con.o v_con.c
+
+rs_rr.o: rs_rr.c vparams.h
+	$(CC) $(CC_OPT) -c -o rs_rr.o rs_rr.c 
+
+g_quant.o: g_quant.c vparams.h
+	$(CC) $(CC_OPT) -c -o g_quant.o g_quant.c
+
+excite.o: excite.c vparams.h
+	$(CC) $(CC_OPT) -c -o excite.o excite.c
+
+wsnr.o: wsnr.c vparams.h
+	$(CC) $(CC_OPT) -c -o wsnr.o wsnr.c 
+
+t_sub.o: vparams.h t_sub.h t_sub.c
+	$(CC) $(CC_OPT) -c -o t_sub.o t_sub.c
+
+r_sub.o: vparams.h r_sub.h r_sub.c
+	$(CC) $(CC_OPT) -c -o r_sub.o r_sub.c 
+
+cunpack0.o: cunpack0.c
+	$(CC) $(CC_OPT) -c -o cunpack0.o cunpack0.c
+
+putc.o: vparams.h putc.c
+	$(CC) $(CC_OPT) -c -o putc.o putc.c
+
+fspace.o: vparams.h fspace.c
+	$(CC) $(CC_OPT) -c -o fspace.o fspace.c
+
+vselp.o: vparams.h vselp.c
+	$(CC) $(CC_OPT) -c vselp.c
+

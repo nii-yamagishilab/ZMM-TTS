@@ -1,0 +1,52 @@
+
+                                   U G S T
+
+                         Read me file for G726 module
+                                (24/Jan/2000)
+
+       =============================================================
+       COPYRIGHT NOTE: This source code, and all of its derivations,
+       is subject to the "ITU-T General Public License". Please have
+       it  read  in    the  distribution  disk,   or  in  the  ITU-T
+       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
+       CODING STANDARDS".
+       =============================================================
+
+The UGST G726 module, version 2.0 (24/Jan/2000) is constituted by the 
+following files:
+
+General:
+~~~~~~~~
+g726.rme: ......... Read-me file for the G.726 module (this file)
+readme.ts: ........ Short description of the test sequences - not included!
+cvt_h_b.c: ........ Program that convert from the Hex-ASCII format of the
+		    ITU-T G.726 test sequences to binary, 16-bit right 
+		    oriented files.
+
+C program code
+~~~~~~~~~~~~~~
+g726.c .......... G726 module itself; needs the prototypes in g726.h.
+g726.h .......... prototypes and definitions needed by the G726 module.
+
+Demos:
+~~~~~~
+g726demo.c ...... Demonstration program for the G726 module; needs the files 
+                  g726.c and ugstdemo.h in the current directory. Operates
+                  at a given fixed rate.
+vbr-g726.c ...... Demonstration program for the G726 module; needs the files 
+                  g726.c and ugstdemo.h in the current directory. Operates
+                  at a given range of rate (e.g, 32, 16, 16-32, 16-24, etc).
+ugstdemo.h ...... prototypes and definitions needed by UGST demo programs.
+
+Makefiles
+~~~~~~~~~
+Makefiles have been provided for automatic build-up of the executable program
+and to process the test sequences, WHEN made available by the user and left
+on the subdirectory "bin":
+make-vms.com: ... DCL for VAX/VMS Vax-cc compiler or the VMS port of gcc
+makefile.cl: .... make file for MS Visual C compiler
+makefile.tcc: ... make file for MSDOS Borland [bt]cc
+makefile.djc: ... make file for MSDOS port of gcc
+makefile.unx: ... make file for Unix, using either cc, acc (Sun), or gcc
+
+-- <simao@labs.comsat.com> --

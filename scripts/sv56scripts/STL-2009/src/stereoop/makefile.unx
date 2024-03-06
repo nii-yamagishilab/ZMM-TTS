@@ -1,0 +1,22 @@
+#
+# Stereoop Makefile
+#
+
+RM= rm -f
+
+CC=	gcc -fno-builtin
+
+CC_OPT = -I../utl -g -Wall
+
+.c.o:
+	$(CC) $(CC_OPT) -c $<
+	
+all: stereoop
+
+stereoop:	stereoop.o 
+	$(CC) -o stereoop stereoop.o -lm
+	
+clean:
+	$(RM) *.o 
+veryclean : 
+	$(RM) *.o stereoop stereoop.exe

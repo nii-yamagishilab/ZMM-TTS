@@ -1,0 +1,74 @@
+# -----------------------------------------------------------------------------
+#	Unix makefile for compiling G.722 v3.0 beta 
+# Modified by y.hiwasaki <hiwasaki.yusuke@lab.ntt.co.jp> 30 Nov 2009
+# Modified by j.svedberg, 2 Feb Nov 2010, to use softbit in eid directory
+# -----------------------------------------------------------------------------
+#
+# example compile line
+#     make veryclean all -f makefile.unx 
+# ------------------------------------------------
+# Choose compiler and set options 
+# ------------------------------------------------
+GCC = gcc
+#CFLAGS = -Wall -fno-builtin -I../utl -I../basop -I../src -std=c99 
+CFLAGS = -Wall -fno-builtin -I../utl -I../basop -I../src -I ../eid -std=c99 
+LD_FLAGS =
+
+SOFTBIT=../eid
+
+# ------------------------------------
+#  Lists of object files
+# ------------------------------------
+G722ENC_OBJ = \
+funcg722.o \
+g722.o \
+../basop/basop32.o \
+../basop/control.o \
+../basop/count.o \
+../basop/enh1632.o \
+encg722.o
+
+G722DEC_OBJ = \
+funcg722.o \
+g722.o \
+$(SOFTBIT)/softbit.o \
+../basop/basop32.o \
+../basop/control.o \
+../basop/count.o \
+../basop/enh1632.o \
+decg722.o
+
+G722DEMO_OBJ = \
+funcg722.o \
+g722.o \
+$(SOFTBIT)/softbit.o \
+../basop/basop32.o \
+../basop/control.o \
+../basop/count.o \
+../basop/enh1632.o \
+g722demo.o
+
+# ------------------------------------
+# Targets 
+# ------------------------------------
+all: g722demo encg722 decg722
+
+clean:
+	@ rm -f `find .. -name '*~'` `find ..  -name '*.o'` `find ..  -name '*.obj'`
+
+veryclean: clean
+	$(RM) g722demo{,.exe} encg722{,.exe} decg722{,.exe}
+
+# ------------------------------------
+# Dependencies and rules 
+# ------------------------------------
+g722demo: $(G722DEMO_OBJ)
+	$(CC) $(CC_OPT) -o $@ $^ $(LD_OPT) -lm
+
+encg722: $(G722ENC_OBJ)
+	$(CC) $(CC_OPT) -o $@ $^ $(LD_OPT) -lm
+
+decg722: $(G722DEC_OBJ)
+	$(CC) $(CC_OPT) -o $@ $^ $(LD_OPT) -lm
+
+

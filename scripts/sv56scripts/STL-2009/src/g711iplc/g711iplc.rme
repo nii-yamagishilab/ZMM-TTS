@@ -1,0 +1,151 @@
+g711iplc.rme - Readme for the G.711 Packet Loss Concealment module
+
+
+                                U G S T
+
+            Read me file for G711 Packet Loss Concealment module
+                             (24.May.2005)
+
+       ==============================================================
+       COPYRIGHT NOTE: This software module  was  developed  by AT&T,
+       who holds the  copyrights  of the implementation and its *use* 
+       was  granted  as per  the  Terms  in  ITU-T Rec.G.191.
+
+       This module, and all of its  derivations,  is subject  to  the
+       "ITU-T General Public License".  Please have it  read  in  the
+       distribution disk, or in the ITU-T Recommendation G.191 on
+       "SOFTWARE TOOLS FOR SPEECH AND AUDIO CODING STANDARDS".
+       ==============================================================
+
+----------------------------------------------------------------------
+(c) Copyright 1997-2001 AT&T Corp.
+All rights reserved.
+
+NOTICE
+
+AT&T hereby grants you ("User") under its copyright rights the right
+to reproduce and prepare derivative works of this software source
+code ("Software") solely for internal research and evaluation
+purposes.  No other rights are granted and no other use is intended
+or authorized.
+
+The availability of the Software does not provide any license by
+implication, estoppel, or otherwise under any patent rights owned or
+controlled by AT&T Corp. or others covering any use of the Software
+herein.
+
+USER UNDERSTANDS THAT AT&T ASSUMES NO LIABILITY FOR ANY DAMAGES,
+WHETHER DIRECT OR OTHERWISE, WHICH THE USER MAY SUFFER DUE TO USER'S
+USE OF THE SOFTWARE.  AT&T MAKES NO EXPRESS OR IMPLIED
+REPRESENTATIONS OR WARRANTIES OF ANY TYPE, AND EXPRESSLY DISCLAIMS
+THE WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY,
+TITLE, AND INFRINGEMENT.  USER ACKNOWLEDGES THAT IT ASSUMES TOTAL
+RESPONSIBILITY AND RISK FOR USER'S USE OF THE SOFTWARE.
+
+The foregoing terms and conditions shall constitute the entire
+agreement between User and AT&T Corp. with respect to the subject
+matter hereof and shall not be modified, superceded, or rescinded by
+any other agreement without the express written authorization of
+AT&T Corp.
+
+Any copies or derivative works must include this and all other
+proprietary notices.
+----------------------------------------------------------------------
+
+
+
+The UGST G711-PLC module, version 1.0 (24.May.2005) contains the
+following files :
+
+
+General:
+~~~~~~~~
+g711iplc.rme .... This read-me file
+
+
+C program code
+~~~~~~~~~~~~~~
+lowcfe.c ...... PLC algorithm module file.
+lowcfe.h ...... Header for lowcfe.c
+plcferio.c .... Functions for reading FER patterns
+plcferio.h .... Headers for plcferio.c
+error.c ....... Process error codes
+error.h ....... Prototypes and definitions for error.c
+asc2g192.c .... Loss pattern convertion utility
+
+C++ code is also available in the g711iplc\cpp_code directory.
+
+Demo:
+~~~~~
+g711iplc.c .... Demo program for PLC module
+
+
+
+Makefiles:
+~~~~~~~~~~
+makefile.cl ... MS-C/C++ makefile
+
+Test Vectors:
+~~~~~~~~~~~~~
+tst-g711iplc.zip ... ZIP-compatible archive with he test files in the 
+                     UNIX byte orientation (high-byte first).
+
+
+Description and usage:
+~~~~~~~~~~~~~~~~~~~~~~
+
+The input and output audio files should be in the native byte order
+for the machine running the simulator (big-endian on SPARC or MIPS,
+little endian on Intel). The sample program does not contain
+the G.711 encoder or decoder. If you have a G.711 bit-stream,
+it must be decoded before the g711iplc program is run.
+
+The packet loss concealment programs takes 3 file arguments:
+
+	g711iplc mask.g192 input.raw output.raw
+
+The mask.g192 file should be in the G.192 format as specified in the
+ITU-T G.191 software tools library (g192, byte, and compact
+representations are supported). The G.192 file should contain only the
+frame headers words (G192_SYNC or G192_FER, see softbit.h), and not
+the data words.  A frame corresponds to 10 msec, or 80 samples. If the
+FER pattern file is shorter than the number of frames in the input.raw
+file, the program will roll-over back to the start of the FER pattern
+file.  For example if the mask.g192 file contains:
+
+	0x6B21 0x6B21 0x6B21 0x6B21 0x6B21, 
+	0x6B21 0x6B21 0x6B21 0x6B21 0x6B20 
+
+a 10% uniform loss pattern will be applied to the whole file. Erasures
+will occur at 90-100 msec, 190-200 msec, 290-300 msec ... in the file.
+
+====================================================================
+NOTE: although by design the algorithm works for packets containing
+10ms of speech, the algorithm can be applied to packetizations
+containing speech chuncks that are integer multiples of 10ms. For
+example, for a 20ms packetization, instead of the sequence above, one
+would use:
+
+	0x6B21 0x6B21 0x6B21 0x6B21 0x6B21, 
+	0x6B21 0x6B21 0x6B21 0x6B21 0x6B21, 
+	0x6B21 0x6B21 0x6B21 0x6B21 0x6B21, 
+	0x6B21 0x6B21 0x6B21 0x6B20 0x6B20 
+
+In other words, a 1:2 interpolation where the frame flag is
+repeated. This can be easily extended for other packetizations,
+e.g. 30ms, 40ms, etc.
+====================================================================
+
+The packet loss concealment algorithm delays the output by 3.75
+msec. The g711iplc.c program compensate for this delay by not outputting 
+the first 3.75 msec of the first packet. This way the input and output files
+align exactly if they are overlayed in an audio waveform editor.
+
+The -noplc will use a silence insertion algorithm for the concealed frames
+instead of running the algorithm in G.711 Appendix I. This is helpful
+if you want to use a wave editor to view the location of the missing frames.
+
+Use the -stats option to print out the number and percentage of frames
+concealed in the processed file.
+
+[END]

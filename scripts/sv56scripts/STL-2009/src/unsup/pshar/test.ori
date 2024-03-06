@@ -1,0 +1,560 @@
+#	This is a shell archive.
+#	Remove everything above and including the cut line.
+#	Then run the rest of the file through sh.
+#----cut here-----cut here-----cut here-----cut here----#
+#!/bin/sh
+# shar:    Shell Archiver
+#	Run the following text with /bin/sh to create:
+#	file1.txt
+#	file2.txt
+#	file3.txt
+#	file4.txt
+#	file5.txt
+# This archive created: Mon Feb 21 15:05:01 1994
+cat << \SHAR_EOF > file1.txt
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <dos.h>
+#include <io.h>
+#include <alloc.h>
+#include "dsp16-io.h"
+
+int             main(int argc, char *argv[])
+{
+  char            hexfile[100] = "resmon.hex";	/* TMS320C25 init file */
+  double          rate = 8000;	/* Samplig rate, in Hz */
+  char            speech_file[100];	/* Digitized speech file */
+  int             errflg = 0;	/* Error flag */
+  char            high_byte_1st = 0;	/* Little or Big endian */
+  char            pause_before_start = 0;	/* wait user's input */
+  short           play_mode = CMD15_ONCE;	/* Loop or single listening */
+  long            addr;		/* Start address in DSP16+ data RAM */
+  long            file_size;	/* speech file size, in bytes */
+  FILE           *fx;		/* speech file structure pointer */
+  int             fh;		/* speech file handler */
+  short far      *bp;		/* pointer for speech data on PC RAM */
+  long            nword;	/* number of 16-bit words in the speech file */
+  long            tmp;
+
+  /* Ask for options */
+  while (argc > 1 && argv[1][0] == '-' && strlen(argv[1]) > 1)
+    if (strcmp(argv[1], "-fs") == 0)
+    {
+      /* Set sampling rate */
+      rate = atof(argv[2]);
+
+      /* Update argv and argc to next argument */
+      argv += 2;
+      argc -= 2;
+    }
+    else if (strcmp(argv[1], "-c") == 0)
+    {
+      /* Set play mode as continuous */
+      play_mode = CMD15_LOOP;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-1") == 0)
+    {
+      /* Set play mode for 1 play */
+      play_mode = CMD15_ONCE;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-p") == 0)
+    {
+      /* Wait user's command to start playback */
+      pause_before_start = 1;
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-s") == 0)
+    {
+      /* Files are big endian - so, swap bytes, please */
+      high_byte_1st = 1;
+      argv++;
+      argc--;
+    }
+    else
+    {
+      fprintf(stderr, "Invalid option \"%s\" in command line\n\n",
+	      argv[1]);
+      exit(1);
+    }
+
+  /* Get length for measurements */
+  if (argc < 2 || strcmp(argv[1], "-?") == 0)
+  {
+    fprintf(stderr, "Usage: %s [-fs Hz] [-1] [-c] [-s] file\n", argv[0]);
+    exit(1);
+  }
+  else
+  {
+    /* Read parameters for processing */
+    strcpy(speech_file, argv[1]);
+    fprintf(stderr, "Speech file: %s\n", speech_file);
+  }
+
+  /* Setting address of DSP-16 */
+  if (DSP16_setaddress())
+    return (1);
+
+  /* Initializing DSP-16 hardware */
+  if (DSP16_initialize(hexfile))
+    return (2);
+
+  /* Documenting hardware/software/firmware options */
+  printf("DSP-16 Driver version %d.%d. - ", dcall.p3, dcall.p4);
+  printf("%d words uploaded.\n", DWORDSUP);
+
+  /* Setting sampling rate, with prevoius check for range */
+  if ((rate <= 0.0) || (rate > 50000.0))
+    rate = 50000.0;
+  errflg = DSP16_samplerate(rate);
+  if (errflg)
+    return (1);
+  printf("Sample rate set to %3.3f kHz.\n", rate / 1000.0);
+
+  /* Open speech file */
+  if ((fx = fopen(speech_file, "rb")) == NULL)
+  {
+    printf("Can't open file %s ... aborted\n", speech_file);
+    return (1);
+  }
+  fh = fileno(fx);
+
+  /* Inicializations for file */
+  bp = (short far *) NULL;
+  file_size = filelength(fh);
+
+  /* Check if enough memory */
+  if ((tmp = farcoreleft()) < file_size)
+    return (fprintf(stderr, "Insufficient memory: %ld bytes! \n", tmp), 2);
+
+  /* ... Allocates memory to load current file */
+  if ((bp = (short far *) farmalloc((long) file_size)) == NULL)
+  {
+    /* Well, there was enough memory BUT allocation failed! */
+    printf("Can't allocate memory for file %s", speech_file);
+    fclose(fx);
+    return (1);
+  }
+
+  /* Load file into the PC memory */
+  fprintf(stderr, "Loading sampled data in PC's RAM\r");
+  nword = load_big_buffer(fh, bp, file_size) / 2;
+  fclose(fx);
+
+  /* Swap bytes when requested */
+  if (high_byte_1st)
+    swap_byte((char far *) bp, 2 * nword);
+
+  /* Send next speech material to DSP16 */
+  addr = 0;
+  fprintf(stderr, "Sending sampled data to DSP16's RAM\r");
+  send_big_block(bp, (long) file_size, &addr);
+
+  /* Clear line */
+  clreol();
+
+  /* Pause, if requested */
+  if (pause_before_start)
+  {
+    fprintf(stderr, "Hit ENTER to start listening ... ");
+    (void) getch();
+    fprintf(stderr, "\r");
+    clreol();
+  }
+
+  /* Send order to start playback */
+  if (start_playback(nword, play_mode) == 0)
+    return (1);
+
+  /* Display info */
+  if (play_mode == CMD15_LOOP)
+    fprintf(stderr, "Hit 'S' to stop listening! ... ");
+
+  /* Free memory */
+  farfree(bp);
+
+  /* Wait until the current file ends its playback */
+  wait_eop_or_esc();
+
+  /* Resets DSP16 */
+  DSP16_resetTMS();
+
+  /* Put DSP16 back into the initial state and quit */
+  errflg = DSP16_initialize(hexfile);
+  return (errflg ? 1 : 0);
+}
+SHAR_EOF
+cat << \SHAR_EOF > file2.txt
+#include <stdio.h>
+#include <math.h>
+#include "gpib-bib.h"
+#include "fd9002.h"
+
+void            main(int argc, char *argv[])
+{
+  /* Filter data */
+  filter_channel_state channel_1, channel_2;
+
+  /* Initializations of default values */
+  channel_1.f0 = 0;
+  channel_1.pregain = channel_1.postgain = 1.0;
+  channel_1.channel = FD_BothChannels;
+  channel_1.config = FD_Config0;
+  channel_1.coupling = FD_AC_COUPLING;
+  channel_1.input = FD_SINGLE;
+  channel_1.mode = FD_ACTIVE;
+
+  /* Check options */
+  while (argc > 1 && argv[1][0] == '-' && strlen(argv[1]) > 1)
+    if (strcmp(argv[1], "-f0") == 0)
+    {
+      /* Set the cut-off frequency and check valid range */
+      channel_1.f0 = atof(argv[2]);
+      if (channel_1.f0 > 102400)
+	channel_1.f0 = 102400.0 /* Hz */ ;
+      else if (channel_1.f0 < 0.1)
+	channel_1.f0 = 0.1 /* Hz */ ;
+
+      /* Update argv and argc to next argument */
+      argv += 2;
+      argc -= 2;
+    }
+    else if (strcmp(argv[1], "-gi") == 0)
+    {
+      /* Set the pre-gain (filter input gain) and check valid range */
+      channel_1.pregain = atof(argv[2]);
+      if (channel_1.pregain > 13.75)
+	channel_1.pregain = 13.75;
+      else if (channel_1.pregain < 1.0)
+	channel_1.pregain = 1.0;
+
+      /* Update argv and argc to next argument */
+      argv += 2;
+      argc -= 2;
+    }
+    else if (strcmp(argv[1], "-go") == 0)
+    {
+      /* Set the post-gain (filter output gain) and check valid range */
+      channel_1.postgain = atof(argv[2]);
+      if (channel_1.postgain > 13.75)
+	channel_1.postgain = 13.75;
+      else if (channel_1.postgain < 1.0)
+	channel_1.postgain = 1.0;
+
+      /* Update argv and argc to next argument */
+      argv += 2;
+      argc -= 2;
+    }
+    else if (strcmp(argv[1], "-c") == 0)
+    {
+      /* Set channel number */
+      channel_1.channel = atoi(argv[2]) == 1 ?
+	FD_Channel1 :
+	FD_Channel2;
+
+      /* Update argv and argc to next argument */
+      argv += 2;
+      argc -= 2;
+    }
+    else if (strcmp(argv[1], "-cfg") == 0)
+    {
+      /* Set configuration number */
+      channel_1.config = (byte) atoi(argv[2]);
+
+      /* Check for valid range */
+      if (channel_1.config > 7 || channel_1.config < 0)
+      {
+	fprintf(stderr, "Bad configuration: valid range is 0..7\n");
+	exit(1);
+      }
+
+      /* Update argv and argc to next argument */
+      argv += 2;
+      argc -= 2;
+    }
+    else if (strcmp(argv[1], "-ac") == 0)
+    {
+      /* Set coupling option */
+      channel_1.coupling = FD_AC_COUPLING;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-dc") == 0)
+    {
+      /* Set coupling option */
+      channel_1.coupling = FD_DC_COUPLING;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-sngl") == 0)
+    {
+      /* Set coupling option */
+      channel_1.input = FD_SINGLE;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-diff") == 0)
+    {
+      /* Set coupling option */
+      channel_1.input = FD_DIFFERENTIAL;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-act") == 0)
+    {
+      /* Set coupling option */
+      channel_1.mode = FD_ACTIVE;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-byp") == 0)
+    {
+      /* Set coupling option */
+      channel_1.mode = FD_BYPASS;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else
+    {
+      fprintf(stderr, "Invalid option \"%s\" in command line\n\n",
+	      argv[1]);
+      exit(1);
+    }
+
+  /* Read parameter for processing, if missing */
+  if (channel_1.f0 == 0)
+  {
+    /* Get parameter only if not specified by the '-f0' option */
+    printf("_Cut-off frequency [Hz]: .......... ");
+    scanf("%lf", &channel_1.f0);
+  }
+
+  /* Initialize channel_2 */
+  channel_2 = channel_1;
+
+  /* Print options read */
+  print_filter_state(channel_1, stdout);
+
+  /* Initializing the filter structure */
+  if (FD9002_open(&channel_1))
+    exit(3);
+
+  /* Progamming the filter */
+  if (channel_1.channel == FD_BothChannels)
+    FD9002_set_filter(channel_1);
+  else
+    FD9002_set_channel(channel_1);
+
+  /* Read configuration of both channels */
+  if (FD9002_get_filter_state(&channel_1, &channel_2))
+    exit(3);
+
+  /* Print configuration */
+  print_filter_state(channel_1, stdout);
+  print_filter_state(channel_2, stdout);
+
+  /* Wait, check clip status and print */
+  printf("\n Wait a second ...");
+  delay(1000);
+  printf("\r Config %d: Clip status is %d %s\n",
+	 channel_1.config, (int) FD9002_get_clip(channel_1),
+	 "(1->Chan1; 2->Chan2; 3->Both)");
+}
+SHAR_EOF
+cat << \SHAR_EOF > file3.txt
+#include <stdio.h>
+#include <string.h>
+#include "gpib-bib.h"
+#include "gpib-dft.h"
+#include "hp35665a.h"
+
+void            main()
+{
+  /* Local variables */
+  float           buf[500];
+  long            datapoints, pulseno;
+  int             bd, dev;	/* GPIB board and device numbers */
+
+  /* Assign unique identifier to board 0 and store in variable bd */
+  if ((bd = ibfind("GPIB0")) < 0)
+    exit(GPIB_error("Can't initialize GPIB board\n"), 1);
+
+  /* Initializing HP35665A as DEV11 */
+  if ((dev = ibfind("DEV11")) < 0)
+    exit(GPIB_error("Can't initialize HP35665A as DEV11\n"), 2);
+
+  /* Send the Interface Clear (IFC). */
+  if (ibsic(bd) & ERR)
+    exit(GPIB_error("Failed sending IFC\n"), 1);
+
+  /* Turn on Remote Enable (REN) signal so instrument can be programmed. */
+  if (ibsre(bd, 1) & ERR)
+    exit(GPIB_error("Failed raising REN\n"), 1);
+
+  /* Initialize the HP35665A */
+  if (init_HP35665A(bd))
+    exit(2);
+
+  /* Do multiple measurements, until a key is hit */
+  do
+  {
+    /* Print message */
+    printf("Dial something on the phone\r");
+
+    /* Get channel 1 of HP35665A, when new data comes */
+    if (get_trace_HP35665A(bd, buf, &datapoints, 1))
+      break;
+
+    /* Find out which key was pressed and print if a valid one */
+    if (get_vote(buf, datapoints, 0l, 9l, &pulseno))
+      printf("Pressed key %ld\t\t\t\n", pulseno);
+
+  } while (!kbhit());
+
+  /* Send instrument to local mode */
+  ibloc(dev);
+
+  /* The program terminates with an interface clear */
+  ibsic(bd);
+}
+SHAR_EOF
+cat << \SHAR_EOF > file4.txt
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include "gpib-bib.h"		/* header file for the NI488 software */
+#include "hp8903b.h"		/* header file for the HP8903B */
+
+int             main()
+{
+  /* GPIB variables */
+  int             bd;
+  HP8903B_state   st;
+
+  /* Assign unique identifier to board 0 and save in bd */
+  fprintf(stderr, "Initializing controller");
+  if ((bd = ibfind("GPIB0")) < 0)
+    return (GPIB_error(NULL), 1);
+
+  /* Send the Interface Clear (IFC). */
+  if (ibsic(bd) & ERR)
+    return (GPIB_error(NULL), 1);
+
+  /* Turn on Remote Enable (REN) signal so instrument can be programmed. */
+  if (ibsre(bd, 1) & ERR)
+    return (GPIB_error(NULL), 1);
+
+  /* Reset devices */
+  if (HP8903B_reset(bd))
+    return (GPIB_error(NULL), 1);
+
+  /* Initialize data structure with desired settings for the HP8903B */
+  strcpy(st.src.uf, "HZ");	/* Frequency unity: Hz */
+  strcpy(st.src.uv, "VL");	/* Amplitude unity: V */
+  st.src.f = 1020;		/* 1020 Hz */
+  st.src.v = 1;			/* 1V */
+
+  /* Initialize the HP8903B */
+  if (HP8903B_set_source(bd, st))
+    exit(1);
+  else
+    fprintf(stderr, "\nHP8903B Source initialized!\n");
+
+
+  /* Read measurement from HP8903 until something else than ENTER is hit */
+  do
+  {
+    printf("\n");
+    fprintf(stderr, ">> Hit ENTER repeat measurement, %s",
+	    "any other key quit\n");
+    printf(" AClevel= %11.3lfV\n", HP8903B_measure(LevelAC, bd, 4l));
+    printf(" DClevel= %11.3lfV\n", HP8903B_measure(LevelDC, bd, 4l));
+    printf(" SNR=     %10.2lfdB\n", HP8903B_measure(SNR, bd, 4l));
+    printf(" SINAD=   %10.2lfdB\n", HP8903B_measure(SINAD, bd, 4l));
+    printf(" Dist=    %12.4lfV\n", HP8903B_measure(Distortion, bd, 4l));
+    printf(" Dist=    %12.4lf%%\n",
+	   HP8903B_measure(DistortionPercent, bd, 4l));
+  } while (getch() == '\r');
+
+  /* The program terminates with an interface clear */
+  ibsic(bd);
+
+  /* Return OK */
+  return (0);
+}
+SHAR_EOF
+cat << \SHAR_EOF > file5.txt
+#include <stdio.h>
+#include <math.h>
+#include "gpib-bib.h"
+#include "sv6.h"
+
+void            main(int argc, char *argv[])
+{
+  sv6_state       st;
+  double          time;
+
+  /* Get length for measurements */
+  if (argc < 2 || strcmp(argv[1], "-?") == 0)
+  {
+    fprintf(stderr, "Usage: %s meas-time-in-sec\n", argv[0]);
+    exit(1);
+  }
+  else
+  {
+    /* Read parameters for processing */
+    st.DeltaT = (double) atof(argv[1]);
+    fprintf(stderr, ">> Measurement time is %lfs\n", st.DeltaT);
+  }
+
+  /* Save specified time in memory */
+  time = st.DeltaT;
+
+  /* Initializing the SV6 structure */
+  if (SV6_open(&st))
+    exit(fprintf(stderr, "Aborting program\n"), 3);
+
+  /* Initialize SV6 */
+  SV6_initialize(st);
+  delay(1000);			/* Allow 1s for settling */
+
+  /* Measuring level and reporting */
+  do
+  {
+    /* Measure level for the specified time */
+    SV6_measure(&st);
+
+    /* Print levels read on screen */
+    print_sv6_state(st, stdout);
+
+    /* Set measurement time to the original value */
+    st.DeltaT = time;
+
+    /* Repeat while the user hits just ENTER */
+    fprintf(stderr, "\n>> Hit ENTER to repeat, other key to quit\n");
+  } while (!kbhit() && getche() == '\r');
+}
+SHAR_EOF
+#	End of shell archive
+exit 0

@@ -1,0 +1,21 @@
+CC=gcc
+CFLAGS=-O
+
+OFILES= g728fpenc.o g728fpdec.o \
+g728fpblk36.o g728fpblk43.o g728fpblk49.o g728fpcpy.o \
+g728fpdivide.o g728fpacor.o g728fpcbsearch.o g728fpexp10.o \
+g728fpimpres.o g728fplgpred.o g728fplgupdate.o g728fpnormsq.o \
+g728fpnormtarv.o g728fpscalecv.o g728fpweight.o g728fpwfilter.o \
+g728fpmemsyn.o g728fpnorm.o g728fpzirlpcf.o g728fpzirwf.o \
+g728fplpcinv.o g728fpdecp.o g728fpltpfcoef.o g728fppostf.o \
+g728fpdurbin.o g728fpvec.o g728fprom.o g728fperase.o g728fplog.o g728fprand.o
+
+all: g728fp
+
+g728fp: g728fp.o $(OFILES)
+	$(CC) $(CFLAGS) -o g728fp g728fp.o $(OFILES)
+
+$(OFILES): g728fp.h
+
+clean:
+	rm -f *.o *.obj *.exe g728fp output bit-stream *.out

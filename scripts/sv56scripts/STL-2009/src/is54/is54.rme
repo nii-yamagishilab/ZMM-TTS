@@ -1,0 +1,69 @@
+is54.rme - Readme for the VSELP program ported to the ITU-T STL
+
+
+
+         Read-me for ITU-T/UGST Vector-Sum Excited Linear Prediction
+                                (01.May.94)
+
+
+       =============================================================
+       COPYRIGHT NOTE: This source code, and all of its derivations,
+       is subject to the "ITU-T General Public License". Please have
+       it  read  in    the  distribution  disk,   or  in  the  ITU-T
+       Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
+       CODING STANDARDS". In special, this software had its use kindly
+       authorized by Motorola, who keeps the original copyright. See
+       file cpyright on this directory. 
+       =============================================================
+
+The ITU-T/UGST distribution of the Motorola reference implementation 
+IS54 program is built of the following files:
+
+
+General:
+~~~~~~~~
+is54.rme: ......... Read-me file for IS54 kit (this file)
+readme.mot: ....... Read-me of the original distribution by Motorola
+
+
+C program code
+~~~~~~~~~~~~~~
+The main vselp encoding PROGRAM is implemented by vselp.c (this is NOT a 
+module!). The other C programs implement its supporting functions:
+	b_con.c		calcp.c		cunpack0.c	decorr.c
+	excite.c	filt4.c		filters.c	flatv.c
+	fspace.c	g_quant.c	getp.c   	init.c
+	interp.c 	isdef.c  	lag.c   	makec.c
+	p_ex.c  	pconv.c 	putc.c  	r_sub.c
+	rs_rr.c 	split.c 	t_sub.c 	v_con.c
+	v_srch.c 	vselp.c 	wsnr.c   
+		
+There are several specific header files:
+	r_sub.h 	t_sub.h		vparams.h	vselp.h
+
+And one UGST general header file: 
+	ugstdemo.h
+	
+There are several "inline" code files, that are either included during 
+compilation (32-bit C compilers) or read by the compiled program during run
+time (16-bit C compilers):
+	basis.i 	edef.i  	gray.i  	k_table.i
+
+Makefiles
+~~~~~~~~~
+Makefiles have been provided for automatic build-up of the executable program:
+make-vms.com: ... DCL for VAX/VMS Vax-cc compiler or the VMS port of gcc
+makefile.tcc: ... makefile for MSDOS Borland bcc
+makefile.cl: .... makefile for MS Visual C Compiler
+makefile.djc: ... makefile for MSDOS port of gcc
+makefile.unx: ... makefile for Unix, using either cc, acc (Sun), or gcc
+
+Testing
+~~~~~~~
+is54-tst.zip: ... PKZIP-compatible archive with test files for the IS54
+		  implementation and makefiles to automatically carry out the
+		  tests. BECAREFUL, makefile names are equal to the ones 
+		  described above, but the files are DIFFERENT! This file, and
+		  the makefiles are in the directory "bin".
+
+-- <simao@cpqd.ansp.br> --

@@ -1,0 +1,29 @@
+(c) Copyright 1997-2001 AT&T Corp.
+All rights reserved.
+
+NOTICE
+
+AT&T hereby grants you ("User") under its copyright rights the right to 
+reproduce and prepare derivative works of this software source code 
+("Software") solely for internal research and evaluation purposes.  No other
+rights are granted and no other use is intended or authorized.
+
+The availability of the Software does not provide any license by implication,
+estoppel, or otherwise under any patent rights owned or controlled by
+AT&T Corp. or others covering any use of the Software herein.
+
+USER UNDERSTANDS THAT AT&T ASSUMES NO LIABILITY FOR ANY DAMAGES, WHETHER
+DIRECT OR OTHERWISE, WHICH THE USER MAY SUFFER DUE TO USER'S USE OF THE
+SOFTWARE.  AT&T MAKES NO EXPRESS OR IMPLIED REPRESENTATIONS OR WARRANTIES
+OF ANY TYPE, AND EXPRESSLY DISCLAIMS THE WARRANTIES OF FITNESS FOR A
+PARTICULAR PURPOSE, MERCHANTABILITY, TITLE, AND INFRINGEMENT.  USER
+ACKNOWLEDGES THAT IT ASSUMES TOTAL RESPONSIBILITY AND RISK FOR USER'S USE
+OF THE SOFTWARE. 
+
+The foregoing terms and conditions shall constitute the entire agreement
+between User and AT&T Corp. with respect to the subject matter hereof and
+shall not be modified, superceded, or rescinded by any other agreement
+without the express written authorization of AT&T Corp.
+
+Any copies or derivative works must include this and all other
+proprietary notices.

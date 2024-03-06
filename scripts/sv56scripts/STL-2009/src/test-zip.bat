@@ -1,0 +1,15 @@
+unzip -t mnru\sine-ref.zip
+unzip -t g726\tst-g726.zip
+unzip -t iir\test-iir.zip
+unzip -t is54\bin\is54-tst.zip
+unzip -t rpeltp\ts\tst-rpe.zip
+unzip -t fir\test-fir.zip
+unzip -t utl\tst-sp.zip
+unzip -t unsup\tstunsup.zip
+unzip -t g711\g711-tst.zip
+unzip -t g711\tst-g711.zip
+unzip -t sv56\sv56-tst.zip
+unzip -t g722\tst-g722.zip
+unzip -t eid\ref8keid.zip
+unzip -t eid\zero-eid.zip
+unzip -t g727\tst-g727.zip

@@ -1,0 +1,46 @@
+This directory should contain the G.728 test vectors. They can
+be obtained from G.728 Appendix I on the ITU-T website.
+The following files should be extracted and placed in this
+directory:
+
+From software/G728apI/G728apIepdf/Disk1_4:
+CW1.BIN
+CW2.BIN
+CW3.BIN
+CW6.BIN
+IN1.BIN
+IN2.BIN
+IN3.BIN
+IN5.BIN
+IN6.BIN
+INCW1.BIN
+INCW2.BIN
+INCW3.BIN
+OUTA1.BIN
+OUTA2.BIN
+OUTA3.BIN
+OUTA6.BIN
+
+From software/G728apI/G728apIepdf/Disk2_4:
+CW4.BIN
+CW5.BIN
+IN4.BIN
+INCW4.BIN
+OUTA4.BIN
+OUTA5.BIN
+OUTB4.BIN
+
+From software/G728apI/G728apIepdf/Disk3_4:
+INCW1G.BIN
+INCW2G.BIN
+INCW3G.BIN
+INCW4G.BIN
+INCW5G.BIN
+INCW6G.BIN
+OUTA1G.BIN
+OUTA2G.BIN
+OUTA3G.BIN
+OUTA4G.BIN
+OUTA5G.BIN
+OUTA6G.BIN
+OUTB4G.BIN

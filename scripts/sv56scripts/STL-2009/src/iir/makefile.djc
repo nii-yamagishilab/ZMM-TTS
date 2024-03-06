@@ -1,0 +1,134 @@
+# -----------------------------------------------------------------------------
+#       MSDOS gcc makefile for compiling and testing the UGST IIR module.
+#	01.Feb.95 - Created - <simao@ctd.comsat.com>
+# -----------------------------------------------------------------------------
+.SUFFIXES: .c .o 
+
+# ------------------------------------------------
+# Choose a file comparison utility: 
+#	- cf compares, 
+#	- sub shows the difference of the different samples
+# Default is cf.
+# ------------------------------------------------
+#CF = cf -q
+CF = sub -q -equiv 1
+CF_OPT = 256 1 30
+
+# ------------------------------------------------
+# Choose an archiving utility: 
+#	- public domain unzip, or [PC/Unix/VMS]
+#	- shareware pkunzip [PC only]
+# ------------------------------------------------
+#UNZIP = pkunzip
+UNZIP = unzip -o
+
+# ------------------------------------------------
+# Choose an AWK; suggest use GNU version 
+#                (available via anonymous ftp) 
+# ------------------------------------------------
+AWK = gawk
+AWK_CMD = '$$6~/[0-9]+:[0-9][0-9]/ {print "sb -over",$$NF};END{print "exit"}'
+
+# ------------------------------------------------
+# Choose compiler. Sun: use cc. HP: gotta use gcc
+# ------------------------------------------------
+ACC = acc
+GCC = gcc -fno-builtin
+CC_OPT = -g -I../utl -Wall
+
+# ------------------------------------------------
+# General purpose symbols
+# ------------------------------------------------
+RM = -rm
+TEST_FILES = testg712.* cascg712.flt iir-irs.flt
+CASC_REF=cascg712.ref iir-irs.ref testpcm1.ref testpcmu.ref testpcmd.ref
+OBJ_FILES = iir-lib.o ugst-utl.o
+PCM = pcmdemo
+IRS = cirsdemo
+CASC_G712 = c712demo
+PCM_EXE = go32 $(PCM)
+IRS_EXE = go32 $(IRS)
+CASC_G712_EXE = go32 $(CASC_G712)
+
+# ------------------------------------------------
+# Generic rules
+# ------------------------------------------------
+.c.o:
+	$(CC) $(CC_OPT) -c $<
+
+# ------------------------------------------------
+# Targets
+# ------------------------------------------------
+all:: pcmdemo cirsdemo c712demo
+
+anyway: clean all
+
+clean:
+	$(RM) *.o 
+
+cleantest:
+	$(RM) $(TEST_FILES) $(CASC_REF) test.src
+
+veryclean: clean cleantest
+	$(RM) pcmdemo cirsdemo c712demo pcmdemo.exe cirsdemo.exe c712demo.exe
+
+# ------------------------------------------------
+# Specific rules
+# ------------------------------------------------
+ugst-utl.o: ../utl/ugst-utl.c
+	$(CC) $(CC_OPT) -c ../utl/ugst-utl.c
+
+# The *original* parallel-form log-PCM demo
+pcmdemo: pcmdemo.o iir-g712.o $(OBJ_FILES)
+	$(CC) $(CC_OPT) -o pcmdemo pcmdemo.o iir-g712.o $(OBJ_FILES)
+
+# Bellcore IRS proposed for the 8kbit/s qualification test plan
+cirsdemo: cirsdemo.o iir-irs.o $(OBJ_FILES)
+	$(CC) $(CC_OPT) -o cirsdemo cirsdemo.o iir-irs.o $(OBJ_FILES)
+
+# Bellcore G.712 proposed for the 8kbit/s qualification test plan
+c712demo: cascg712.o c712demo.o $(OBJ_FILES)
+	$(CC) $(CC_OPT) -o c712demo c712demo.o cascg712.o $(OBJ_FILES)
+
+
+# ------------------------------------------------
+# Testing the portability of the implementation!
+# Note: there are no compliance test vectors associated with the IIR module
+# ------------------------------------------------
+test:	proc comp
+
+proc:	test.src
+	$(PCM_EXE) test.src testg712.100 1_1 0 0
+	$(PCM_EXE) test.src testg712.u00 1_2 0 0
+	$(PCM_EXE) test.src testg712.d00 2_1 0 0
+	$(PCM_EXE) test.src testg712.010 0 1_1 0
+	$(PCM_EXE) test.src testg712.0u0 0 1_2 0
+	$(PCM_EXE) test.src testg712.0d0 0 2_1 0
+	$(PCM_EXE) test.src testg712.001 0 0 1_1
+	$(PCM_EXE) test.src testg712.00u 0 0 1_2
+	$(PCM_EXE) test.src testg712.00d 0 0 2_1
+	$(IRS_EXE) test.src iir-irs.flt
+	$(CASC_G712_EXE) test.src cascg712.flt
+
+comp: cascg712.ref
+	$(CF) testpcm1.ref testg712.100 $(CF_OPT)
+	$(CF) testpcmu.ref testg712.u00 $(CF_OPT)
+	$(CF) testpcmd.ref testg712.d00 $(CF_OPT)
+	$(CF) testg712.100 testg712.010 $(CF_OPT)
+	$(CF) testg712.u00 testg712.0u0 $(CF_OPT)
+	$(CF) testg712.d00 testg712.0d0 $(CF_OPT)
+	$(CF) testg712.100 testg712.001 $(CF_OPT)
+	$(CF) testg712.u00 testg712.00u $(CF_OPT)
+	$(CF) testg712.d00 testg712.00d $(CF_OPT)
+	$(CF) iir-irs.ref  iir-irs.flt  $(CF_OPT)
+	$(CF) cascg712.ref cascg712.flt $(CF_OPT)
+
+test.src: test-iir.zip
+	$(UNZIP) test-iir.zip test.src 
+	swapover test.src
+#	$(UNZIP) -v test-iir.zip test.src | $(AWK) $(AWK_CMD) | command
+
+cascg712.ref: test-iir.zip
+	$(UNZIP) test-iir.zip $(CASC_REF)
+	swapover $(CASC_REF)
+#	$(UNZIP) -v test-iir.zip *.ref | $(AWK) $(AWK_CMD) | command

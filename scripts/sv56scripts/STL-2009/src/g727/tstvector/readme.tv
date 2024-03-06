@@ -1,0 +1,16 @@
+G.727 Test vectors
+~~~~~~~~~~~~~~~~~~
+
+The test vectors in ugst are files in the UGST format, with 16-bit words
+holding 5,4,3, or 2 valid bits, as needed for big endian ("Unix format") 
+platforms. The directory ugst/pc has the same files as in ugst/, but 
+byte-swaped to little endian format (PC format), which is also used by 
+VMS and Alpha CPUs.
+
+Use them according to the byte orientation in your computer.
+
+Directory general contains the original readme files for the G.727 test 
+vectors.
+
+Simao.
+--

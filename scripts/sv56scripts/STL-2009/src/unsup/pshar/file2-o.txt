@@ -1,0 +1,187 @@
+#include <stdio.h>
+#include <math.h>
+#include "gpib-bib.h"
+#include "fd9002.h"
+
+void            main(int argc, char *argv[])
+{
+  /* Filter data */
+  filter_channel_state channel_1, channel_2;
+
+  /* Initializations of default values */
+  channel_1.f0 = 0;
+  channel_1.pregain = channel_1.postgain = 1.0;
+  channel_1.channel = FD_BothChannels;
+  channel_1.config = FD_Config0;
+  channel_1.coupling = FD_AC_COUPLING;
+  channel_1.input = FD_SINGLE;
+  channel_1.mode = FD_ACTIVE;
+
+  /* Check options */
+  while (argc > 1 && argv[1][0] == '-' && strlen(argv[1]) > 1)
+    if (strcmp(argv[1], "-f0") == 0)
+    {
+      /* Set the cut-off frequency and check valid range */
+      channel_1.f0 = atof(argv[2]);
+      if (channel_1.f0 > 102400)
+	channel_1.f0 = 102400.0 /* Hz */ ;
+      else if (channel_1.f0 < 0.1)
+	channel_1.f0 = 0.1 /* Hz */ ;
+
+      /* Update argv and argc to next argument */
+      argv += 2;
+      argc -= 2;
+    }
+    else if (strcmp(argv[1], "-gi") == 0)
+    {
+      /* Set the pre-gain (filter input gain) and check valid range */
+      channel_1.pregain = atof(argv[2]);
+      if (channel_1.pregain > 13.75)
+	channel_1.pregain = 13.75;
+      else if (channel_1.pregain < 1.0)
+	channel_1.pregain = 1.0;
+
+      /* Update argv and argc to next argument */
+      argv += 2;
+      argc -= 2;
+    }
+    else if (strcmp(argv[1], "-go") == 0)
+    {
+      /* Set the post-gain (filter output gain) and check valid range */
+      channel_1.postgain = atof(argv[2]);
+      if (channel_1.postgain > 13.75)
+	channel_1.postgain = 13.75;
+      else if (channel_1.postgain < 1.0)
+	channel_1.postgain = 1.0;
+
+      /* Update argv and argc to next argument */
+      argv += 2;
+      argc -= 2;
+    }
+    else if (strcmp(argv[1], "-c") == 0)
+    {
+      /* Set channel number */
+      channel_1.channel = atoi(argv[2]) == 1 ?
+	FD_Channel1 :
+	FD_Channel2;
+
+      /* Update argv and argc to next argument */
+      argv += 2;
+      argc -= 2;
+    }
+    else if (strcmp(argv[1], "-cfg") == 0)
+    {
+      /* Set configuration number */
+      channel_1.config = (byte) atoi(argv[2]);
+
+      /* Check for valid range */
+      if (channel_1.config > 7 || channel_1.config < 0)
+      {
+	fprintf(stderr, "Bad configuration: valid range is 0..7\n");
+	exit(1);
+      }
+
+      /* Update argv and argc to next argument */
+      argv += 2;
+      argc -= 2;
+    }
+    else if (strcmp(argv[1], "-ac") == 0)
+    {
+      /* Set coupling option */
+      channel_1.coupling = FD_AC_COUPLING;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-dc") == 0)
+    {
+      /* Set coupling option */
+      channel_1.coupling = FD_DC_COUPLING;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-sngl") == 0)
+    {
+      /* Set coupling option */
+      channel_1.input = FD_SINGLE;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-diff") == 0)
+    {
+      /* Set coupling option */
+      channel_1.input = FD_DIFFERENTIAL;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-act") == 0)
+    {
+      /* Set coupling option */
+      channel_1.mode = FD_ACTIVE;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else if (strcmp(argv[1], "-byp") == 0)
+    {
+      /* Set coupling option */
+      channel_1.mode = FD_BYPASS;
+
+      /* Update argv and argc to next argument */
+      argv++;
+      argc--;
+    }
+    else
+    {
+      fprintf(stderr, "Invalid option \"%s\" in command line\n\n",
+	      argv[1]);
+      exit(1);
+    }
+
+  /* Read parameter for processing, if missing */
+  if (channel_1.f0 == 0)
+  {
+    /* Get parameter only if not specified by the '-f0' option */
+    printf("_Cut-off frequency [Hz]: .......... ");
+    scanf("%lf", &channel_1.f0);
+  }
+
+  /* Initialize channel_2 */
+  channel_2 = channel_1;
+
+  /* Print options read */
+  print_filter_state(channel_1, stdout);
+
+  /* Initializing the filter structure */
+  if (FD9002_open(&channel_1))
+    exit(3);
+
+  /* Progamming the filter */
+  if (channel_1.channel == FD_BothChannels)
+    FD9002_set_filter(channel_1);
+  else
+    FD9002_set_channel(channel_1);
+
+  /* Read configuration of both channels */
+  if (FD9002_get_filter_state(&channel_1, &channel_2))
+    exit(3);
+
+  /* Print configuration */
+  print_filter_state(channel_1, stdout);
+  print_filter_state(channel_2, stdout);
+
+  /* Wait, check clip status and print */
+  printf("\n Wait a second ...");
+  delay(1000);
+  printf("\r Config %d: Clip status is %d %s\n",
+	 channel_1.config, (int) FD9002_get_clip(channel_1),
+	 "(1->Chan1; 2->Chan2; 3->Both)");
+}

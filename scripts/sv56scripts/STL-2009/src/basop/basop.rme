@@ -1,0 +1,114 @@
+
+	     Read-me for ITU-T/UGST Basic Operator Module V.2.3
+			    (30.Nov.2009)
+
+    =============================================================
+    COPYRIGHT NOTE: This source code, and all of its derivations,
+    is subject to the "ITU-T General Public License". Please have
+    it  read  in    the  distribution  disk,   or  in  the  ITU-T
+    Recommendation G.191 on "SOFTWARE TOOLS FOR SPEECH AND  AUDIO
+    CODING STANDARDS".
+    =============================================================
+
+Changes v.2.2 --> v.2.3
+***********************
+
+Modifications in basop32.c and basop32.h
+  - Function round() is now named round_fx(), to avoid clashes with
+    standard C library.
+  - Function saturate() is made unreferencable from outside application.
+
+Added new functionalities:
+  - Basic operator counter utility: basop_cnt.c
+  - Complexity evaluation tool for floating-point: flc.h, flc.c
+
+Changes v.2.1 --> v.2.2
+***********************
+
+New functions in count.c:
+	- void setFrameRate(int samplingFreq, int frameLength);
+	  This function can overwrite the value of the frameRate variable 
+	  that is initialized by the FRAME_RATE constant.
+	- void WMOPS_output_avg (Word16 dtx_mode, Word32 *tot_wm, Word16 *num_frames);
+	  same as WMOPS_output + returns the total wmops counter and the number of frames 
+	  to support the computation of advanced complexity results as the global average.
+
+An example of the use of WMOPS_output_avg is given below:
+
+In a decoder, the spe1Id was used for valid frames while the spe2Id counter was used for erased frames.
+Using the WMOPS_output_avg the global average complexity can be also displayed :
+
+short spe1Id = getCounterId("Valid frames");
+short spe2Id = getCounterId("Bad frames");
+long tot_wm1; 
+short num_frames1;
+long tot_wm2; 
+short num_frames2;
+
+... 
+
+setCounter(spe1Id);
+fwc();
+WMOPS_output_avg(0, &tot_wm1, &num_frames1);
+setCounter(spe2Id);
+fwc();
+WMOPS_output_avg(0, &tot_wm2, &num_frames2);
+printf("Global average %f WMOPS\n", (tot_wm1 + tot_wm2)/(float)(num_frames1 + num_frames2));
+
+Modifications in count.c:
+  - L_mls() is weighted 5.
+  - div_l() is weighted 32.
+  - i_mult() is weighted 3.
+
+Changes v.2.0 --> v.2.1
+***********************
+
+Improved portability:
+	- in header files "__inline" was changed to "static __inline"
+	- // style comments were changed to /* */ 
+	- Cygwin added in the supported compiler list (typedef.h)
+	- Word40 definition was added for Sun and Unix (typedef.h)
+Corrections:
+	- missing incrementations were added for s_and, s_or and s_xor (enh1632.h)
+
+    
+
+Original version: v.2.0
+***********************
+    
+The ITU-T/UGST Basic Operator module contails the following files:
+
+General:
+~~~~~~~~
+ basop.rme: ....... Read-me file for Basic Operator module (this file)
+  
+C code: ('model' directory)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ basop32.c: ....... 16/32 bit basic operators
+ basop32.h: ....... Prototypes for basop32.c
+ count.c: ......... Functions for WMOPS computation
+ count.h: ......... Prototypes for count.c
+ typedef.h: ....... Data type definitions
+ typedefs.h: ...... New data type definitions
+ move.h: .......... Move & miscellaneous legacy operators
+ control.c: ....... Control operator internal variable decl.
+ control.h: ....... Control operators
+ enh1632.c: ....... Enhanced 16/32 bit basic operators
+ enh1632.h: ....... Prototypes for enh1632.c
+ enh40.c: ......... 40 bit basic operators
+ enh40.h: ......... Prototypes for enh40.c
+ patch.h: ......... Backward compatibility for operator names
+ stl.h: ........... Main header file
+
+Demos:
+~~~~~~
+Demo programs are not available for this module.
+
+
+Makefiles
+~~~~~~~~~
+Make files are not available for this module.
+
+
+-- <k-djafarian@ti.com>
+

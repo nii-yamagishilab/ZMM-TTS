@@ -1,0 +1,18 @@
+#/bin/csh
+chdir files
+../cwcomp cw1.bin cw2.bin
+../cwcomp cw1.bin cw3.bin 
+../cwcomp cw1.bin cw4.bin 
+../cwcomp cw1.bin cw5.bin 
+../cwcomp cw1.bin cw6.bin 
+../cwcomp cw2.bin cw3.bin 
+../cwcomp cw2.bin cw4.bin 
+../cwcomp cw2.bin cw5.bin 
+../cwcomp cw2.bin cw6.bin 
+../cwcomp cw3.bin cw4.bin 
+../cwcomp cw3.bin cw5.bin 
+../cwcomp cw3.bin cw6.bin 
+../cwcomp cw4.bin cw5.bin 
+../cwcomp cw4.bin cw5.bin 
+../cwcomp cw5.bin cw6.bin 
+

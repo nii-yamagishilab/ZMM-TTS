@@ -1,0 +1,60 @@
+# -----------------------------------------------------------------------------
+#       Unix makefile for compiling and testing the UGST Truncate module.
+#					8.Oct.08
+# -----------------------------------------------------------------------------
+.SUFFIXES: .c .o 
+
+# ------------------------------------------------
+# Choose a file comparison utility: 
+#	- cf compares, 
+#	- sub shows the difference of the different samples
+# Default is cf.
+# ------------------------------------------------
+#CF = cf -q
+CF = sub -q -equiv 1 
+CF_OPT = 256 1 30
+
+# ------------------------------------------------
+# Choose an archiving utility: 
+#	- public domain unzip, or [PC/Unix/VMS]
+#	- shareware pkunzip [PC only]
+# ------------------------------------------------
+#UNZIP = pkunzip
+UNZIP = unzip -o
+
+# Choose compiler. Sun: use cc. HP: gotta use gcc
+ACC = acc
+GCC = gcc -fno-builtin
+CC_OPT = -g -I../utl -I../eid -Wall
+
+# ------------------------------------------------
+# Generic rules
+# ------------------------------------------------
+.c.o:
+	$(CC) $(CC_OPT) -c $<
+
+# ------------------------------------------------
+# Targets
+# ------------------------------------------------
+all:: truncate
+
+anyway: clean all
+
+clean:
+	$(RM) *.o 
+
+veryclean: clean cleantest
+	$(RM) truncate
+
+# ------------------------------------------------
+# Specific rules
+# ------------------------------------------------
+
+truncate: trunc-lib.o ugst-utl.o softbit.o truncate.o
+	$(CC) -o truncate truncate.o trunc-lib.o softbit.o ugst-utl.o -lm
+
+ugst-utl.o: ../utl/ugst-utl.c
+	$(CC) $(CC_OPT) -c ../utl/ugst-utl.c -lm
+
+softbit.o: ../eid/softbit.c
+	$(CC) $(CC_OPT) -c ../eid/softbit.c -lm

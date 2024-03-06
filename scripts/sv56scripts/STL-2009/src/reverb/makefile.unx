@@ -1,0 +1,69 @@
+# -----------------------------------------------------------------------------
+#	Cygwin GCC makefile for compiling and testing the UGST Reverb module 
+#       implementation
+# -----------------------------------------------------------------------------
+
+# ------------------------------------------------
+# Choose compiler.
+# ------------------------------------------------
+CC = gcc
+C_OPT = $(XXX) -I../utl  -I/.
+
+# ------------------------------------------------
+# Executables
+# ------------------------------------------------
+RM = rm -f
+REVERB_EXE= reverb
+
+# ------------------------------------------------
+# Choose an archiving utility: 
+#       - public domain unzip, or [PC/MS Visual C/VMS]
+#       - shareware pkunzip [PC only]
+# ------------------------------------------------
+#UNZIP = pkunzip
+UNZIP = unzip -o
+
+# ------------------------------------------------
+# Choose a file comparison utility: 
+#       - cf compares, 
+#       - sub shows the difference of the different samples
+# Default is cf.
+# ------------------------------------------------
+DIFF = cf -q
+#DIFF = sub
+
+# ------------------------------------------------
+# Generic rules
+# ------------------------------------------------
+.c.o:
+	$(CC) $(C_OPT) -c $<
+	
+# ------------------------------------------------
+# Targets
+# ------------------------------------------------
+all: clean reverb
+
+anyway: clean all
+
+clean:
+	$(RM) *.o
+
+cleantest:
+	$(RM) *.ref *.IR *.src *.tst
+
+veryclean: clean cleantest
+	$(RM) reverb.exe
+
+# ------------------------------------------------
+# Specific rules
+# ------------------------------------------------
+#reverb: reverb.exe
+reverb: reverb-lib.o reverb.o
+	$(CC) -o reverb reverb-lib.o reverb.o
+	
+
+# -----------------------------------------------------------------------------
+# Dependencies
+# -----------------------------------------------------------------------------
+reverb-lib.o:  reverb-lib.c reverb-lib.h
+reverb.o:      reverb.c reverb-lib.c reverb-lib.h
